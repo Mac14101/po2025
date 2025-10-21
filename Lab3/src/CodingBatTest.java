@@ -9,4 +9,14 @@ public class CodingBatTest {
         assertEquals(true,new CodingBat().sleepIn(false,true));
         assertEquals(true,new CodingBat().sleepIn(true,true));
     }
+    @org.junit.Test
+    public void notString() {
+        assertEquals("not candy",new CodingBat().notString("candy"));
+        assertEquals("not x",new CodingBat().notString("x"));
+        assertEquals("not bad",new CodingBat().notString("not bad"));
+        assertEquals("not bad",new CodingBat().notString("bad"));
+        assertEquals("not",new CodingBat().notString("not"));
+        assertEquals("not is not",new CodingBat().notString("is not"));
+        assertEquals("not no",new CodingBat().notString("no"));
+    }
 }
