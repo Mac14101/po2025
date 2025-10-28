@@ -29,4 +29,18 @@ public class CodingBatTest {
         assertArrayEquals(new int[]{1, 1, 1},new CodingBat().shiftLeft(new int[]{1, 1, 1}));
         assertArrayEquals(new int[]{2, 3, 1},new CodingBat().shiftLeft(new int[]{1, 2, 3}));
     }
+    @org.junit.Test
+    public void frontAgain() {
+        assertEquals(true,new CodingBat().frontAgain("edited"));
+        assertEquals(false,new CodingBat().frontAgain("edit"));
+        assertEquals(true,new CodingBat().frontAgain("ed"));
+        assertEquals(true,new CodingBat().frontAgain("jj"));
+        assertEquals(true,new CodingBat().frontAgain("jjj"));
+        assertEquals(true,new CodingBat().frontAgain("jjjj"));
+        assertEquals(false,new CodingBat().frontAgain("jjjk"));
+        assertEquals(false,new CodingBat().frontAgain("x"));
+        assertEquals(false,new CodingBat().frontAgain(""));
+        assertEquals(false,new CodingBat().frontAgain("java"));
+        assertEquals(true,new CodingBat().frontAgain("javaja"));
+    }
 }

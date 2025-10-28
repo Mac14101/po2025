@@ -26,5 +26,13 @@ public class CodingBat {
         nums[nums.length-1]=buff;
         return nums;
     }
-
+    // String1 > frontAgain
+    public boolean frontAgain(String str) {
+        if(str.length()==2){
+            return true;
+        } else if (str.length()<2) {
+            return false;
+        }
+        return str.substring(0,2).equals(str.substring(str.length()-2));
+    }
 }
