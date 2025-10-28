@@ -1,9 +1,9 @@
 package animals;
 
 public class Parrot extends Animal{
-    final int legs=2;
-    Parrot(String name){
+    public Parrot(String name){
         this.name=name;
+        this.legs=2;
     }
 
     @Override

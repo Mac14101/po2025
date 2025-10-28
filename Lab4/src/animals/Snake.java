@@ -1,13 +1,13 @@
 package animals;
 
 public class Snake extends Animal{
-    final int legs=0;
-    Snake(String name){
+    public Snake(String name){
         this.name=name;
+        this.legs=0;
     }
 
     @Override
     public String getDescription() {
-        return "Snake " + this.name + " has " + Integer.toString(this.legs) + ".";
+        return "Snake " + this.name + " has " + Integer.toString(this.legs) + " legs.";
     }
 }
