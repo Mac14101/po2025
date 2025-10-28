@@ -1,7 +1,7 @@
 package animals;
 
 public class Parrot extends Animal{
-    int legs=2;
+    final int legs=2;
     Parrot(String name){
         this.name=name;
     }
