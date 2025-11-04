@@ -7,4 +7,7 @@ public abstract class Animal {
     public int getLegs(){
         return this.legs;
     };
+    public void makeSound(){
+        System.out.println("Animal makes sound.");
+    }
 }

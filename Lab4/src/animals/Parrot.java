@@ -10,4 +10,9 @@ public class Parrot extends Animal{
     public String getDescription() {
         return "Parrot " + this.name + " has " + Integer.toString(this.legs) + ".";
     }
+
+    @Override
+    public void makeSound(){
+        System.out.println("Parrot makes sound.");
+    }
 }

@@ -25,6 +25,9 @@ public class Zoo {
                 }
             }
         }
+        for (Animal animal : animals) {
+            animal.makeSound();
+        }
         System.out.println("Suma nóg zwierząt : " + Integer.toString(zoo.legsSum(animals)));
     }
     public int legsSum(Animal[] animals){

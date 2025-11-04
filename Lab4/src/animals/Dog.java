@@ -10,4 +10,9 @@ public class Dog extends Animal{
     public String getDescription() {
         return "Dog " + this.name + " has " + Integer.toString(this.legs) + " legs.";
     }
+
+    @Override
+    public void makeSound(){
+        System.out.println("Dog makes sound.");
+    }
 }
