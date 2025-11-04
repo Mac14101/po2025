@@ -29,8 +29,9 @@ public class Zoo {
     }
     public int legsSum(Animal[] animals){
         int sum=0;
-        for(int i=0;i<animals.length;i++){
-            sum+=animals[i].legs;
+        for (Animal animal : animals) {
+            int legs=animal.getLegs();
+            sum += legs;
         }
         return sum;
     }

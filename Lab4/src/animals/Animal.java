@@ -2,6 +2,9 @@ package animals;
 
 public abstract class Animal {
     String name;
-    public int legs;
+    int legs;
     public abstract String getDescription();
+    public int getLegs(){
+        return this.legs;
+    };
 }
