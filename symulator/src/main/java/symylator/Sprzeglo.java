@@ -20,10 +20,10 @@ public class Sprzeglo extends Komponent {
     }
 
     public void wcisnij() {
-        this.stanSprzegla = true;
+        this.stanSprzegla = false;
     }
 
     public void zwolnij() {
-        this.stanSprzegla = false;
+        this.stanSprzegla = true;
     }
 }
