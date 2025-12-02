@@ -17,6 +17,11 @@ public class SamochoGUIControler {
     private Button downshiftGearButton;
 
     @FXML
+    private Button pushGasButton;
+    @FXML
+    private Button releaseGasButton;
+
+    @FXML
     private Button pushClutchButton;
     @FXML
     private Button releaseClutchButton;
@@ -44,6 +49,16 @@ public class SamochoGUIControler {
     @FXML
     private void onDownshiftGearButton() {
         System.out.println("DownshiftGearButton click");
+    }
+
+    @FXML
+    private void onPushGasButton() {
+        System.out.println("PushGasButton click");
+    }
+
+    @FXML
+    private void onReleaseGasButton() {
+        System.out.println("ReleaseGasButton click");
     }
 
     @FXML

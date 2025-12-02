@@ -132,12 +132,14 @@
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
-                                <Button mnemonicParsing="false" text="Dodaj gazu" fx:id="">
+                                <Button mnemonicParsing="false" text="Dodaj gazu" fx:id="pushGasButton"
+                                        onAction="#onPushGasButton">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
                                 </Button>
-                                <Button mnemonicParsing="false" text="Ujmij gazu" fx:id="">
+                                <Button mnemonicParsing="false" text="Ujmij gazu" fx:id="releaseGasButton"
+                                        onAction="#onReleaseGasButton">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
