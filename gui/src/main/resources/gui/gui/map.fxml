@@ -5,7 +5,8 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.gui.SamochoGUIControler">
+            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="gui.gui.SamochoGUIControler">
     <left>
         <VBox prefWidth="240.0" BorderPane.alignment="CENTER">
             <children>
@@ -37,17 +38,20 @@
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
-                                <Button mnemonicParsing="false" text="Włącz" fx:id="startButton" onAction="#onStartButton">
+                                <Button mnemonicParsing="false" text="Włącz" fx:id="startButton"
+                                        onAction="#onStartButton">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
                                 </Button>
-                                <Button mnemonicParsing="false" text="Wyłącz" fx:id="stopButton" onAction="#onStopButton">
+                                <Button mnemonicParsing="false" text="Wyłącz" fx:id="stopButton"
+                                        onAction="#onStopButton">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
                                 </Button>
-                                <Button mnemonicParsing="false" text="Button" fx:id="buttonButton" onAction="#onButtonButton">
+                                <Button mnemonicParsing="false" text="Button" fx:id="buttonButton"
+                                        onAction="#onButtonButton">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
@@ -84,12 +88,14 @@
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
-                                <Button mnemonicParsing="false" text="Zwiększ bieg">
+                                <Button mnemonicParsing="false" text="Zwiększ bieg" fx:id="upshiftGear"
+                                        onAction="#onUpshiftGear">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
                                 </Button>
-                                <Button mnemonicParsing="false" text="Zmniejsz bieg">
+                                <Button mnemonicParsing="false" text="Zmniejsz bieg" fx:id="downshiftGear"
+                                        onAction="#onDownshiftGear">
                                     <FlowPane.margin>
                                         <Insets bottom="3.0" left="5.0" right="5.0" top="3.0"/>
                                     </FlowPane.margin>
