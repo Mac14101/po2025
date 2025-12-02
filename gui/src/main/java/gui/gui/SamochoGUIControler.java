@@ -12,9 +12,14 @@ public class SamochoGUIControler {
     private Button buttonButton;
 
     @FXML
-    private Button upshiftGear;
+    private Button upshiftGearButton;
     @FXML
-    private Button downshiftGear;
+    private Button downshiftGearButton;
+
+    @FXML
+    private Button pushClutchButton;
+    @FXML
+    private Button releaseClutchButton;
 
     @FXML
     private void onStartButton() {
@@ -32,12 +37,22 @@ public class SamochoGUIControler {
     }
 
     @FXML
-    private void onUpshiftGear() {
-        System.out.println("UpshiftGearButton");
+    private void onUpshiftGearButton() {
+        System.out.println("UpshiftGearButton click");
     }
 
     @FXML
-    private void onDownshiftGear() {
-        System.out.println("DownshiftGearButton");
+    private void onDownshiftGearButton() {
+        System.out.println("DownshiftGearButton click");
+    }
+
+    @FXML
+    private void onPushClutchButton() {
+        System.out.println("PushClutchButton click");
+    }
+
+    @FXML
+    private void onReleaseClutchButton() {
+        System.out.println("PushClutchButton click");
     }
 }
