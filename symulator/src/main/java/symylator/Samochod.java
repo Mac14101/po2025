@@ -20,9 +20,19 @@ public class Samochod {
         this.pozycja = pozycja;
     }
 
+    public Samochod(String nrRejestr, String model, Silnik silnik, SkrzyniaBiegow skrzyniaBiegow, Pozycja pozycja) {
+        this.stanWlaczenia = false;
+        this.nrRejestr = nrRejestr;
+        this.model = model;
+        this.predkoscMax = 160;
+        this.silnik = silnik;
+        this.skrzyniaBiegow = skrzyniaBiegow;
+        this.pozycja = pozycja;
+    }
+
     public void wlacz() {
         this.stanWlaczenia = true;
-        this.silnik.uruchom();
+        this.silnik.uruchom()
     }
 
     public void wylacz() {
@@ -35,13 +45,10 @@ public class Samochod {
     }
 
     public double getWaga() {
-        // TODO
-        return 0d;
+        return this.silnik.getWaga()+this.skrzyniaBiegow.getWaga();
     }
 
     public double getAktPredkosc() {
-        // TODO
-        return 0d;
     }
 
     public Pozycja getAktpozycja() {

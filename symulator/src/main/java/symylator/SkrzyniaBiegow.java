@@ -46,4 +46,8 @@ public class SkrzyniaBiegow extends Komponent {
     public double getAktualnePrzelozenie() {
         return this.aktualnePrzelozenie;
     }
+
+    public double getWaga() {
+        return this.waga + this.sprzeglo.getWaga();
+    }
 }
