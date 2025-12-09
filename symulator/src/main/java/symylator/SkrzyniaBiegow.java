@@ -14,27 +14,29 @@ public class SkrzyniaBiegow extends Komponent {
         this.sprzeglo = sprzeglo;
     }
 
-    public SkrzyniaBiegow(String nazwa, int iloscBiegow, Sprzeglo sprzeglo, double waga, double cena) {
+    public SkrzyniaBiegow(String nazwa, Sprzeglo sprzeglo, double waga, double cena) {
         super(nazwa, waga, cena);
-        this.iloscBiegow = iloscBiegow;
+        this.iloscBiegow = 6;
         this.aktualnyBieg = 0;
         this.aktualnePrzelozenie = 0;
         this.sprzeglo = sprzeglo;
     }
 
-    public SkrzyniaBiegow(String nazwa) {
-        super(nazwa, 45d, 16000d);
-        this.iloscBiegow = 5;
-        this.aktualnyBieg = 0;
-        this.sprzeglo = new Sprzeglo();
-    }
 
     void zwiekszBieg() {
-        this.aktualnyBieg++;
+        if (!this.sprzeglo.getStanSprzegla()) {
+            if (this.aktualnyBieg < this.iloscBiegow) {
+                this.aktualnyBieg++;
+            }
+        } else {/* TODO Wyrzuć błąd */}
     }
 
     void zmniejszBieg() {
-        this.aktualnyBieg--;
+        if (!this.sprzeglo.getStanSprzegla()) {
+            if (this.aktualnyBieg > 0) {
+                this.aktualnyBieg--;
+            }
+        } else {/* TODO Wyrzuć błąd */}
     }
 
     public int getAktualnyBieg() {
