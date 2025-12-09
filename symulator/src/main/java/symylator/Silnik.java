@@ -10,20 +10,16 @@ public class Silnik extends Komponent {
         this.obroty = obroty;
     }
 
-    public Silnik(String nazwa, int maxObroty, double waga, double cena) {
+    public Silnik(String nazwa, double waga, double cena) {
         super(nazwa, waga, cena);
-        this.maxObroty = maxObroty;
-        this.obroty = 0;
-    }
-
-    public Silnik(Strina nazwa) {
-        super(nazwa, 100d, 15000d);
         this.maxObroty = 8000;
         this.obroty = 0;
     }
 
     public void uruchom() {
-        this.obroty = 1000;
+        if (this.obroty == 0) {
+            this.obroty = 800;
+        }
     }
 
     public void zatrzymaj() {
@@ -31,10 +27,15 @@ public class Silnik extends Komponent {
     }
 
     public void zwiekszObroty() {
-        this.obroty += 10;
+        if (this.obroty + 10 < this.maxObroty) {
+            this.obroty += 10;
+        }
     }
 
     public void zmniejszObroty() {
-        this.obroty -= 10;
+
+        if (this.obroty - 10 < 800) {
+            this.obroty -= 10;
+        }
     }
 }
