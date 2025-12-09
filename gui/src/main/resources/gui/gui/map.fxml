@@ -217,7 +217,7 @@
                 <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                     <children>
                         <Label text="Samochód : "/>
-                        <ChoiceBox prefWidth="150.0"/>
+                        <ComboBox prefWidth="150.0" fx:id="selectCarComboBox" onShowing="#onSelectCarComboBox"/>
                         <Button mnemonicParsing="false" text="Dodaj nowy"/>
                         <Button mnemonicParsing="false" text="Usuń"/>
                     </children>

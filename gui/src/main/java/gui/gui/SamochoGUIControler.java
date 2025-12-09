@@ -2,6 +2,7 @@ package gui.gui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 
 public class SamochoGUIControler {
     @FXML
@@ -25,6 +26,9 @@ public class SamochoGUIControler {
     private Button pushClutchButton;
     @FXML
     private Button releaseClutchButton;
+
+    @FXML
+    private ComboBox selectCarComboBox;
 
     @FXML
     private void onStartButton() {
@@ -69,5 +73,10 @@ public class SamochoGUIControler {
     @FXML
     private void onReleaseClutchButton() {
         System.out.println("PushClutchButton click");
+    }
+
+    @FXML
+    private void onSelectCarComboBox() {
+        System.out.println("SelectCarComboBox show");
     }
 }
