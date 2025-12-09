@@ -14,16 +14,15 @@ public class Sprzeglo extends Komponent {
         this.stanSprzegla = true;
     }
 
-    public Sprzeglo() {
-        super(nazwa, 6d, 1800d);
-        this.stanSprzegla = true;
-    }
-
     public void wcisnij() {
         this.stanSprzegla = false;
     }
 
     public void zwolnij() {
         this.stanSprzegla = true;
+    }
+
+    public boolean getStanSprzegla() {
+        return this.stanSprzegla;
     }
 }
