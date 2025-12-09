@@ -20,33 +20,6 @@ public class Samochod {
         this.pozycja = pozycja;
     }
 
-    public Samochod(String nrRejestr, String model, double predkoscMax, Silnik silnik, SkrzyniaBiegow skrzyniaBiegow, Pozycja pozycja) {
-        this.stanWlaczenia = false;
-        this.nrRejestr = nrRejestr;
-        this.model = model;
-        this.predkoscMax = predkoscMax;
-        this.silnik = silnik;
-        this.skrzyniaBiegow = skrzyniaBiegow;
-        this.pozycja = pozycja;
-    }
-
-    public Samochod(String nrRejestr, String model, double predkoscMax, Pozycja pozycja) {
-        this.nrRejestr = nrRejestr;
-        this.model = model;
-        this.predkoscMax = predkoscMax;
-        this.pozycja = pozycja;
-        this.silnik = new Silnik();
-        this.skrzyniaBiegow = new SkrzyniaBiegow();
-    }
-
-    public Samochod(String nrRejestr, String model, double predkoscMax) {
-        this.nrRejestr = nrRejestr;
-        this.model = model;
-        this.predkoscMax = predkoscMax;
-        this.pozycja = new Pozycja(0d, 0d);
-        this.skrzyniaBiegow = new SkrzyniaBiegow();
-    }
-
     public void wlacz() {
         this.stanWlaczenia = true;
         this.silnik.uruchom();

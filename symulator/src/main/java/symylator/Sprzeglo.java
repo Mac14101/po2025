@@ -4,18 +4,18 @@ public class Sprzeglo extends Komponent {
     // Wartość 'false' oznacza sprzęgło wciścięte, 'true' oznacza sprzęgło zwolnione
     private boolean stanSprzegla;
 
-    public Sprzeglo(boolean stanSprzegla, double waga, double cena) {
-        super("Sprzęgło", waga, cena);
+    public Sprzeglo(String nazwa, boolean stanSprzegla, double waga, double cena) {
+        super(nazwa, waga, cena);
         this.stanSprzegla = stanSprzegla;
     }
 
     public Sprzeglo(double waga, double cena) {
-        super("Sprzęgło", waga, cena);
+        super(nazwa, waga, cena);
         this.stanSprzegla = true;
     }
 
     public Sprzeglo() {
-        super("Sprzęgło", 6d, 1800d);
+        super(nazwa, 6d, 1800d);
         this.stanSprzegla = true;
     }
 
