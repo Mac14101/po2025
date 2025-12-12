@@ -48,6 +48,15 @@ public class Samochod {
         this.skrzyniaBiegow.zwiekszBieg();
     }
 
+    public void dodajGazu() {
+        this.silnik.zwiekszObroty();
+    }
+
+    public void ujmijGazu() {
+        this.silnik.zmniejszObroty();
+    }
+
+
     public void jedzDo(Pozycja cel) {
         // TODO
     }
