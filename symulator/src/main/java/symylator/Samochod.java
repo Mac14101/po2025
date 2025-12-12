@@ -32,7 +32,7 @@ public class Samochod {
 
     public void wlacz() {
         this.stanWlaczenia = true;
-        this.silnik.uruchom()
+        this.silnik.uruchom();
     }
 
     public void wylacz() {
@@ -40,15 +40,24 @@ public class Samochod {
         this.silnik.zatrzymaj();
     }
 
+    public void zmniejszBieg() {
+        this.skrzyniaBiegow.zmniejszBieg();
+    }
+
+    public void zwiekszBieg() {
+        this.skrzyniaBiegow.zwiekszBieg();
+    }
+
     public void jedzDo(Pozycja cel) {
         // TODO
     }
 
     public double getWaga() {
-        return this.silnik.getWaga()+this.skrzyniaBiegow.getWaga();
+        return this.silnik.getWaga() + this.skrzyniaBiegow.getWaga();
     }
 
     public double getAktPredkosc() {
+        return 0d;
     }
 
     public Pozycja getAktpozycja() {
