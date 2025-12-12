@@ -48,6 +48,14 @@ public class Samochod {
         this.skrzyniaBiegow.zwiekszBieg();
     }
 
+    public void nacisnijSprzeglo() {
+        this.skrzyniaBiegow.nacisnijSprzeglo();
+    }
+
+    public void zwolnijsprezglo() {
+        this.skrzyniaBiegow.zwolnijSprzeglo();
+    }
+
     public void dodajGazu() {
         this.silnik.zwiekszObroty();
     }

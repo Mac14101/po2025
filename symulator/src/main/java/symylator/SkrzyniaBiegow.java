@@ -1,10 +1,10 @@
 package symylator;
 
 public class SkrzyniaBiegow extends Komponent {
+    Sprzeglo sprzeglo;
     private int aktualnyBieg;
     private int iloscBiegow;
     private double aktualnePrzelozenie;
-    Sprzeglo sprzeglo;
 
     public SkrzyniaBiegow(String nazwa, int aktualnyBieg, int iloscBiegow, double aktualnePrzelozenie, Sprzeglo sprzeglo, double waga, double cena) {
         super(nazwa, waga, cena);
@@ -22,6 +22,13 @@ public class SkrzyniaBiegow extends Komponent {
         this.sprzeglo = sprzeglo;
     }
 
+    void nacisnijSprzeglo() {
+        this.sprzeglo.wcisnij();
+    }
+
+    void zwolnijSprzeglo() {
+        this.sprzeglo.zwolnij();
+    }
 
     void zwiekszBieg() {
         if (!this.sprzeglo.getStanSprzegla()) {
