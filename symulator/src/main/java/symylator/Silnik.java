@@ -33,7 +33,6 @@ public class Silnik extends Komponent {
     }
 
     public void zmniejszObroty() {
-
         if (this.obroty - 10 < 800) {
             this.obroty -= 10;
         }

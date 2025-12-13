@@ -9,7 +9,7 @@ public class Sprzeglo extends Komponent {
         this.stanSprzegla = stanSprzegla;
     }
 
-    public Sprzeglo(double waga, double cena) {
+    public Sprzeglo(String nazwa, double waga, double cena) {
         super(nazwa, waga, cena);
         this.stanSprzegla = true;
     }
