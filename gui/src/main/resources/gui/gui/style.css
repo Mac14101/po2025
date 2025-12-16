@@ -1,0 +1,23 @@
+.menu-vbox{
+    -fx-pref-width: 320;
+}
+.menu-titled-pane{
+    -fx-pref-width: 320;
+    -fx-min-height: 100;
+}
+.menu-titled-pane-element{
+    -fx-pref-width: 320;
+    -fx-alignment: center;
+}
+.menu-titled-pane-label{
+    -fx-pref-width: 90;
+}
+.menu-titled-pane-textField{
+    -fx-pref-width: 180;
+}
+.menu-titled-pane-button{
+    -fx-pref-width: 80;
+}
+.menu-titled-pane-button-long{
+    -fx-pref-width: 100;
+}
