@@ -1,0 +1,43 @@
+.container-full {
+    -fx-pref-width: 600;
+}
+
+.container-half {
+    -fx-pref-width: 296;
+    -fx-pref-height: 150;
+}
+
+.header {
+    -fx-alignment: top-center;
+    -fx-font-size: 30;
+    -fx-font-weight: 900;
+    -fx-pref-height: 40;
+    -fx-max-height: 40;
+}
+
+.header-section {
+    -fx-pref-width: 296;
+    -fx-pref-height: 20;
+    -fx-font-size: 18;
+    -fx-font-weight: 700;
+}
+
+.label-section {
+    -fx-pref-width: 96;
+}
+
+.textField-section {
+    -fx-pref-width: 190;
+}
+
+.align-center {
+    -fx-alignment: center;
+}
+
+.footer {
+    -fx-pref-height: 60;
+}
+
+.button-footer {
+    -fx-font-size: 16;
+}
