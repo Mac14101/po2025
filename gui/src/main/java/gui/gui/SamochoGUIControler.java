@@ -33,50 +33,64 @@ public class SamochoGUIControler {
     @FXML
     private void onStartButton() {
         System.out.println("StartButton click.");
+        this.refresh();
     }
 
     @FXML
     private void onStopButton() {
         System.out.println("StopButton click.");
+        this.refresh();
     }
 
     @FXML
     private void onButtonButton() {
         System.out.println("ButtonButton click.");
+        this.refresh();
     }
 
     @FXML
     private void onUpshiftGearButton() {
         System.out.println("UpshiftGearButton click");
+        this.refresh();
     }
 
     @FXML
     private void onDownshiftGearButton() {
         System.out.println("DownshiftGearButton click");
+        this.refresh();
     }
 
     @FXML
     private void onPushGasButton() {
         System.out.println("PushGasButton click");
+        this.refresh();
     }
 
     @FXML
     private void onReleaseGasButton() {
         System.out.println("ReleaseGasButton click");
+        this.refresh();
     }
 
     @FXML
     private void onPushClutchButton() {
         System.out.println("PushClutchButton click");
+        this.refresh();
     }
 
     @FXML
     private void onReleaseClutchButton() {
         System.out.println("PushClutchButton click");
+        this.refresh();
     }
 
     @FXML
     private void onSelectCarComboBox() {
         System.out.println("SelectCarComboBox show");
+        this.refresh();
+    }
+
+    private void refresh() {
+        System.out.println("Refresh");
     }
 }
