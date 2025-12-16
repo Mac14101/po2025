@@ -9,8 +9,6 @@ public class SamochoGUIControler {
     private Button startButton;
     @FXML
     private Button stopButton;
-    @FXML
-    private Button buttonButton;
 
     @FXML
     private Button upshiftGearButton;
@@ -39,12 +37,6 @@ public class SamochoGUIControler {
     @FXML
     private void onStopButton() {
         System.out.println("StopButton click.");
-        this.refresh();
-    }
-
-    @FXML
-    private void onButtonButton() {
-        System.out.println("ButtonButton click.");
         this.refresh();
     }
 

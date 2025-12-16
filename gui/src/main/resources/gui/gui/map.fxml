@@ -46,11 +46,6 @@
                                         <Insets left="10.0" right="10.0" />
                                     </FlowPane.margin>
                                 </Button>
-                                <Button fx:id="buttonButton" mnemonicParsing="false" onAction="#onButtonButton" styleClass="menu-titled-pane-button" text="Button">
-                                    <FlowPane.margin>
-                                        <Insets left="10.0" right="10.0" />
-                                    </FlowPane.margin>
-                                </Button>
                             </children>
                         </FlowPane>
                     </content>
