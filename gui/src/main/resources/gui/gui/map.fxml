@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0"
-            xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12"
             fx:controller="gui.gui.SamochoGUIControler">
     <left>
         <VBox prefWidth="240.0" BorderPane.alignment="CENTER">
@@ -15,25 +15,25 @@
                         <FlowPane prefHeight="200.0" prefWidth="200.0">
                             <children>
                                 <Label text="Nazwa"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Nr rejestracyjny"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Waga"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Prędkość"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
@@ -65,25 +65,25 @@
                         <FlowPane prefHeight="200.0" prefWidth="200.0">
                             <children>
                                 <Label text="Nazwa"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Cena"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Waga"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Bieg"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
@@ -109,25 +109,25 @@
                         <FlowPane prefHeight="200.0" prefWidth="200.0">
                             <children>
                                 <Label text="Nazwa"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Cena"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Waga"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Obroty"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
@@ -153,25 +153,25 @@
                         <FlowPane prefHeight="200.0" prefWidth="200.0">
                             <children>
                                 <Label text="Nazwa"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Cena"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Waga"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label text="Stan"/>
-                                <TextField prefWidth="220.0">
+                                <TextField prefWidth="220.0" editable="false">
                                     <FlowPane.margin>
                                         <Insets/>
                                     </FlowPane.margin>
