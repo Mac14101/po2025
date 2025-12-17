@@ -1,8 +1,13 @@
 package gui.gui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class SamochoGUIControler {
     @FXML
@@ -27,6 +32,9 @@ public class SamochoGUIControler {
 
     @FXML
     private ComboBox selectCarComboBox;
+
+    @FXML
+    private Button newCarButton;
 
     @FXML
     private void onStartButton() {
@@ -82,7 +90,22 @@ public class SamochoGUIControler {
         this.refresh();
     }
 
+    @FXML
+    private void onNewCarButton() throws IOException {
+        this.openNewCarWindow();
+        this.refresh();
+    }
+
     private void refresh() {
         System.out.println("Refresh");
+    }
+
+    private void openNewCarWindow() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("newCar.fxml"));
+        Stage stage = new Stage();
+        stage.setScene(new Scene(loader.load()));
+        stage.setTitle("Dodaj nowy samochód");
+        stage.setResizable(false);
+        stage.show();
     }
 }
