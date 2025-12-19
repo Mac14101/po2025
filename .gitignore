@@ -1,1 +1,29 @@
+# IntelliJ IDEA
+.idea/
+*.iml
+out/
+
+# Kompilacja Java
 *.class
+*.jar
+*.war
+*.ear
+
+# Logi i tymczasowe pliki
+*.log
+*.tmp
+*.swp
+
+# System operacyjny
+.DS_Store
+Thumbs.db
+
+# Maven
+target/
+
+# Gradle
+.gradle/
+build/
+
+# Pliki cache
+*.cache
