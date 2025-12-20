@@ -101,6 +101,14 @@ JExpHandler..|>JExpNext
    * public **void** type() - ustawia typ odpowiedzi
    * public **void** send() throws **Exception** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
    * public **void** end() throws **Exception** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
+7. JExpNext
+   Klasa pozwalająca pomijać funkcje obsługi tras.
+   Atrybuty:
+   * private **boolean** nextHandler - jeśli prawda przechodzi do następnego obiektu obsługującego trasę
+   * private **boolean** nextRoute - jeśli prawda przechodzi do nastepnej dopasowanej trasy
+   Metody:
+   * public **void** next() throws **Exception** - przechodzi do następnego obiektu obsługującego trasę, wyrzuca wyjątek po drugim wywołaniu
+   * public **void** nextRoute() throws **Exception** - przechodzi do nastepnej dopasowanej trasy, wyrzuca wyjątek po drugim wywołaniu
 
 ## Diagramy sekwencji
 
@@ -194,3 +202,7 @@ deactivate Server
    * [JExpResponse](../jexp/src/main/java/jexp/JExpResponse.java)
       * metoda **send()**
       * metoda **end()**
+2. Dodać klasę błędu następnego obiektu obsługi
+   * [JExpNext](../jexp/src/main/java/jexp/JExpNext.java)
+      * metoda **next()**
+      * metoda **nextRoute()**
