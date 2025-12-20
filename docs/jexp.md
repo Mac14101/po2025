@@ -79,7 +79,15 @@ JExpHandler..|>JExpNext
 5. JExpRequest
    Klasa reprezentująca żądanie HTTP.
    Atrybuty:
+   * private final **Headers** headers - obiekt nagłówków HTTP
+   * private final **String[]** path - tablica ciągów znaków ułatwiająca dopasowanie żądania do trasy
+   * private final **String** protocol - wersja protokołu
+   * private final **String** url - adres URL razem z query string
    Metody:
+   * public **Headers** getHeaders() - metoda zwracająca obiekt nagłówków HTTP
+   * public **String[]** getPath() - metoda zwracająca tablicę ciągów znaków ułatwiających dopasowanie trasy
+   * public **String** getProtocol() - metoda zwracająca wersję protokołu
+   * public **String** getUrl() - metoda zwracająca adres URL razem z query string
 6. JExpResponse
    Klasa reprezentująca odpowiedź HTTP.
    Atrybuty:
