@@ -91,7 +91,16 @@ JExpHandler..|>JExpNext
 6. JExpResponse
    Klasa reprezentująca odpowiedź HTTP.
    Atrybuty:
+   * private final Headers headers - obiekt nagłówków HTTP
+   * private int statusCode - kod odpowiedzi HTTP
+   * private String body - ciało odpowiedzi
+   * private boolean closed - atrybut 
    Metody:
+   * public **void** status() - ustawia status HTTP odpowiedzi
+   * public **void** header() - dodaje nowy nagłówek HTTP
+   * public **void** type() - ustawia typ odpowiedzi
+   * public **void** send() throws **Exception** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
+   * public **void** end() throws **Exception** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
 
 ## Diagramy sekwencji
 
@@ -179,3 +188,9 @@ Server->User : Wysłanie odpowiedzi
 deactivate Server
 @enduml
 ```
+
+## TODO
+1. Dodać klasę błędu odpowiedzi
+   * [JExpResponse](../jexp/src/main/java/jexp/JExpResponse.java)
+      * metoda **send()**
+      * metoda **end()**

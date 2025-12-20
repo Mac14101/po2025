@@ -23,9 +23,9 @@ public class JExpRequestTest {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         JExpRequest request = new JExpRequest(exchange);
         assertArrayEquals(new String[]{}, request.getPath());
-        exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/"));
+        exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
         request = new JExpRequest(exchange);
-        assertArrayEquals(new String[]{"abc"}, request.getPath());
+        assertArrayEquals(new String[]{"abc", "abc"}, request.getPath());
     }
 
     @Test
@@ -40,8 +40,8 @@ public class JExpRequestTest {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         JExpRequest request = new JExpRequest(exchange);
         assertEquals("/", request.getUrl());
-        exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/"));
+        exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
         request = new JExpRequest(exchange);
-        assertEquals("/abc/", request.getUrl());
+        assertEquals("/abc/abc/", request.getUrl());
     }
 }
