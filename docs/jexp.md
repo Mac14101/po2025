@@ -50,6 +50,14 @@
       * private **Handler** handler - obiekt obsługujący trasę o podanej metodzie
    Metody:
       * public **void** handle() - metoda obsługująca żądanie HTTP tylko o metodzie podanej w atrybucie **method**
+6. RoutingList
+   Klasa odpowiedzialna za przechowywanie dopasowania tras do obiektów obsługujących trasę. Zapewnia automatyczną inicjalizację listy obiektów obsługi trasy.
+   Atrybuty:
+   * private **HashMap<String, ArrayList<Handler>>** pathList;
+   Metody:
+   * public **void** addHandler() - metoda dodająca obiekt obsługi trasy
+   * public **ArrayList<Handler>** getHandlers() - metoda pobierająca listę obiektów obsługi trasy
+   * public **boolean** hasPath() - metoda sprawdzająca czy trasa jest zapisana, **true** - trasa zapisana / **false** - brak trasy
 
 ## Wyjątki
 1. JExpError - ogólna klasa wyjątku
