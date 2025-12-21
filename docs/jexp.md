@@ -3,81 +3,8 @@
 
 ## Diagram UML klas
 
-```plantuml
-@startuml
-interface Handler{
-+ handle(): void
-}
-class MethodHandler{
-}
-class Router{
-}
-class Server{
-}
-
-class Request{
-}
-class Response{
-}
-class Next{
-}
-
-MethodHandler--|>Handler
-MethodHandler--*Handler
-Router--|>Handler
-Router--*Handler
-Router--*MethodHandler
-Server--*Router
-
-Server..|>Request
-Server..|>Response
-Server..|>Next
-
-Handler..|>Request
-Handler..|>Response
-Handler..|>Next
-
-@enduml
-```
-
 ## Klasy i interfejsy
-
-1. Handler
-   Interfejs, którego rozszerzeniem są obiekty obsługujące określone trasy.
-   Metody:
-      * public **void** handle() - metoda obsługująca żądanie HTTP
-2. MethodHandler
-   Klasa rozszerzająca interfejs **Handler**, obsługująca tylko żądania o wybranej metodzie HTTP.
-   Atrybuty:
-      * private **String** method - metoda żądania HTTP, którą obiekt może obsłużyć
-      * private **Handler** handler - obiekt obsługujący trasę o podanej metodzie
-   Metody:
-      * public **void** handle() - metoda obsługująca żądanie HTTP tylko o metodzie podanej w atrybucie **method**
-3. Router
-   Klasa rozszerzająca interfejs **Handler**, implementująca routing.
-   Atrybuty:
-      * private **HashMap<String, ArrayList<Handler>>** handlers - tablica zawierająca odwzorowanie tras na obiekty obsługujące trasę
-   Metody:
-      * public **void** use() - metoda dodająca nowy obiekt obsługujący trasę do routera, dowolna metoda HTTP
-      * public **void** get() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *GET*
-      * public **void** post() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *POST*
-      * public **void** put() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *PUT*
-      * public **void** delete() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *DELETE*
-      * public **void** method() - metoda dodająca nowy obiekt obsługujący trasę do routera, wybrana metoda HTTP
-4. Server
-   Klasa zawierająca serwer HTTP oraz główny router serwera, do którego są dodawane obiekty obsługujące trasy.
-   Atrybuty:
-      * private **HttpServer** server
-      * private **Router** mainRouter - główny router serwera
-   Metody:
-      * public **void** listen() - tworzy serwer HTTP, który rozpoczyna nasłuchiwanie na wybranym porcie
-      * public **void** use() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, dowolna metoda HTTP
-      * public **void** get() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, metoda HTTP *GET*
-      * public **void** post() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, metoda HTTP *POST*
-      * public **void** put() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, metoda HTTP *PUT*
-      * public **void** delete() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, metoda HTTP *DELETE*
-      * public **void** method() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, wybrana metoda HTTP
-5. Request
+1. Request
    Klasa reprezentująca żądanie HTTP.
    Atrybuty:
    * private final **Headers** headers - obiekt nagłówków HTTP
@@ -91,7 +18,7 @@ Handler..|>Next
    * public **String** getProtocol() - metoda zwracająca wersję protokołu
    * public **String** getUrl() - metoda zwracająca adres URL razem z query string
    * public **String** getMethod() - metoda zwracająca metodę użytą w żądaniu HTTP
-6. Response
+2. Response
    Klasa reprezentująca odpowiedź HTTP.
    Atrybuty:
    * private final Headers headers - obiekt nagłówków HTTP
@@ -104,7 +31,7 @@ Handler..|>Next
    * public **void** type() - ustawia typ odpowiedzi
    * public **void** send() throws **Exception** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
    * public **void** end() throws **Exception** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
-7. Next
+3. Next
    Klasa pozwalająca pomijać funkcje obsługi tras.
    Atrybuty:
    * private **boolean** nextHandler - jeśli prawda przechodzi do następnego obiektu obsługującego trasę
@@ -112,93 +39,19 @@ Handler..|>Next
    Metody:
    * public **void** next() throws **Exception** - przechodzi do następnego obiektu obsługującego trasę, wyrzuca wyjątek po drugim wywołaniu
    * public **void** nextRoute() throws **Exception** - przechodzi do nastepnej dopasowanej trasy, wyrzuca wyjątek po drugim wywołaniu
+4. Handler
+   Interfejs, którego rozszerzeniem są obiekty obsługujące określone trasy.
+   Metody:
+      * public **void** handle() - metoda obsługująca żądanie HTTP
+5. MethodHandler
+   Klasa rozszerzająca interfejs **Handler**, obsługująca tylko żądania o wybranej metodzie HTTP.
+   Atrybuty:
+      * private **String** method - metoda żądania HTTP, którą obiekt może obsłużyć
+      * private **Handler** handler - obiekt obsługujący trasę o podanej metodzie
+   Metody:
+      * public **void** handle() - metoda obsługująca żądanie HTTP tylko o metodzie podanej w atrybucie **method**
 
 ## Diagramy sekwencji
-
-### Obsługa żądanie HTTP
-1. Brak routerów zagnieżdżonych, jeden obiekt obsługi trasy
-```plantuml
-@startuml
-actor "Użytkownik" as User
-participant "App" as Server
-participant "mainRouter" as Router
-participant "Handler" as Handler
-User->Server : Wysłanie żądania Http
-activate Server
-Server->Server : Stworzenie obiektu żądania i obiektu odpowiedzi
-Server->Router : handle()
-activate Router
-Router->Handler : handle()
-activate Handler
-Handler->Router
-deactivate Handler
-Router->Server
-deactivate Router
-Server->User : Wysłanie odpowiedzi Http
-deactivate Server
-@enduml
-```
-
-2. Router zagnieżdżony, jeden obiekt obsługujący trasę
-```plantuml
-@startuml
-actor "Użytkownik" as User
-participant "App" as Server
-participant "mainRouter" as MainRouter
-participant "Router(/a/)" as Router1
-participant "Router(/a/b/)" as Router2
-participant "Handler" as Handler
-User->Server : Wysłanie żądania Http
-activate Server
-Server->Server : Stworzenie obiektu żądania i obiektu odpowiedzi
-Server->MainRouter : handle()
-activate MainRouter
-MainRouter->Router1 : handle()
-activate Router1
-Router1->Router2 : handle()
-activate Router2
-Router2->Handler : handle()
-activate Handler
-Handler->Router2
-deactivate Handler
-Router2->Router1
-deactivate Router2
-Router1->MainRouter
-deactivate Router1
-MainRouter->Server
-deactivate MainRouter
-Server->User : Wysłanie odpowiedzi
-deactivate Server
-@enduml
-```
-
-3. Brak routerów zagnieżdżonych, dwa obiekty obsługujące trasę trasy
-```plantuml
-@startuml
-actor "Użytkownik" as User
-participant "App" as Server
-participant "mainRouter" as Router
-participant "Handler1" as Handler1
-participant "Handler2" as Handler2
-User->Server : Wysłanie żądania Http
-activate Server
-Server->Server : Stworzenie obiektu żądania i obiektu odpowiedzi
-Server->Router : handle()
-activate Router
-Router->Handler1 : handle()
-Activate Handler1
-Handler1->Router : Next.next()
-deactivate Handler1
-Router->Handler2 : handle()
-activate Handler2
-Handler2->Router
-deactivate Handler2
-Router->Server
-deactivate Router
-Server->User : Wysłanie odpowiedzi
-deactivate Server
-@enduml
-```
 
 ## TODO
 1. Dodać klasę błędu odpowiedzi
