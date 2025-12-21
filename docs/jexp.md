@@ -50,6 +50,7 @@ Handler..|>Next
    Klasa rozszerzająca interfejs **Handler**, obsługująca tylko żądania o wybranej metodzie HTTP.
    Atrybuty:
       * private **String** method - metoda żądania HTTP, którą obiekt może obsłużyć
+      * private **Handler** handler - obiekt obsługujący trasę o podanej metodzie
    Metody:
       * public **void** handle() - metoda obsługująca żądanie HTTP tylko o metodzie podanej w atrybucie **method**
 3. Router

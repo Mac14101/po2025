@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.URI;
+import java.net.URISyntaxException;
 
 public class TestExchange extends HttpExchange {
     String method;
@@ -30,6 +31,14 @@ public class TestExchange extends HttpExchange {
         this.protocol = protocol;
         this.method = method;
         this.uri = uri;
+        this.requestHeaders = new Headers();
+        this.responseHeaders = new Headers();
+    }
+
+    public TestExchange() throws URISyntaxException {
+        this.protocol = "protocol";
+        this.method = "GET";
+        this.uri = new URI("https://localhost:8080");
         this.requestHeaders = new Headers();
         this.responseHeaders = new Headers();
     }
