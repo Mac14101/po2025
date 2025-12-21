@@ -9,16 +9,16 @@ public class Next {
         this.nextRoute = false;
     }
 
-    public void next() throws Exception {
+    public void next() throws NextError {
         if (this.nextHandler || this.nextRoute) {
-            throw new Exception(); // TODO Dodać klasę błędu następnego obiektu przetwarzania HTTP
+            throw new NextError("Next handler has been already invoked!");
         }
         this.nextHandler = true;
     }
 
-    public void nextRoute() throws Exception {
+    public void nextRoute() throws NextError {
         if (this.nextHandler || this.nextRoute) {
-            throw new Exception(); // TODO Dodać klasę błędu następnego obiektu przetwarzania HTTP
+            throw new NextError("Next handler has been already invoked!");
         }
         this.nextRoute = true;
     }
@@ -29,5 +29,11 @@ public class Next {
 
     public boolean getNextRoute() {
         return this.nextRoute;
+    }
+
+    public static class NextError extends JExpError {
+        public NextError(String message) {
+            super(message);
+        }
     }
 }

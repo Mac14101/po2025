@@ -51,14 +51,11 @@
    Metody:
       * public **void** handle() - metoda obsługująca żądanie HTTP tylko o metodzie podanej w atrybucie **method**
 
+## Wyjątki
+1. JExpError - ogólna klasa wyjątku
+2. ResponseError - wyjątek obiektu odpowiedzi
+3. NextError - wyjątek obiektu odpowiedzialnego za przetwarzanie potokowe
+
 ## Diagramy sekwencji
 
 ## TODO
-1. Dodać klasę błędu odpowiedzi
-   * [Response](..//src/main/java//Response.java)
-      * metoda **send()**
-      * metoda **end()**
-2. Dodać klasę błędu następnego obiektu obsługi
-   * [Next](..//src/main/java//Next.java)
-      * metoda **next()**
-      * metoda **nextRoute()**

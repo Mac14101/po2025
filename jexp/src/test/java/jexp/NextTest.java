@@ -14,7 +14,7 @@ public class NextTest {
         next.next();
         assertTrue(next.getNext());
         assertFalse(next.getNextRoute());
-        assertThrows(Exception.class, () -> {
+        assertThrows(Next.NextError.class, () -> {
             next.next();
         });
     }
@@ -27,7 +27,7 @@ public class NextTest {
         next.nextRoute();
         assertFalse(next.getNext());
         assertTrue(next.getNextRoute());
-        assertThrows(Exception.class, () -> {
+        assertThrows(Next.NextError.class, () -> {
             next.nextRoute();
         });
     }

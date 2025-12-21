@@ -4,6 +4,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -11,7 +12,7 @@ import static org.junit.Assert.assertTrue;
 public class MethodHandlerTest {
 
     @Test
-    public void handleRightMethod() throws Exception {
+    public void handleRightMethod() throws URISyntaxException, Next.NextError, Response.ResponseError {
         Handler handler = Mockito.mock(Handler.class);
         MethodHandler methodHandler = new MethodHandler("GET", handler);
         Request request = new Request(new TestExchange());
@@ -22,7 +23,7 @@ public class MethodHandlerTest {
     }
 
     @Test
-    public void handleWrongMethod() throws Exception {
+    public void handleWrongMethod() throws URISyntaxException, Next.NextError, Response.ResponseError {
         Handler handler = Mockito.mock(Handler.class);
         MethodHandler methodHandler = new MethodHandler("GET", handler);
         Request request = new Request(new TestExchange("protocol", "POST", new URI("https://localhost:8080")));

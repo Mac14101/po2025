@@ -43,23 +43,23 @@ public class ResponseTest {
     }
 
     @Test
-    public void send() throws Exception {
+    public void send() throws Response.ResponseError {
         Response response = new Response();
         assertNull(response.getBody());
         response.send("body");
         assertEquals("body", response.getBody());
         assertTrue(response.isClosed());
-        assertThrows(Exception.class, () -> {
+        assertThrows(Response.ResponseError.class, () -> {
             response.send("data");
         });
     }
 
     @Test
-    public void end() throws Exception {
+    public void end() throws Response.ResponseError {
         Response response = new Response();
         response.end();
         assertTrue(response.isClosed());
-        assertThrows(Exception.class, () -> {
+        assertThrows(Response.ResponseError.class, () -> {
             response.end();
         });
     }

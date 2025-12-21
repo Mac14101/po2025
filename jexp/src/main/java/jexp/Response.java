@@ -34,17 +34,17 @@ public class Response {
         this.header("Content-Type", type);
     }
 
-    public void send(String data) throws Exception {
+    public void send(String data) throws ResponseError {
         if (this.closed) {
-            throw new Exception(); // TODO : Dodać klasę błędu odpowiedzi
+            throw new ResponseError("Response has been closed!");
         }
         this.body = data;
         this.closed = true;
     }
 
-    public void end() throws Exception {
+    public void end() throws ResponseError {
         if (this.closed) {
-            throw new Exception(); // TODO : Dodać klasę błędu odpowiedzi
+            throw new ResponseError("Response has been closed!");
         }
         this.closed = true;
     }
@@ -65,5 +65,11 @@ public class Response {
 
     public boolean isClosed() {
         return closed;
+    }
+
+    public static class ResponseError extends JExpError {
+        public ResponseError(String message) {
+            super(message);
+        }
     }
 }
