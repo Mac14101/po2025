@@ -1,61 +1,61 @@
 # Moduł JExp
-JExp to moduł wzorowany na frameworku express.js dla środowiska Node.js. Moduł opakowuje wbudowany serwer HTTP, aby zapewnić szybkie i wygodne budowanie serwerów, a zwłaszcza REST API. Klasa **JExpServer** posiada główny router aplikacji odpowiedzialny za obsługę wszystkich tras. Do głównego routera mogą zostać inne routery obsługujące inne trasy, tworząc drzewiastą strukturę obsługującą trasy oraz zapewniającą przetwarzanie potokowe (przez co ważna jest kolejność dodawania tras). Taka struktura aplikacji jest możliwa dzięki użyciu wzorca Composite, każdy obiekt obsługujący żądanie rozszerza interfejs **JExpHandler**, przez co musi posiadać metodę **handle()**, która jest wywoływana stopniowo przez kolejne elementy, aż przetwarzanie żądania zostanie zakończone.
+ JExp to moduł wzorowany na frameworku express.js dla środowiska Node.js. Moduł opakowuje wbudowany serwer HTTP, aby zapewnić szybkie i wygodne budowanie serwerów, a zwłaszcza REST API. Klasa **Server** posiada główny router aplikacji odpowiedzialny za obsługę wszystkich tras. Do głównego routera mogą zostać inne routery obsługujące inne trasy, tworząc drzewiastą strukturę obsługującą trasy oraz zapewniającą przetwarzanie potokowe (przez co ważna jest kolejność dodawania tras). Taka struktura aplikacji jest możliwa dzięki użyciu wzorca Composite, każdy obiekt obsługujący żądanie rozszerza interfejs **Handler**, przez co musi posiadać metodę **handle()**, która jest wywoływana stopniowo przez kolejne elementy, aż przetwarzanie żądania zostanie zakończone.
 
 ## Diagram UML klas
 
 ```plantuml
 @startuml
-interface JExpHandler{
+interface Handler{
 + handle(): void
 }
-class JExpMethodHandler{
+class MethodHandler{
 }
-class JExpRouter{
+class Router{
 }
-class JExpServer{
-}
-
-class JExpRequest{
-}
-class JExpResponse{
-}
-class JExpNext{
+class Server{
 }
 
-JExpMethodHandler--|>JExpHandler
-JExpMethodHandler--*JExpHandler
-JExpRouter--|>JExpHandler
-JExpRouter--*JExpHandler
-JExpRouter--*JExpMethodHandler
-JExpServer--*JExpRouter
+class Request{
+}
+class Response{
+}
+class Next{
+}
 
-JExpServer..|>JExpRequest
-JExpServer..|>JExpResponse
-JExpServer..|>JExpNext
+MethodHandler--|>Handler
+MethodHandler--*Handler
+Router--|>Handler
+Router--*Handler
+Router--*MethodHandler
+Server--*Router
 
-JExpHandler..|>JExpRequest
-JExpHandler..|>JExpResponse
-JExpHandler..|>JExpNext
+Server..|>Request
+Server..|>Response
+Server..|>Next
+
+Handler..|>Request
+Handler..|>Response
+Handler..|>Next
 
 @enduml
 ```
 
 ## Klasy i interfejsy
 
-1. JExpHandler
+1. Handler
    Interfejs, którego rozszerzeniem są obiekty obsługujące określone trasy.
    Metody:
       * public **void** handle() - metoda obsługująca żądanie HTTP
-2. JExpMethodHandler
-   Klasa rozszerzająca interfejs **JExpHandler**, obsługująca tylko żądania o wybranej metodzie HTTP.
+2. MethodHandler
+   Klasa rozszerzająca interfejs **Handler**, obsługująca tylko żądania o wybranej metodzie HTTP.
    Atrybuty:
       * private **String** method - metoda żądania HTTP, którą obiekt może obsłużyć
    Metody:
       * public **void** handle() - metoda obsługująca żądanie HTTP tylko o metodzie podanej w atrybucie **method**
-3. JExpRouter
-   Klasa rozszerzająca interfejs **JExpHandler**, implementująca routing.
+3. Router
+   Klasa rozszerzająca interfejs **Handler**, implementująca routing.
    Atrybuty:
-      * private **HashMap<String, ArrayList<JExpHandler>>** handlers - tablica zawierająca odwzorowanie tras na obiekty obsługujące trasę
+      * private **HashMap<String, ArrayList<Handler>>** handlers - tablica zawierająca odwzorowanie tras na obiekty obsługujące trasę
    Metody:
       * public **void** use() - metoda dodająca nowy obiekt obsługujący trasę do routera, dowolna metoda HTTP
       * public **void** get() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *GET*
@@ -63,11 +63,11 @@ JExpHandler..|>JExpNext
       * public **void** put() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *PUT*
       * public **void** delete() - metoda dodająca nowy obiekt obsługujący trasę do routera, metoda HTTP *DELETE*
       * public **void** method() - metoda dodająca nowy obiekt obsługujący trasę do routera, wybrana metoda HTTP
-4. JExpServer
+4. Server
    Klasa zawierająca serwer HTTP oraz główny router serwera, do którego są dodawane obiekty obsługujące trasy.
    Atrybuty:
       * private **HttpServer** server
-      * private **JExpRouter** mainRouter - główny router serwera
+      * private **Router** mainRouter - główny router serwera
    Metody:
       * public **void** listen() - tworzy serwer HTTP, który rozpoczyna nasłuchiwanie na wybranym porcie
       * public **void** use() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, dowolna metoda HTTP
@@ -76,19 +76,21 @@ JExpHandler..|>JExpNext
       * public **void** put() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, metoda HTTP *PUT*
       * public **void** delete() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, metoda HTTP *DELETE*
       * public **void** method() - metoda dodająca nowy obiekt obsługujący trasę do głównego routera, wybrana metoda HTTP
-5. JExpRequest
+5. Request
    Klasa reprezentująca żądanie HTTP.
    Atrybuty:
    * private final **Headers** headers - obiekt nagłówków HTTP
    * private final **String[]** path - tablica ciągów znaków ułatwiająca dopasowanie żądania do trasy
    * private final **String** protocol - wersja protokołu
    * private final **String** url - adres URL razem z query string
+   * private final **String** method - metoda użyta w żądaniu HTTP
    Metody:
    * public **Headers** getHeaders() - metoda zwracająca obiekt nagłówków HTTP
    * public **String[]** getPath() - metoda zwracająca tablicę ciągów znaków ułatwiających dopasowanie trasy
    * public **String** getProtocol() - metoda zwracająca wersję protokołu
    * public **String** getUrl() - metoda zwracająca adres URL razem z query string
-6. JExpResponse
+   * public **String** getMethod() - metoda zwracająca metodę użytą w żądaniu HTTP
+6. Response
    Klasa reprezentująca odpowiedź HTTP.
    Atrybuty:
    * private final Headers headers - obiekt nagłówków HTTP
@@ -101,7 +103,7 @@ JExpHandler..|>JExpNext
    * public **void** type() - ustawia typ odpowiedzi
    * public **void** send() throws **Exception** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
    * public **void** end() throws **Exception** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
-7. JExpNext
+7. Next
    Klasa pozwalająca pomijać funkcje obsługi tras.
    Atrybuty:
    * private **boolean** nextHandler - jeśli prawda przechodzi do następnego obiektu obsługującego trasę
@@ -117,9 +119,9 @@ JExpHandler..|>JExpNext
 ```plantuml
 @startuml
 actor "Użytkownik" as User
-participant "JExpApp" as Server
+participant "App" as Server
 participant "mainRouter" as Router
-participant "JExpHandler" as Handler
+participant "Handler" as Handler
 User->Server : Wysłanie żądania Http
 activate Server
 Server->Server : Stworzenie obiektu żądania i obiektu odpowiedzi
@@ -140,11 +142,11 @@ deactivate Server
 ```plantuml
 @startuml
 actor "Użytkownik" as User
-participant "JExpApp" as Server
+participant "App" as Server
 participant "mainRouter" as MainRouter
 participant "Router(/a/)" as Router1
 participant "Router(/a/b/)" as Router2
-participant "JExpHandler" as Handler
+participant "Handler" as Handler
 User->Server : Wysłanie żądania Http
 activate Server
 Server->Server : Stworzenie obiektu żądania i obiektu odpowiedzi
@@ -173,10 +175,10 @@ deactivate Server
 ```plantuml
 @startuml
 actor "Użytkownik" as User
-participant "JExpApp" as Server
+participant "App" as Server
 participant "mainRouter" as Router
-participant "JExpHandler1" as Handler1
-participant "JExpHandler2" as Handler2
+participant "Handler1" as Handler1
+participant "Handler2" as Handler2
 User->Server : Wysłanie żądania Http
 activate Server
 Server->Server : Stworzenie obiektu żądania i obiektu odpowiedzi
@@ -184,7 +186,7 @@ Server->Router : handle()
 activate Router
 Router->Handler1 : handle()
 Activate Handler1
-Handler1->Router : JExpNext.next()
+Handler1->Router : Next.next()
 deactivate Handler1
 Router->Handler2 : handle()
 activate Handler2
@@ -199,10 +201,10 @@ deactivate Server
 
 ## TODO
 1. Dodać klasę błędu odpowiedzi
-   * [JExpResponse](../jexp/src/main/java/jexp/JExpResponse.java)
+   * [Response](..//src/main/java//Response.java)
       * metoda **send()**
       * metoda **end()**
 2. Dodać klasę błędu następnego obiektu obsługi
-   * [JExpNext](../jexp/src/main/java/jexp/JExpNext.java)
+   * [Next](..//src/main/java//Next.java)
       * metoda **next()**
       * metoda **nextRoute()**

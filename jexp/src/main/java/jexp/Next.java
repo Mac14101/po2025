@@ -1,10 +1,10 @@
 package jexp;
 
-public class JExpNext {
+public class Next {
     private boolean nextHandler;
     private boolean nextRoute;
 
-    JExpNext() {
+    Next() {
         this.nextHandler = false;
         this.nextRoute = false;
     }

@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class JExpResponseTest {
+public class ResponseTest {
 
     @Test
     public void status() {
-        JExpResponse response = new JExpResponse();
+        Response response = new Response();
         assertEquals(200, response.getStatusCode());
         response.status(201);
         assertEquals(201, response.getStatusCode());
@@ -17,7 +17,7 @@ public class JExpResponseTest {
 
     @Test
     public void header() {
-        JExpResponse response = new JExpResponse();
+        Response response = new Response();
         response.header("header1", "header1Value");
         response.header("header2", "header2Value");
         assertTrue(response.getHeaders().containsKey("header1"));
@@ -27,7 +27,7 @@ public class JExpResponseTest {
         Headers headers = new Headers();
         headers.add("header1", "header1Value");
         headers.add("header2", "header2Value");
-        response = new JExpResponse(headers);
+        response = new Response(headers);
         assertTrue(response.getHeaders().containsKey("header1"));
         assertTrue(response.getHeaders().containsKey("header2"));
         assertArrayEquals(new String[]{"header1Value"}, response.getHeaders().get("header1").toArray());
@@ -36,7 +36,7 @@ public class JExpResponseTest {
 
     @Test
     public void type() {
-        JExpResponse response = new JExpResponse();
+        Response response = new Response();
         response.type("type");
         assertTrue(response.getHeaders().containsKey("Content-Type"));
         assertArrayEquals(new String[]{"type"}, response.getHeaders().get("Content-Type").toArray());
@@ -44,7 +44,7 @@ public class JExpResponseTest {
 
     @Test
     public void send() throws Exception {
-        JExpResponse response = new JExpResponse();
+        Response response = new Response();
         assertNull(response.getBody());
         response.send("body");
         assertEquals("body", response.getBody());
@@ -56,7 +56,7 @@ public class JExpResponseTest {
 
     @Test
     public void end() throws Exception {
-        JExpResponse response = new JExpResponse();
+        Response response = new Response();
         response.end();
         assertTrue(response.isClosed());
         assertThrows(Exception.class, () -> {

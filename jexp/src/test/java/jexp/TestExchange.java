@@ -67,7 +67,7 @@ public class TestExchange extends HttpExchange {
 
     @Override
     public String getRequestMethod() {
-        return "";
+        return this.method;
     }
 
     @Override

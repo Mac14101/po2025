@@ -4,13 +4,13 @@ package jexp;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
-public class JExpRequest {
+public class Request {
     private final Headers headers;
     private final String[] path;
     private final String protocol;
     private final String url;
 
-    public JExpRequest(HttpExchange exchange) {
+    public Request(HttpExchange exchange) {
         this.headers = exchange.getRequestHeaders();
         this.url = exchange.getRequestURI().getPath();
         String[] path = exchange.getRequestURI().getPath().split("[/]");
@@ -40,4 +40,5 @@ public class JExpRequest {
     public String getUrl() {
         return this.url;
     }
+
 }

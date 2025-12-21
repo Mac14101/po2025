@@ -4,11 +4,11 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class JExpNextTest {
+public class NextTest {
 
     @Test
     public void next() throws Exception {
-        JExpNext next = new JExpNext();
+        Next next = new Next();
         assertFalse(next.getNext());
         assertFalse(next.getNextRoute());
         next.next();
@@ -21,7 +21,7 @@ public class JExpNextTest {
 
     @Test
     public void nextRoute() throws Exception {
-        JExpNext next = new JExpNext();
+        Next next = new Next();
         assertFalse(next.getNext());
         assertFalse(next.getNextRoute());
         next.nextRoute();

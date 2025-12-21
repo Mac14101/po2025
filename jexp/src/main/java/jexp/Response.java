@@ -2,20 +2,20 @@ package jexp;
 
 import com.sun.net.httpserver.Headers;
 
-public class JExpResponse {
+public class Response {
     private final Headers headers;
     private int statusCode;
     private String body;
     private boolean closed;
 
-    public JExpResponse(Headers headers) {
+    public Response(Headers headers) {
         this.headers = headers;
         this.statusCode = 200;
         this.body = null;
         this.closed = false;
     }
 
-    public JExpResponse() {
+    public Response() {
         this.headers = new Headers();
         this.statusCode = 200;
         this.body = null;

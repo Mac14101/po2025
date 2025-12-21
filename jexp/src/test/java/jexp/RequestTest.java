@@ -7,41 +7,41 @@ import java.net.URISyntaxException;
 
 import static org.junit.Assert.*;
 
-public class JExpRequestTest {
+public class RequestTest {
 
     @Test
     public void getHeaders() throws URISyntaxException {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         exchange.addRequestHeaders("header1", "header1Value");
         exchange.addRequestHeaders("header2", "header2Value");
-        JExpRequest request = new JExpRequest(exchange);
+        Request request = new Request(exchange);
         assertSame(exchange.getRequestHeaders(), request.getHeaders());
     }
 
     @Test
     public void getPath() throws URISyntaxException {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
-        JExpRequest request = new JExpRequest(exchange);
+        Request request = new Request(exchange);
         assertArrayEquals(new String[]{}, request.getPath());
         exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
-        request = new JExpRequest(exchange);
+        request = new Request(exchange);
         assertArrayEquals(new String[]{"abc", "abc"}, request.getPath());
     }
 
     @Test
     public void getProtocol() throws URISyntaxException {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
-        JExpRequest request = new JExpRequest(exchange);
+        Request request = new Request(exchange);
         assertEquals("Protocol", request.getProtocol());
     }
 
     @Test
     public void getUrl() throws URISyntaxException {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
-        JExpRequest request = new JExpRequest(exchange);
+        Request request = new Request(exchange);
         assertEquals("/", request.getUrl());
         exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
-        request = new JExpRequest(exchange);
+        request = new Request(exchange);
         assertEquals("/abc/abc/", request.getUrl());
     }
 }
