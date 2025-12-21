@@ -44,4 +44,11 @@ public class RequestTest {
         request = new Request(exchange);
         assertEquals("/abc/abc/", request.getUrl());
     }
+
+    @Test
+    public void getMethod() throws URISyntaxException {
+        TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
+        Request request = new Request(exchange);
+        assertEquals("GET", request.getMethod());
+    }
 }

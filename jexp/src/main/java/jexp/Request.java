@@ -9,6 +9,7 @@ public class Request {
     private final String[] path;
     private final String protocol;
     private final String url;
+    private final String method;
 
     public Request(HttpExchange exchange) {
         this.headers = exchange.getRequestHeaders();
@@ -23,6 +24,7 @@ public class Request {
             }
         }
         this.protocol = exchange.getProtocol();
+        this.method = exchange.getRequestMethod();
     }
 
     public Headers getHeaders() {
@@ -41,4 +43,7 @@ public class Request {
         return this.url;
     }
 
+    public String getMethod() {
+        return this.method;
+    }
 }
