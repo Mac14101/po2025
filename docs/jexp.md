@@ -31,6 +31,7 @@
    * public **void** type() - ustawia typ odpowiedzi
    * public **void** send() throws **Response.ResponseError** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
    * public **void** end() throws **Response.ResponseError** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
+   * public **void** sendResponse() throws **IOException** - wysyła odpowiedź HTTP
 3. Next
    Klasa pozwalająca pomijać funkcje obsługi tras.
    Atrybuty:

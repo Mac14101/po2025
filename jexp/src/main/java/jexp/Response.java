@@ -72,12 +72,12 @@ public class Response {
     }
 
     public void sendResponse(HttpExchange exchange) throws IOException {
-        //TODO : Zaimplementować wysyłanie odpowiedzi HTTP
-        String message = "Error 501 - not Implemented";
-        exchange.sendResponseHeaders(501, message.length());
+        exchange.sendResponseHeaders(statusCode, body.length());
+        exchange.getResponseHeaders().putAll(headers);
         try (OutputStream os = exchange.getResponseBody()) {
-            os.write(message.getBytes());
+            os.write(body.getBytes());
         }
+        exchange.close();
     }
 
     public static class ResponseError extends JExpError {

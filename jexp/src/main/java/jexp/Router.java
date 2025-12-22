@@ -27,26 +27,30 @@ public class Router implements Handler {
     public void handle(Request request, Response response, Next next) throws Response.ResponseError, Next.NextError {
         if (request.getRoute().length == 0 && this.routingList.hasPath("")) {
             ArrayList<Handler> handlers = this.routingList.getHandlers("");
-            for (Handler handler : handlers) {
+            for (int i = 0; i < handlers.size(); i++) {
                 Next nextHandler = new Next();
-                handler.handle(request, response, nextHandler);
+                handlers.get(i).handle(request, response, nextHandler);
                 if (nextHandler.getNextRoute()) {
                     next.next();
                     break;
                 } else if (!nextHandler.getNext()) {
                     break;
+                } else if (nextHandler.getNext() && i + 1 == handlers.size()) {
+                    next.next();
                 }
             }
         } else if (request.getRoute().length > 0 && this.routingList.hasPath(request.getRoute()[this.depth])) {
             ArrayList<Handler> handlers = this.routingList.getHandlers(request.getRoute()[this.depth]);
-            for (Handler handler : handlers) {
+            for (int i = 0; i < handlers.size(); i++) {
                 Next nextHandler = new Next();
-                handler.handle(request, response, nextHandler);
+                handlers.get(i).handle(request, response, nextHandler);
                 if (nextHandler.getNextRoute()) {
                     next.next();
                     break;
                 } else if (!nextHandler.getNext()) {
                     break;
+                } else if (nextHandler.getNext() && i + 1 == handlers.size()) {
+                    next.next();
                 }
             }
         } else {
