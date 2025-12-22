@@ -22,7 +22,7 @@ public class RequestTest {
     public void getPath() throws URISyntaxException {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
-        assertArrayEquals(new String[]{}, request.getPath());
+        assertArrayEquals(new String[]{""}, request.getPath());
         exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
         request = new Request(exchange);
         assertArrayEquals(new String[]{"abc", "abc"}, request.getPath());

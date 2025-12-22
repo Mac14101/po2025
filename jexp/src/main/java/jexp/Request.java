@@ -14,9 +14,9 @@ public class Request {
     public Request(HttpExchange exchange) {
         this.headers = exchange.getRequestHeaders();
         this.url = exchange.getRequestURI().getPath();
-        String[] path = exchange.getRequestURI().getPath().split("[/]");
+        String[] path = exchange.getRequestURI().getPath().split("/");
         if (path.length == 0) {
-            this.path = new String[0];
+            this.path = new String[]{""};
         } else {
             this.path = new String[path.length - 1];
             for (int i = 1; i < path.length; i++) {

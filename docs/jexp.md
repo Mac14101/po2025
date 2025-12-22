@@ -29,16 +29,16 @@
    * public **void** status() - ustawia status HTTP odpowiedzi
    * public **void** header() - dodaje nowy nagłówek HTTP
    * public **void** type() - ustawia typ odpowiedzi
-   * public **void** send() throws **Exception** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
-   * public **void** end() throws **Exception** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
+   * public **void** send() throws **Response.ResponseError** - wysyła dane, blokuje wysłanie następnych danych, jeśli już zablokowane rzuca wyjątek rzuca wyjątek
+   * public **void** end() throws **Response.ResponseError** - blokuje wysyłanie danych, jeśli już zablokowane rzuca wyjątek
 3. Next
    Klasa pozwalająca pomijać funkcje obsługi tras.
    Atrybuty:
    * private **boolean** nextHandler - jeśli prawda przechodzi do następnego obiektu obsługującego trasę
    * private **boolean** nextRoute - jeśli prawda przechodzi do nastepnej dopasowanej trasy
    Metody:
-   * public **void** next() throws **Exception** - przechodzi do następnego obiektu obsługującego trasę, wyrzuca wyjątek po drugim wywołaniu
-   * public **void** nextRoute() throws **Exception** - przechodzi do nastepnej dopasowanej trasy, wyrzuca wyjątek po drugim wywołaniu
+   * public **void** next() throws **Next.NextError** - przechodzi do następnego obiektu obsługującego trasę, wyrzuca wyjątek po drugim wywołaniu
+   * public **void** nextRoute() throws **Next.NextError** - przechodzi do nastepnej dopasowanej trasy, wyrzuca wyjątek po drugim wywołaniu
 4. Handler
    Interfejs, którego rozszerzeniem są obiekty obsługujące określone trasy.
    Metody:
@@ -58,6 +58,16 @@
    * public **void** addHandler() - metoda dodająca obiekt obsługi trasy
    * public **ArrayList<Handler>** getHandlers() - metoda pobierająca listę obiektów obsługi trasy
    * public **boolean** hasPath() - metoda sprawdzająca czy trasa jest zapisana, **true** - trasa zapisana / **false** - brak trasy
+7. Router
+   Klasa odpowiedzialna za dopasowanie odpowiedniej trasy obsługującej żądanie.
+   Atrybuty:
+   * private finale **RoutingList** routingList - obiekt przechowujący obiekty obsługi trasy wraz z dopasowaną trasę
+   * private **int** depth - liczba informujący o kolejności obsługi trasy, informuje router, za który człon ścieżki odpowiada
+   Metody:
+   * public **int** getDepth() - zwraca głębokość routera
+   * public **void** setDepth() - ustawia głębokość routera
+   * public **RoutingList** getRoutingList() - zwraca listę routingu routera
+   * public **void** handle() throws **Response.ResponseError**, **Next.NextError** - obsługuje
 
 ## Wyjątki
 1. JExpError - ogólna klasa wyjątku
