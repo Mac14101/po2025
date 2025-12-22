@@ -1,6 +1,10 @@
 package jexp;
 
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class Response {
     private final Headers headers;
@@ -65,6 +69,15 @@ public class Response {
 
     public boolean isClosed() {
         return closed;
+    }
+
+    public void sendResponse(HttpExchange exchange) throws IOException {
+        //TODO : Zaimplementować wysyłanie odpowiedzi HTTP
+        String message = "Error 501 - not Implemented";
+        exchange.sendResponseHeaders(501, message.length());
+        try (OutputStream os = exchange.getResponseBody()) {
+            os.write(message.getBytes());
+        }
     }
 
     public static class ResponseError extends JExpError {

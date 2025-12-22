@@ -67,6 +67,7 @@
    * public **String** getNextPath() - zwraca ścieżkę od zadanej głębokości **depth**
    * public **String[]** getRoute() - zwraca trasę zapisaną w obiekcie
    * public **String** getNextRoute() - zwraca trasę od zadanej głębokości **depth**
+   * public **int** getDepth() - zwraca maksymalną głębokość klasy
 8. Router
    Klasa odpowiedzialna za dopasowanie odpowiedniej trasy obsługującej żądanie.
    Atrybuty:
@@ -78,6 +79,14 @@
    * public **RoutingList** getRoutingList() - zwraca listę routingu routera
    * public **void** handle() throws **Response.ResponseError**, **Next.NextError** - obsługuje żądanie, dopasowuje trasę
    * public **void** use() - dodaje nową trasę do listy routingu
+9. Server
+   Klasa opakowująca serwer HTTP. Posiada główny router, do którego dodawane są kolejne trasy, a także 2 domyślne obiekty obsługujące błąd 404 - nie znaleziono i 500 - błąd serwera.
+   Atrybuty:
+   * private **Router** mainRouter - router serwera HTTP od którego zaczyna się obsługa żądania
+   * private **HttpServer** server - instancja serwera HTTP
+   Metody:
+   * public **void** use() throws **Route.RouteError** - metoda dodająca obiekt obsługi trasy
+   * public **void** listen() throws **IOException** - metoda aktywująca serwer HTTP na porcie **port**
 
 ## Wyjątki
 1. JExpError - ogólna klasa wyjątku
