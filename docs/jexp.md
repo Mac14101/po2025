@@ -58,7 +58,16 @@
    * public **void** addHandler() - metoda dodająca obiekt obsługi trasy
    * public **ArrayList<Handler>** getHandlers() - metoda pobierająca listę obiektów obsługi trasy
    * public **boolean** hasPath() - metoda sprawdzająca czy trasa jest zapisana, **true** - trasa zapisana / **false** - brak trasy
-7. Router
+7. Route
+   Klasa reprezentująca trasę, umożliwiająca wykonywanie działań na trasie, na przykład pobieranie następnej trasy.
+   Atrybuty:
+   * private final **String[]** route - trasa zapisana w obiekcie
+   Metody:
+   * public **String** getPath() - zwraca ścieżkę zapisaną jako trasa w obiekcie
+   * public **String** getNextPath() - zwraca ścieżkę od zadanej głębokości **depth**
+   * public **String[]** getRoute() - zwraca trasę zapisaną w obiekcie
+   * public **String** getNextRoute() - zwraca trasę od zadanej głębokości **depth**
+8. Router
    Klasa odpowiedzialna za dopasowanie odpowiedniej trasy obsługującej żądanie.
    Atrybuty:
    * private finale **RoutingList** routingList - obiekt przechowujący obiekty obsługi trasy wraz z dopasowaną trasę
@@ -67,7 +76,8 @@
    * public **int** getDepth() - zwraca głębokość routera
    * public **void** setDepth() - ustawia głębokość routera
    * public **RoutingList** getRoutingList() - zwraca listę routingu routera
-   * public **void** handle() throws **Response.ResponseError**, **Next.NextError** - obsługuje
+   * public **void** handle() throws **Response.ResponseError**, **Next.NextError** - obsługuje żądanie, dopasowuje trasę
+   * public **void** use() - dodaje nową trasę do listy routingu
 
 ## Wyjątki
 1. JExpError - ogólna klasa wyjątku
