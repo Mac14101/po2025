@@ -44,6 +44,10 @@ public class Route {
         return route[depth];
     }
 
+    public int getDepth() {
+        return this.route.length;
+    }
+
     public static class RouteError extends Exception {
         public RouteError(String message) {
             super(message);

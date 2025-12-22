@@ -33,4 +33,12 @@ public class RouteTest {
         route = new Route("/");
         assertArrayEquals(new String[]{}, route.getRoute());
     }
+
+    @Test
+    public void getDepth() {
+        Route route = new Route("/a/b/c");
+        assertEquals(3, route.getDepth());
+        route = new Route("/");
+        assertEquals(0, route.getDepth());
+    }
 }

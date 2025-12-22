@@ -6,7 +6,8 @@ import com.sun.net.httpserver.HttpExchange;
 
 public class Request {
     private final Headers headers;
-    private final String[] path;
+    private final String[] route;
+    private final String path;
     private final String protocol;
     private final String url;
     private final String method;
@@ -14,15 +15,9 @@ public class Request {
     public Request(HttpExchange exchange) {
         this.headers = exchange.getRequestHeaders();
         this.url = exchange.getRequestURI().getPath();
-        String[] path = exchange.getRequestURI().getPath().split("/");
-        if (path.length == 0) {
-            this.path = new String[]{""};
-        } else {
-            this.path = new String[path.length - 1];
-            for (int i = 1; i < path.length; i++) {
-                this.path[i - 1] = path[i];
-            }
-        }
+        Route route = new Route(exchange.getRequestURI().getPath());
+        this.route = route.getRoute();
+        this.path = route.getPath();
         this.protocol = exchange.getProtocol();
         this.method = exchange.getRequestMethod();
     }
@@ -31,7 +26,11 @@ public class Request {
         return this.headers;
     }
 
-    public String[] getPath() {
+    public String[] getRoute() {
+        return this.route;
+    }
+
+    public String getPath() {
         return this.path;
     }
 

@@ -21,7 +21,7 @@ public class RouterTest {
     }
 
     @Test
-    public void use() {
+    public void use() throws Route.RouteError {
         Handler handler1 = Mockito.mock(Handler.class);
         Router router = new Router();
         router.use("/", handler1);
@@ -46,7 +46,7 @@ public class RouterTest {
     }
 
     @Test
-    public void handle() throws URISyntaxException, Next.NextError, Response.ResponseError {
+    public void handle() throws URISyntaxException, Next.NextError, Response.ResponseError, Route.RouteError {
         TestExchange exchange = new TestExchange("protocol", "GET", new URI("http://localhost:8080/"));
         Request request;
         Response response;

@@ -25,8 +25,20 @@ public class Router implements Handler {
 
     @Override
     public void handle(Request request, Response response, Next next) throws Response.ResponseError, Next.NextError {
-        if (this.routingList.hasPath(request.getPath()[this.depth])) {
-            ArrayList<Handler> handlers = this.routingList.getHandlers(request.getPath()[this.depth]);
+        if (request.getRoute().length == 0 && this.routingList.hasPath("")) {
+            ArrayList<Handler> handlers = this.routingList.getHandlers("");
+            for (Handler handler : handlers) {
+                Next nextHandler = new Next();
+                handler.handle(request, response, nextHandler);
+                if (nextHandler.getNextRoute()) {
+                    next.next();
+                    break;
+                } else if (!nextHandler.getNext()) {
+                    break;
+                }
+            }
+        } else if (request.getRoute().length > 0 && this.routingList.hasPath(request.getRoute()[this.depth])) {
+            ArrayList<Handler> handlers = this.routingList.getHandlers(request.getRoute()[this.depth]);
             for (Handler handler : handlers) {
                 Next nextHandler = new Next();
                 handler.handle(request, response, nextHandler);
@@ -42,23 +54,21 @@ public class Router implements Handler {
         }
     }
 
-    public void use(String path, Handler handler) {
+    public void use(String path, Handler handler) throws Route.RouteError {
         if (handler instanceof Router) {
             ((Router) handler).setDepth(this.depth + 1);
         }
-        String[] paths = path.split("/");
-        if (paths.length == 0) {
+        Route route = new Route(path);
+        if (route.getDepth() == 0) {
             this.routingList.addHandler("", handler);
-        } else if (paths.length == 2) {
-            this.routingList.addHandler(paths[1], handler);
+        } else if (route.getDepth() == 1) {
+            this.routingList.addHandler(route.getNextRoute(0), handler);
+
         } else {
             Router routerNew = new Router();
-            String newPath = "/";
-            for (int i = 2; i < paths.length; i++) {
-                newPath += paths[i] + "/";
-            }
-            routerNew.use(newPath, handler);
-            this.routingList.addHandler(paths[1], routerNew);
+            routerNew.use(route.getNextPath(1), handler);
+            this.routingList.addHandler(route.getNextRoute(0), routerNew);
         }
+
     }
 }
