@@ -18,6 +18,8 @@
    * public **String** getProtocol() - metoda zwracająca wersję protokołu
    * public **String** getUrl() - metoda zwracająca adres URL razem z query string
    * public **String** getMethod() - metoda zwracająca metodę użytą w żądaniu HTTP
+   * public **String** getQuery() - metoda zwracająca wartość wybranego atrybutu z query string
+   * public **T** getBody() throws **JsonProcessingException** - metoda przekształcająca ciało żądania na obiekt java
 2. Response
    Klasa reprezentująca odpowiedź HTTP.
    Atrybuty:
@@ -88,6 +90,12 @@
    Metody:
    * public **void** use() throws **Route.RouteError** - metoda dodająca obiekt obsługi trasy
    * public **void** listen() throws **IOException** - metoda aktywująca serwer HTTP na porcie **port**
+10. JSONParser
+   Klasa oparta o wzorzec singleton umożliwiająca przekształcanie JSON na obiekt java.
+   Atrybuty:
+   * private static **JSONParser** mapper - pojedyncza instancja
+   Metody: 
+   * public static **T** parse() throws **JsonProcessingException** - metoda przekształcająca JSON na obiekt wybranej klasy **T**
 
 ## Wyjątki
 1. JExpError - ogólna klasa wyjątku
