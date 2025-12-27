@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400" prefWidth="600" stylesheets="@newCar.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1">
+<?import java.lang.*?>
+<VBox xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
+      minWidth="-Infinity"
+      prefHeight="400" prefWidth="600" stylesheets="@newCar.css"
+      xmlns="http://javafx.com/javafx/17.0.12" fx:controller="gui.gui.DodajSamochodController">
     <children>
         <FlowPane styleClass="container-full">
             <children>
-                <Label text="Tworzenie nowego samochodu" />
+                <Label text="Tworzenie nowego samochodu"/>
             </children>
             <styleClass>
-                <String fx:value="container-full" />
-                <String fx:value="header" />
+                <String fx:value="container-full"/>
+                <String fx:value="header"/>
             </styleClass>
         </FlowPane>
         <SplitPane dividerPositions="0.5" styleClass="container-full">
@@ -22,15 +24,17 @@
                     <children>
                         <FlowPane styleClass="container-half">
                             <children>
-                                <Label styleClass="header-section" text="Samochód" />
-                                <Label styleClass="label-section" text="Model" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Nr rejestracyjny" />
-                                <TextField styleClass="textField-section" />
-                                <Button mnemonicParsing="false" text="Wygeneruj">
-                           <FlowPane.margin>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </FlowPane.margin></Button>
+                                <Label styleClass="header-section" text="Samochód"/>
+                                <Label styleClass="label-section" text="Model"/>
+                                <TextField styleClass="textField-section" fx:id="carModelTextField"/>
+                                <Label styleClass="label-section" text="Nr rejestracyjny"/>
+                                <TextField styleClass="textField-section" fx:id="carNumberTextField"/>
+                                <Button mnemonicParsing="false" text="Wygeneruj" fx:id="carNumberGenerateButton"
+                                        onAction="#onCarNumberGenerateButton">
+                                    <FlowPane.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                                    </FlowPane.margin>
+                                </Button>
                             </children>
                         </FlowPane>
                     </children>
@@ -39,15 +43,15 @@
                     <children>
                         <FlowPane styleClass="container-half">
                             <children>
-                                <Label styleClass="header-section" text="Silnik" />
-                                <Label styleClass="label-section" text="Nazwa" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Waga" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Cena" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Maksymalne obroty" />
-                                <TextField styleClass="textField-section" />
+                                <Label styleClass="header-section" text="Silnik"/>
+                                <Label styleClass="label-section" text="Nazwa"/>
+                                <TextField styleClass="textField-section" fx:id="carEngineNameTextField"/>
+                                <Label styleClass="label-section" text="Waga"/>
+                                <TextField styleClass="textField-section" fx:id="carEngineWeightTextField"/>
+                                <Label styleClass="label-section" text="Cena"/>
+                                <TextField styleClass="textField-section" fx:id="carEnginePriceTextField"/>
+                                <Label styleClass="label-section" text="Maksymalne obroty"/>
+                                <TextField styleClass="textField-section" fx:id="carEngineMaxRPMTextField"/>
                             </children>
                         </FlowPane>
                     </children>
@@ -60,15 +64,15 @@
                     <children>
                         <FlowPane styleClass="container-half">
                             <children>
-                                <Label styleClass="header-section" text="Skrzynia biegów" />
-                                <Label styleClass="label-section" text="Nazwa" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Waga" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Cena" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Maksymalny bieg" />
-                                <TextField styleClass="textField-section" />
+                                <Label styleClass="header-section" text="Skrzynia biegów"/>
+                                <Label styleClass="label-section" text="Nazwa"/>
+                                <TextField styleClass="textField-section" fx:id="carGearboxNameTextField"/>
+                                <Label styleClass="label-section" text="Waga"/>
+                                <TextField styleClass="textField-section" fx:id="carGearboxWeightTextField"/>
+                                <Label styleClass="label-section" text="Cena"/>
+                                <TextField styleClass="textField-section" fx:id="carGearboxPriceTextField"/>
+                                <Label styleClass="label-section" text="Maksymalny bieg"/>
+                                <TextField styleClass="textField-section" fx:id="carGearboxMaxGearTextField"/>
                             </children>
                         </FlowPane>
                     </children>
@@ -77,13 +81,13 @@
                     <children>
                         <FlowPane styleClass="container-half">
                             <children>
-                                <Label styleClass="header-section" text="Sprzęgło" />
-                                <Label styleClass="label-section" text="Nazwa" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Waga" />
-                                <TextField styleClass="textField-section" />
-                                <Label styleClass="label-section" text="Cena" />
-                                <TextField styleClass="textField-section" />
+                                <Label styleClass="header-section" text="Sprzęgło"/>
+                                <Label styleClass="label-section" text="Nazwa"/>
+                                <TextField styleClass="textField-section" fx:id="carClutchNameTextField"/>
+                                <Label styleClass="label-section" text="Waga"/>
+                                <TextField styleClass="textField-section" fx:id="carClutchWeightTextField"/>
+                                <Label styleClass="label-section" text="Cena"/>
+                                <TextField styleClass="textField-section" fx:id="carClutchPriceTextField"/>
                             </children>
                         </FlowPane>
                     </children>
@@ -92,21 +96,23 @@
         </SplitPane>
         <FlowPane>
             <children>
-                <Button mnemonicParsing="false" styleClass="button-footer" text="Zatwierdź">
+                <Button mnemonicParsing="false" styleClass="button-footer" text="Zatwierdź" fx:id="submitButton"
+                        onAction="#onSubmitButton">
                     <FlowPane.margin>
-                        <Insets left="30.0" right="30.0" />
+                        <Insets left="30.0" right="30.0"/>
                     </FlowPane.margin>
                 </Button>
-                <Button mnemonicParsing="false" styleClass="button-footer" text="Anuluj">
+                <Button mnemonicParsing="false" styleClass="button-footer" text="Anuluj" fx:id="cancelButton"
+                        onAction="#onCancelButton">
                     <FlowPane.margin>
-                        <Insets left="30.0" right="30.0" />
+                        <Insets left="30.0" right="30.0"/>
                     </FlowPane.margin>
                 </Button>
             </children>
             <styleClass>
-                <String fx:value="container-full" />
-                <String fx:value="align-center" />
-                <String fx:value="footer" />
+                <String fx:value="container-full"/>
+                <String fx:value="align-center"/>
+                <String fx:value="footer"/>
             </styleClass>
         </FlowPane>
     </children>
