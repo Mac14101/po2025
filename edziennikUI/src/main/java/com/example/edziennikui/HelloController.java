@@ -1,5 +1,6 @@
 package com.example.edziennikui;
 
+import com.example.edziennikui.shared.DashboardController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,15 @@ public class HelloController {
 
     @FXML
     private void handleShowDashboard(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/shared/Dashboard.fxml"));
+            Node view = loader.load();
+            DashboardController controller = loader.getController();
+            controller.setInfo(this.currentRole);
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+        e.printStackTrace();
+    }
     }
 
     @FXML
@@ -113,6 +123,16 @@ public class HelloController {
                 btnAttendance.setText("Obecność");
                 btnSchedule.setText("Plan Lekcji");
                 break;
+
+        }
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/shared/Dashboard.fxml"));
+            Node view = loader.load();
+            DashboardController controller = loader.getController();
+            controller.setInfo(this.currentRole);
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
