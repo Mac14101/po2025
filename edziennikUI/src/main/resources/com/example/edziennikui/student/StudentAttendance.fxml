@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.student.StudentAttendanceController">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="30.0" style="-fx-background-color: #f4f4f4; -fx-background-radius: 10;">
+            <children>
+                <VBox HBox.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Moja Obecność">
+                            <font>
+                                <Font name="System Bold" size="24.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER">
+                    <children>
+                        <Label text="Obecności" textFill="#27ae60" />
+                        <Label fx:id="lblPresentCount" />
+                    </children>
+                </VBox>
+                <VBox alignment="CENTER">
+                    <children>
+                        <Label text="Nieobecności" textFill="#c0392b" />
+                        <Label fx:id="lblAbsentCount" />
+                    </children>
+                </VBox>
+            </children>
+            <padding>
+                <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
+            </padding>
+        </HBox>
+
+        <TableView fx:id="attendanceTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colDate" text="Data" />
+                <TableColumn fx:id="colLesson" text="Lekcja" />
+                <TableColumn fx:id="colSubject" text="Przedmiot" />
+                <TableColumn fx:id="colStatus" text="Status" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+    </padding>
+</VBox>

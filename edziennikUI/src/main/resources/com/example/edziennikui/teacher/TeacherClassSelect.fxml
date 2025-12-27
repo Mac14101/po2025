@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" prefHeight="400.0" prefWidth="600.0" spacing="25.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.teacher.TeacherClassSelectController">
+    <children>
+        <VBox alignment="CENTER" spacing="10.0">
+            <children>
+                <Label text="Wybór zajęć">
+                    <font>
+                        <Font name="System Bold" size="28.0" />
+                    </font>
+                </Label>
+                <Label text="Wybierz klasę i przedmiot, aby przejść do panelu zarządzania" textFill="#7f8c8d" />
+            </children>
+        </VBox>
+
+        <VBox maxWidth="300.0" spacing="15.0">
+            <children>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Klasa:" />
+                        <ComboBox fx:id="comboClass" maxWidth="1.7976931348623157E308" promptText="Wybierz klasę..." />
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Przedmiot:" />
+                        <ComboBox fx:id="comboSubject" maxWidth="1.7976931348623157E308" promptText="Wybierz przedmiot..." />
+                    </children>
+                </VBox>
+            </children>
+        </VBox>
+
+        <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#handleConfirmSelection" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-background-radius: 5;" text="Przejdź dalej">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Button>
+    </children>
+    <padding>
+        <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
+    </padding>
+</VBox>

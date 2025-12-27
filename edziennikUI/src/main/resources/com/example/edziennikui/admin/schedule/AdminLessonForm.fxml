@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.admin.schedule.AdminLessonFormController">
+    <children>
+        <Label text="Planowanie Lekcji">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+
+        <GridPane hgap="15.0" vgap="15.0">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="250.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <Label text="Klasa:" />
+                <ComboBox fx:id="comboClass" maxWidth="1.7976931348623157E308" promptText="Wybierz klasę..." GridPane.columnIndex="1" />
+
+                <Label text="Przedmiot:" GridPane.rowIndex="1" />
+                <ComboBox fx:id="comboSubject" maxWidth="1.7976931348623157E308" promptText="Wybierz przedmiot..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                <Label text="Nauczyciel:" GridPane.rowIndex="2" />
+                <ComboBox fx:id="comboTeacher" maxWidth="1.7976931348623157E308" promptText="Wybierz nauczyciela..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                <Label text="Dzień tygodnia:" GridPane.rowIndex="3" />
+                <ComboBox fx:id="comboDay" maxWidth="1.7976931348623157E308" promptText="Wybierz dzień..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                <Label text="Godzina/Nr lekcji:" GridPane.rowIndex="4" />
+                <TextField fx:id="txtLessonHour" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                <Label text="Sala:" GridPane.rowIndex="5" />
+                <TextField fx:id="txtRoom" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            </children>
+        </GridPane>
+
+        <HBox alignment="CENTER_RIGHT" spacing="15.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleCancel" text="Anuluj" />
+                <Button mnemonicParsing="false" onAction="#handleSave" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Zapisz w planie" />
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+    </padding>
+</VBox>

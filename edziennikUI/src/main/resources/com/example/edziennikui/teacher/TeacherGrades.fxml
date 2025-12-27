@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="600.0" prefWidth="900.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.teacher.TeacherGradesController">
+    <children>
+        <HBox alignment="CENTER_LEFT" spacing="20.0" style="-fx-background-color: #f4f4f4; -fx-background-radius: 10;">
+            <children>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Aktualna Klasa:" textFill="#7f8c8d" />
+                        <Label fx:id="lblSelectedClass" text="">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Przedmiot:" textFill="#7f8c8d" />
+                        <Label fx:id="lblSelectedSubject" text="">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+                <HBox alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                    <children>
+                        <Button mnemonicParsing="false" onAction="#handleRefresh" text="Odśwież listę" />
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+            </padding>
+        </HBox>
+
+        <TableView fx:id="gradesTable" VBox.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="colStudentName" prefWidth="200.0" text="Imię i Nazwisko" />
+                <TableColumn fx:id="colGrades" prefWidth="450.0" text="Oceny" />
+                <TableColumn fx:id="colAverage" maxWidth="100.0" minWidth="80.0" prefWidth="90.0" text="Średnia" />
+                <TableColumn fx:id="colAction" maxWidth="120.0" minWidth="100.0" prefWidth="110.0" text="Akcja" />
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
+        </TableView>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="25.0" right="25.0" top="20.0" />
+    </padding>
+</VBox>

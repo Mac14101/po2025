@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox spacing="15.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.teacher.TeacherGradeFormController">
+    <children>
+        <Label fx:id="lblHeader" text="Wystawianie oceny">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Label>
+
+        <Label fx:id="lblStudentName" text="Uczeń: " textFill="#555555" />
+
+        <HBox spacing="20.0">
+            <children>
+                <VBox spacing="5.0">
+                    <children>
+                        <Label text="Ocena:" />
+                        <ComboBox fx:id="comboGradeValue" prefWidth="100.0" promptText="--" />
+                    </children>
+                </VBox>
+            </children>
+        </HBox>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Kategoria:" />
+                <TextField fx:id="txtCategory" promptText="Wpisz kategorię..." />
+            </children>
+        </VBox>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Komentarz:" />
+                <TextArea fx:id="txtComment" prefHeight="80.0" prefWidth="300.0" promptText="Dodaj komentarz..." wrapText="true" />
+            </children>
+        </VBox>
+
+        <HBox alignment="CENTER_RIGHT" spacing="10.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleCancel" text="Anuluj" />
+                <Button mnemonicParsing="false" onAction="#handleSave" style="-fx-background-color: #27ae60; -fx-text-fill: white;" text="Dodaj ocenę" />
+            </children>
+            <padding>
+                <Insets top="10.0" />
+            </padding>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+</VBox>

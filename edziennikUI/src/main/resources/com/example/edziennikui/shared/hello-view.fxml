@@ -24,7 +24,10 @@
             <Button fx:id="btnDashboard" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowDashboard" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" text="Pulpit" />
             <Button fx:id="btnUsers" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowUsers" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" text="Użytkownicy" />
             <Button fx:id="btnGrades" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowGrades" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" text="Oceny" />
+            <Button fx:id="btnAttendance" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowAttendance" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" text="Obecność" />
+            <Button fx:id="btnSchedule" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowSchedule" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" text="Plan Lekcji" />
 
+            <Button fx:id="btnSettings" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowAccountSettings" style="-fx-background-color: transparent; -fx-text-fill: white; -fx-alignment: BASELINE_LEFT;" text="Ustawienia Konta" />
             <VBox VBox.vgrow="ALWAYS" /> <Button maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleLogout" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Wyloguj" />
         </children>
         <padding>
