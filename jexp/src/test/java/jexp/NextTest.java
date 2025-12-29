@@ -7,7 +7,7 @@ import static org.junit.Assert.*;
 public class NextTest {
 
     @Test
-    public void next() throws Exception {
+    public void next() throws Next.NextError {
         Next next = new Next();
         assertFalse(next.getNext());
         assertFalse(next.getNextRoute());
@@ -20,7 +20,7 @@ public class NextTest {
     }
 
     @Test
-    public void nextRoute() throws Exception {
+    public void nextRoute() throws Next.NextError {
         Next next = new Next();
         assertFalse(next.getNext());
         assertFalse(next.getNextRoute());

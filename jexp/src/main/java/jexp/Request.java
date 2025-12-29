@@ -21,28 +21,32 @@ public class Request {
     private final HashMap<String, String> query;
     private final String body;
 
-    public Request(HttpExchange exchange) throws IOException {
-        this.headers = exchange.getRequestHeaders();
-        this.url = exchange.getRequestURI().toString();
-        Route route = new Route(exchange.getRequestURI().getPath());
-        this.route = route.getRoute();
-        this.path = route.getPath();
-        this.protocol = exchange.getProtocol();
-        this.method = exchange.getRequestMethod();
-        this.query = new HashMap<String, String>();
-        String queryString = exchange.getRequestURI().getQuery();
-        if (queryString != null) {
-            String[] query = queryString.split("&");
-            for (int i = 0; i < query.length; i++) {
-                String[] currentQuery = query[i].split("=");
-                this.query.put(currentQuery[0], currentQuery[1]);
+    public Request(HttpExchange exchange) throws RequestError {
+        try {
+            this.headers = exchange.getRequestHeaders();
+            this.url = exchange.getRequestURI().toString();
+            Route route = new Route(exchange.getRequestURI().getPath());
+            this.route = route.getRoute();
+            this.path = route.getPath();
+            this.protocol = exchange.getProtocol();
+            this.method = exchange.getRequestMethod();
+            this.query = new HashMap<String, String>();
+            String queryString = exchange.getRequestURI().getQuery();
+            if (queryString != null) {
+                String[] query = queryString.split("&");
+                for (String s : query) {
+                    String[] currentQuery = s.split("=");
+                    this.query.put(currentQuery[0], currentQuery[1]);
+                }
             }
-        }
-        InputStream bodyStream = exchange.getRequestBody();
-        if (bodyStream != null) {
-            this.body = new String(bodyStream.readAllBytes(), StandardCharsets.UTF_8);
-        } else {
-            this.body = null;
+            InputStream bodyStream = exchange.getRequestBody();
+            if (bodyStream != null) {
+                this.body = new String(bodyStream.readAllBytes(), StandardCharsets.UTF_8);
+            } else {
+                this.body = null;
+            }
+        } catch (IOException e) {
+            throw new RequestError(e.getMessage());
         }
     }
 
@@ -74,11 +78,26 @@ public class Request {
         return this.query.get(key);
     }
 
-    public <T> T getBody(Class<T> type) throws JsonProcessingException {
-        return JSONParser.parse(this.body, type);
+    public <T> T getBody(Class<T> type) throws RequestError {
+        try {
+            return JSONParser.parse(this.body, type);
+        } catch (JsonProcessingException e) {
+            throw new RequestError(e.getMessage());
+        }
     }
 
-    public <T> T getBody(TypeReference<T> type) throws JsonProcessingException {
-        return JSONParser.parse(this.body, type);
+    public <T> T getBody(TypeReference<T> type) throws RequestError {
+        try {
+            return JSONParser.parse(this.body, type);
+
+        } catch (JsonProcessingException e) {
+            throw new RequestError(e.getMessage());
+        }
+    }
+
+    public static class RequestError extends JExpError {
+        public RequestError(String message) {
+            super(message);
+        }
     }
 }

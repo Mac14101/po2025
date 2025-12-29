@@ -24,7 +24,7 @@ public class Router implements Handler {
     }
 
     @Override
-    public void handle(Request request, Response response, Next next) throws Response.ResponseError, Next.NextError {
+    public void handle(Request request, Response response, Next next) throws JExpError {
         if (request.getRoute().length == 0 && this.routingList.hasPath("")) {
             ArrayList<Handler> handlers = this.routingList.getHandlers("");
             for (int i = 0; i < handlers.size(); i++) {

@@ -3,7 +3,6 @@ package jexp;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -47,7 +46,7 @@ public class RouterTest {
     }
 
     @Test
-    public void handle() throws URISyntaxException, Next.NextError, Response.ResponseError, Route.RouteError, IOException {
+    public void handle() throws URISyntaxException, JExpError, Route.RouteError {
         TestExchange exchange = new TestExchange("protocol", "GET", new URI("http://localhost:8080/"));
         Request request;
         Response response;

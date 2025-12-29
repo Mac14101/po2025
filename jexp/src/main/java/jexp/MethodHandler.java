@@ -9,7 +9,7 @@ public class MethodHandler implements Handler {
         this.handler = handler;
     }
 
-    public void handle(Request request, Response response, Next next) throws Next.NextError, Response.ResponseError {
+    public void handle(Request request, Response response, Next next) throws JExpError {
         if (request.getMethod().equals(this.method)) {
             handler.handle(request, response, next);
         } else {

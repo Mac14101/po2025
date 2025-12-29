@@ -46,24 +46,24 @@ public class Server {
         @Override
         public void handle(HttpExchange exchange) throws IOException {
             try {
+                Request request = new Request(exchange);
+                Response response = new Response();
+                Next next = new Next();
                 try {
-                    Request request = new Request(exchange);
-                    Response response = new Response();
-                    Next next = new Next();
                     this.router.handle(request, response, next);
                     if (next.getNext() || next.getNextRoute()) {
                         next = new Next();
                         this.notFoundHandler.handle(request, response, next);
                     }
                     response.sendResponse(exchange);
-                } catch (Response.ResponseError | Next.NextError error) {
-                    Request request = new Request(exchange);
-                    Response response = new Response();
-                    Next next = new Next();
+                } catch (JExpError error) {
+                    request = new Request(exchange);
+                    response = new Response();
+                    next = new Next();
                     this.serverErrorHandler.handle(request, response, next);
                     response.sendResponse(exchange);
                 }
-            } catch (Response.ResponseError | Next.NextError error) {
+            } catch (JExpError error) {
                 exchange.sendResponseHeaders(500, 0);
             }
         }

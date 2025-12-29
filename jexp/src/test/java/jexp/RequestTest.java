@@ -2,7 +2,6 @@ package jexp;
 
 import org.junit.Test;
 
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -11,7 +10,7 @@ import static org.junit.Assert.*;
 public class RequestTest {
 
     @Test
-    public void getHeaders() throws URISyntaxException, IOException {
+    public void getHeaders() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         exchange.addRequestHeaders("header1", "header1Value");
         exchange.addRequestHeaders("header2", "header2Value");
@@ -20,7 +19,7 @@ public class RequestTest {
     }
 
     @Test
-    public void getRoute() throws URISyntaxException, IOException {
+    public void getRoute() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
         assertArrayEquals(new String[]{}, request.getRoute());
@@ -30,7 +29,7 @@ public class RequestTest {
     }
 
     @Test
-    public void getPath() throws URISyntaxException, IOException {
+    public void getPath() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
         assertEquals("/", request.getPath());
@@ -40,14 +39,14 @@ public class RequestTest {
     }
 
     @Test
-    public void getProtocol() throws URISyntaxException, IOException {
+    public void getProtocol() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
         assertEquals("Protocol", request.getProtocol());
     }
 
     @Test
-    public void getUrl() throws URISyntaxException, IOException {
+    public void getUrl() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
         assertEquals("http://localhost:8080/", request.getUrl());
@@ -57,14 +56,14 @@ public class RequestTest {
     }
 
     @Test
-    public void getMethod() throws URISyntaxException, IOException {
+    public void getMethod() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
         assertEquals("GET", request.getMethod());
     }
 
     @Test
-    public void getQuery() throws URISyntaxException, IOException {
+    public void getQuery() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/?a=1&b=2"));
         Request request = new Request(exchange);
         assertEquals("1", request.getQuery("a"));
