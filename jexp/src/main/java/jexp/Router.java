@@ -70,6 +70,7 @@ public class Router implements Handler {
 
         } else {
             Router routerNew = new Router();
+            routerNew.setDepth(this.depth + 1);
             routerNew.use(route.getNextPath(1), handler);
             this.routingList.addHandler(route.getNextRoute(0), routerNew);
         }
