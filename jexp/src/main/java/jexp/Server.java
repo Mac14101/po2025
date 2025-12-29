@@ -18,7 +18,23 @@ public class Server {
     }
 
     public void use(String path, Handler handler) throws Route.RouteError {
-        mainRouter.use(path, handler);
+        this.mainRouter.use(path, handler);
+    }
+
+    public void get(String path, Handler handler) throws Route.RouteError {
+        this.mainRouter.use(path, new MethodHandler("get", handler));
+    }
+
+    public void post(String path, Handler handler) throws Route.RouteError {
+        this.mainRouter.use(path, new MethodHandler("post", handler));
+    }
+
+    public void put(String path, Handler handler) throws Route.RouteError {
+        this.mainRouter.use(path, new MethodHandler("put", handler));
+    }
+
+    public void delete(String path, Handler handler) throws Route.RouteError {
+        this.mainRouter.use(path, new MethodHandler("delete", handler));
     }
 
     public void listen(String host, int port) throws IOException {
