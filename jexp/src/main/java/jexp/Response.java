@@ -71,9 +71,40 @@ public class Response {
         return closed;
     }
 
+
+    public void cookie(String name, String value) {
+        StringBuilder cookie = new StringBuilder();
+        cookie.append(name).append("=").append(value).append(";");
+        cookie.append("Path=/").append(";");
+        cookie.append("HttpOnly").append(";");
+        cookie.append("Secure=false").append(";");
+        cookie.append("Max-Age=3600");
+        this.headers.add("Set-Cookie", cookie.toString());
+    }
+
+    public void cookie(String name, String value, int maxAge) {
+        StringBuilder cookie = new StringBuilder();
+        cookie.append(name).append("=").append(value).append(";");
+        cookie.append("Path=/").append(";");
+        cookie.append("HttpOnly").append(";");
+        cookie.append("Secure=false").append(";");
+        cookie.append("Max-Age=").append(maxAge);
+        this.headers.add("Set-Cookie", cookie.toString());
+    }
+
+    public void cookie(String name, String value, int maxAge, String path) {
+        StringBuilder cookie = new StringBuilder();
+        cookie.append(name).append("=").append(value).append(";");
+        cookie.append("Path=").append(path).append(";");
+        cookie.append("HttpOnly").append(";");
+        cookie.append("Secure=false").append(";");
+        cookie.append("Max-Age=").append(maxAge);
+        this.headers.add("Set-Cookie", cookie.toString());
+    }
+
     public void sendResponse(HttpExchange exchange) throws IOException {
-        exchange.sendResponseHeaders(statusCode, body.length());
         exchange.getResponseHeaders().putAll(headers);
+        exchange.sendResponseHeaders(statusCode, body.length());
         try (OutputStream os = exchange.getResponseBody()) {
             os.write(body.getBytes());
         }
