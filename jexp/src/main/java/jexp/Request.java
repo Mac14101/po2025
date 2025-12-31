@@ -20,6 +20,7 @@ public class Request {
     private final String method;
     private final HashMap<String, String> query;
     private final String body;
+    private final HashMap<String, String> cookies;
 
     public Request(HttpExchange exchange) throws RequestError {
         try {
@@ -37,6 +38,14 @@ public class Request {
                 for (String s : query) {
                     String[] currentQuery = s.split("=");
                     this.query.put(currentQuery[0], currentQuery[1]);
+                }
+            }
+            this.cookies = new HashMap<String, String>();
+            if (this.headers.get("Cookie") != null) {
+                String[] cookieList = this.headers.get("Cookie").getFirst().split(";");
+                for (String s : cookieList) {
+                    String[] currentCookie = s.split("=");
+                    this.cookies.put(currentCookie[0], currentCookie[1]);
                 }
             }
             InputStream bodyStream = exchange.getRequestBody();
@@ -93,6 +102,14 @@ public class Request {
         } catch (JsonProcessingException e) {
             throw new RequestError(e.getMessage());
         }
+    }
+
+    public String getCookie(String name) {
+        return this.cookies.get(name);
+    }
+
+    public HashMap<String, String> getCookies() {
+        return this.cookies;
     }
 
     public static class RequestError extends JExpError {
