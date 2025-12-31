@@ -80,6 +80,7 @@ public class Server {
                     response.sendResponse(exchange);
                 }
             } catch (JExpError error) {
+                System.out.println(error.getMessage());
                 exchange.sendResponseHeaders(500, 0);
             }
         }
