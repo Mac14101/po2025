@@ -17,23 +17,23 @@ public class Server {
         this.mainRouter = new Router();
     }
 
-    public void use(String path, Handler handler) throws Route.RouteError {
+    public void use(String path, Handler handler) {
         this.mainRouter.use(path, handler);
     }
 
-    public void get(String path, Handler handler) throws Route.RouteError {
+    public void get(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("get", handler));
     }
 
-    public void post(String path, Handler handler) throws Route.RouteError {
+    public void post(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("post", handler));
     }
 
-    public void put(String path, Handler handler) throws Route.RouteError {
+    public void put(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("put", handler));
     }
 
-    public void delete(String path, Handler handler) throws Route.RouteError {
+    public void delete(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("delete", handler));
     }
 

@@ -21,12 +21,9 @@ public class Route {
         return path.toString();
     }
 
-    public String getNextPath(int depth) throws RouteError {
-        if (depth >= route.length) {
-            throw new RouteError("Cannot resolve next path with depth " + depth);
-        }
+    public String getNextPath() {
         StringBuilder path = new StringBuilder("/");
-        for (int i = depth; i < route.length; i++) {
+        for (int i = 1; i < route.length; i++) {
             path.append(route[i]).append("/");
         }
         return path.toString();
@@ -37,20 +34,16 @@ public class Route {
         return this.route;
     }
 
-    public String getNextRoute(int depth) throws RouteError {
-        if (depth >= route.length) {
-            throw new RouteError("Cannot resolve next route with depth " + depth);
-        }
-        return route[depth];
+    public String getNextRoute() {
+        return route[1];
+    }
+
+    public String getActualRoute() {
+        return route[0];
     }
 
     public int getDepth() {
         return this.route.length;
     }
 
-    public static class RouteError extends Exception {
-        public RouteError(String message) {
-            super(message);
-        }
-    }
 }

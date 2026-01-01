@@ -21,7 +21,7 @@ public class RouterTest {
     }
 
     @Test
-    public void use() throws Route.RouteError {
+    public void use() {
         Handler handler1 = Mockito.mock(Handler.class);
         Router router = new Router();
         router.use("/", handler1);
@@ -32,12 +32,12 @@ public class RouterTest {
         assertSame(handler2, router.getRoutingList().getHandlers("").get(1));
         Handler handler3 = Mockito.mock(Handler.class);
         router.use("/a/", handler3);
-        assertSame(handler3, router.getRoutingList().getHandlers("a").getFirst());
+        assertSame(handler3, ((Router) router.getRoutingList().getHandlers("a").getFirst()).getRoutingList().getHandlers("").getFirst());
         Handler handler4 = Mockito.mock(Handler.class);
         router.use("/a/b/", handler4);
-        assertSame(handler3, router.getRoutingList().getHandlers("a").getFirst());
-        assertTrue(router.getRoutingList().getHandlers("a").get(1) instanceof Router);
-        assertSame(handler4, ((Router) router.getRoutingList().getHandlers("a").get(1)).getRoutingList().getHandlers("b").getFirst());
+        assertSame(handler3, ((Router) router.getRoutingList().getHandlers("a").getFirst()).getRoutingList().getHandlers("").getFirst());
+        assertTrue(router.getRoutingList().getHandlers("a").getFirst() instanceof Router);
+        assertSame(handler4, ((Router) ((Router) router.getRoutingList().getHandlers("a").getFirst()).getRoutingList().getHandlers("b").getFirst()).getRoutingList().getHandlers("").getFirst());
 
         Router routerNew = new Router();
         assertEquals(0, routerNew.getDepth());
@@ -46,7 +46,7 @@ public class RouterTest {
     }
 
     @Test
-    public void handle() throws URISyntaxException, JExpError, Route.RouteError {
+    public void handle() throws URISyntaxException, JExpError {
         TestExchange exchange = new TestExchange("protocol", "GET", new URI("http://localhost:8080/"));
         Request request;
         Response response;

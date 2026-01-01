@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoutingList {
-    private HashMap<String, ArrayList<Handler>> pathList;
+    private HashMap<String, ArrayList<Handler>> routes;
 
     public RoutingList() {
-        this.pathList = new HashMap<>();
+        this.routes = new HashMap<>();
     }
 
-    public void addHandler(String path, Handler handler) {
-        if (this.pathList.containsKey(path)) {
-            this.pathList.get(path).add(handler);
+    public void addHandler(String route, Handler handler) {
+        if (this.routes.containsKey(route)) {
+            this.routes.get(route).add(handler);
         } else {
-            this.pathList.put(path, new ArrayList<Handler>());
-            this.pathList.get(path).add(handler);
+            this.routes.put(route, new ArrayList<Handler>());
+            this.routes.get(route).add(handler);
         }
     }
 
-    public ArrayList<Handler> getHandlers(String path) {
-        return this.pathList.get(path);
+    public ArrayList<Handler> getHandlers(String route) {
+        return this.routes.get(route);
     }
 
-    public boolean hasPath(String path) {
-        return this.pathList.containsKey(path);
+    public boolean hasRoute(String route) {
+        return this.routes.containsKey(route);
     }
 }
