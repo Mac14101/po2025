@@ -28,6 +28,15 @@ public class JSONTest {
         assertEquals(6, resultNew.get(1).c);
     }
 
+    @Test
+    public void stringify() throws JsonProcessingException {
+        TestJson object = new TestJson();
+        object.a = 1;
+        object.b = 2;
+        object.c = 3;
+        assertEquals("{\"a\":1,\"b\":2,\"c\":3}", JSON.stringify(object));
+    }
+
     public static class TestJson {
         public int a;
         public int b;
