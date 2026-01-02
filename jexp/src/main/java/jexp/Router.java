@@ -4,46 +4,66 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class Router implements Handler {
-    private ArrayList<Handler> handlers;
+    private final ArrayList<Handler> handlers;
     private String route;
+    private int depth;
 
     Router() {
         this.handlers = new ArrayList<>();
         this.route = null;
-    }
-
-    public void setRoute(String route) {
-        this.route = route;
+        this.depth = 0;
     }
 
     public String getRoute() {
         return this.route;
     }
 
-    private Router findRoute(String route) {
-        Router router=null;
+    public void setRoute(String route) {
+        this.route = route;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    public void updateDepth() {
         for (Handler handler : this.handlers) {
-            if (handler instanceof Router && Objects.equals(((Router) handler).getRoute(), route)) {
-                router = (Router) handler;
+            if (handler instanceof Router) {
+                ((Router) handler).setDepth(this.depth + 1);
+                ((Router) handler).updateDepth();
+            } else if (handler instanceof ParamHandler) {
+                ((ParamHandler) handler).setDepth(this.depth + 1);
+            }
+        }
+    }
+
+    private Router findRoute(String route) {
+        Router router = null;
+        for (int i = this.handlers.size() - 1; i >= 0; i--) {
+            if (this.handlers.get(i) instanceof Router && Objects.equals(((Router) this.handlers.get(i)).getRoute(), route)) {
+                router = (Router) this.handlers.get(i);
                 break;
             }
         }
         return router;
     }
 
-    public void use(String path, Handler handler){
+    public void use(String path, Handler handler) {
         Route route = new Route(path);
-        if(route.getRoute().length == 0){
+        if (route.getRoute().length == 0) {
             this.handlers.add(handler);
-        }else{
-            String actualRoute=route.getActualRoute();
-            Router router=this.findRoute(actualRoute);
-            if(router==null){
-                Router newRouter=new Router();
+        } else {
+            String actualRoute = route.getActualRoute();
+            Router router = this.findRoute(actualRoute);
+            if (router == null) {
+                if (actualRoute.matches("^:.*$")) {
+                    this.handlers.add(new ParamHandler(actualRoute));
+                }
+                Router newRouter = new Router();
                 newRouter.setRoute(actualRoute);
                 newRouter.use(route.getNextPath(), handler);
                 this.handlers.add(newRouter);
-            }else{
+            } else {
                 router.use(route.getNextPath(), handler);
             }
         }

@@ -69,5 +69,6 @@ public class RequestTest {
         request.readParam(":id", 1);
         assertEquals("2", request.getParam("id"));
         assertTrue(request.getParams().containsKey(":id"));
+        assertArrayEquals(new String[]{"a", ":id", "c"}, request.getRoute());
     }
 }
