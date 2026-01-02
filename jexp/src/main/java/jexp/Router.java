@@ -87,7 +87,21 @@ public class Router implements Handler {
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-
+        if (this.route == null || this.route.equals(request.getRoute()[this.depth])) {
+            for (int i = 0; i < this.handlers.size(); i++) {
+                Next newNext = new Next();
+                this.handlers.get(i).handle(request, response, newNext);
+                if (newNext.getNextRoute()) {
+                    next.next();
+                    return;
+                } else if (!newNext.getNext()) {
+                    return;
+                }
+            }
+            next.next();
+        } else {
+            next.next();
+        }
     }
 
 }
