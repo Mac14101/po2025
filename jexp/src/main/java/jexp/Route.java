@@ -35,15 +35,16 @@ public class Route {
     }
 
     public String getNextRoute() {
+        if (this.route.length < 2) {
+            return null;
+        }
         return route[1];
     }
 
     public String getActualRoute() {
+        if (this.route.length == 0) {
+            return null;
+        }
         return route[0];
     }
-
-    public int getDepth() {
-        return this.route.length;
-    }
-
 }

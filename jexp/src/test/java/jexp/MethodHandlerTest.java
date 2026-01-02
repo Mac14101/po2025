@@ -1,5 +1,7 @@
 package jexp;
 
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -15,7 +17,11 @@ public class MethodHandlerTest {
     public void handleRightMethod() throws URISyntaxException, JExpError {
         Handler handler = Mockito.mock(Handler.class);
         MethodHandler methodHandler = new MethodHandler("GET", handler);
-        Request request = new Request(new TestExchange());
+        HttpExchange exchange = Mockito.mock(HttpExchange.class);
+        Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
+        Mockito.when(exchange.getRequestURI()).thenReturn(new URI("https://localhost:8080/"));
+        Mockito.when(exchange.getRequestMethod()).thenReturn("GET");
+        Request request = new Request(exchange);
         Response response = new Response();
         Next next = new Next();
         methodHandler.handle(request, response, next);
@@ -26,7 +32,11 @@ public class MethodHandlerTest {
     public void handleWrongMethod() throws URISyntaxException, JExpError {
         Handler handler = Mockito.mock(Handler.class);
         MethodHandler methodHandler = new MethodHandler("GET", handler);
-        Request request = new Request(new TestExchange("protocol", "POST", new URI("https://localhost:8080")));
+        HttpExchange exchange = Mockito.mock(HttpExchange.class);
+        Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
+        Mockito.when(exchange.getRequestURI()).thenReturn(new URI("https://localhost:8080/"));
+        Mockito.when(exchange.getRequestMethod()).thenReturn("POST");
+        Request request = new Request(exchange);
         Response response = new Response();
         Next next = new Next();
         methodHandler.handle(request, response, next);

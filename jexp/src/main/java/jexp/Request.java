@@ -123,10 +123,6 @@ public class Request {
         return this.params.get(":" + name);
     }
 
-    public HashMap<String, String> getParams() {
-        return params;
-    }
-
     public static class RequestError extends JExpError {
         public RequestError(String message) {
             super(message);

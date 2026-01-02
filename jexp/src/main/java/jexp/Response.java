@@ -13,13 +13,6 @@ public class Response {
     private String body;
     private boolean closed;
 
-    public Response(Headers headers) {
-        this.headers = headers;
-        this.statusCode = 200;
-        this.body = null;
-        this.closed = false;
-    }
-
     public Response() {
         this.headers = new Headers();
         this.statusCode = 200;
@@ -54,43 +47,12 @@ public class Response {
         this.closed = true;
     }
 
-
-    public Headers getHeaders() {
-        return headers;
-    }
-
-    public int getStatusCode() {
-        return statusCode;
-    }
-
-
-    public String getBody() {
-        return body;
-    }
-
-    public boolean isClosed() {
-        return closed;
-    }
-
-
     public void cookie(String name, String value) {
-        StringBuilder cookie = new StringBuilder();
-        cookie.append(name).append("=").append(value).append(";");
-        cookie.append("Path=/").append(";");
-        cookie.append("HttpOnly").append(";");
-        cookie.append("Secure=false").append(";");
-        cookie.append("Max-Age=3600");
-        this.headers.add("Set-Cookie", cookie.toString());
+        this.cookie(name, value, 3600, "/");
     }
 
     public void cookie(String name, String value, int maxAge) {
-        StringBuilder cookie = new StringBuilder();
-        cookie.append(name).append("=").append(value).append(";");
-        cookie.append("Path=/").append(";");
-        cookie.append("HttpOnly").append(";");
-        cookie.append("Secure=false").append(";");
-        cookie.append("Max-Age=").append(maxAge);
-        this.headers.add("Set-Cookie", cookie.toString());
+        this.cookie(name, value, maxAge, "/");
     }
 
     public void cookie(String name, String value, int maxAge, String path) {

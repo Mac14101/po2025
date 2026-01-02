@@ -1,86 +1,98 @@
 package jexp;
 
 import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Field;
+import java.net.URISyntaxException;
 
 import static org.junit.Assert.*;
 
 public class ResponseTest {
 
     @Test
-    public void status() {
+    public void status() throws NoSuchFieldException, IllegalAccessException {
+        Field status = Response.class.getDeclaredField("statusCode");
+        status.setAccessible(true);
         Response response = new Response();
-        assertEquals(200, response.getStatusCode());
+        assertEquals(200, status.get(response));
         response.status(201);
-        assertEquals(201, response.getStatusCode());
+        assertEquals(201, status.get(response));
     }
 
     @Test
-    public void header() {
+    public void header() throws NoSuchFieldException, IllegalAccessException {
+        Field headers = Response.class.getDeclaredField("headers");
+        headers.setAccessible(true);
         Response response = new Response();
         response.header("header1", "header1Value");
         response.header("header2", "header2Value");
-        assertTrue(response.getHeaders().containsKey("header1"));
-        assertTrue(response.getHeaders().containsKey("header2"));
-        assertArrayEquals(new String[]{"header1Value"}, response.getHeaders().get("header1").toArray());
-        assertArrayEquals(new String[]{"header2Value"}, response.getHeaders().get("header2").toArray());
-        Headers headers = new Headers();
-        headers.add("header1", "header1Value");
-        headers.add("header2", "header2Value");
-        response = new Response(headers);
-        assertTrue(response.getHeaders().containsKey("header1"));
-        assertTrue(response.getHeaders().containsKey("header2"));
-        assertArrayEquals(new String[]{"header1Value"}, response.getHeaders().get("header1").toArray());
-        assertArrayEquals(new String[]{"header2Value"}, response.getHeaders().get("header2").toArray());
+        assertTrue(((Headers) headers.get(response)).containsKey("header1"));
+        assertTrue(((Headers) headers.get(response)).containsKey("header2"));
+        assertArrayEquals(new String[]{"header1Value"}, ((Headers) headers.get(response)).get("header1").toArray());
+        assertArrayEquals(new String[]{"header2Value"}, ((Headers) headers.get(response)).get("header2").toArray());
     }
 
     @Test
-    public void type() {
+    public void type() throws NoSuchFieldException, IllegalAccessException {
+        Field headers = Response.class.getDeclaredField("headers");
+        headers.setAccessible(true);
         Response response = new Response();
         response.type("type");
-        assertTrue(response.getHeaders().containsKey("Content-Type"));
-        assertArrayEquals(new String[]{"type"}, response.getHeaders().get("Content-Type").toArray());
+        assertTrue(((Headers) headers.get(response)).containsKey("Content-Type"));
+        assertArrayEquals(new String[]{"type"}, ((Headers) headers.get(response)).get("Content-Type").toArray());
     }
 
     @Test
-    public void send() throws Response.ResponseError {
+    public void send() throws Response.ResponseError, NoSuchFieldException, IllegalAccessException {
+        Field body = Response.class.getDeclaredField("body");
+        body.setAccessible(true);
+        Field closed = Response.class.getDeclaredField("closed");
+        closed.setAccessible(true);
+
         Response response = new Response();
-        assertNull(response.getBody());
+        assertNull(body.get(response));
         response.send("body");
-        assertEquals("body", response.getBody());
-        assertTrue(response.isClosed());
+        assertEquals("body", body.get(response));
+        assertTrue((Boolean) closed.get(response));
         assertThrows(Response.ResponseError.class, () -> {
             response.send("data");
         });
     }
 
     @Test
-    public void end() throws Response.ResponseError {
+    public void end() throws Response.ResponseError, NoSuchFieldException, IllegalAccessException {
+        Field closed = Response.class.getDeclaredField("closed");
+        closed.setAccessible(true);
         Response response = new Response();
         response.end();
-        assertTrue(response.isClosed());
+        assertTrue((Boolean) closed.get(response));
         assertThrows(Response.ResponseError.class, () -> {
             response.end();
         });
     }
+
     @Test
-    public void cookie(){
+    public void cookie() throws NoSuchFieldException, IllegalAccessException {
+        Field headers = Response.class.getDeclaredField("headers");
+        headers.setAccessible(true);
         Response response = new Response();
-        response.cookie("cookie", "cookieValue",10,"path");
-        assertTrue(response.getHeaders().containsKey("Set-Cookie"));
-        assertEquals("cookie=cookieValue;Path=path;HttpOnly;Secure=false;Max-Age=10",response.getHeaders().get("Set-Cookie").getFirst());
+        response.cookie("cookie", "cookieValue", 10, "path");
+        assertTrue(((Headers) headers.get(response)).containsKey("Set-Cookie"));
+        assertEquals("cookie=cookieValue;Path=path;HttpOnly;Secure=false;Max-Age=10", ((Headers) headers.get(response)).get("Set-Cookie").getFirst());
     }
+
     @Test
-    public void sendResponse() throws Response.ResponseError, IOException {
+    public void sendResponse() throws Response.ResponseError, IOException, URISyntaxException {
         Response response = new Response();
         response.header("header1", "header1Value");
         String body = "body";
         response.send(body);
-        TestExchange exchange= Mockito.mock(TestExchange.class);
+        HttpExchange exchange = Mockito.mock(HttpExchange.class);
         Headers headers = Mockito.mock(Headers.class);
         Mockito.when(exchange.getResponseHeaders()).thenReturn(headers);
         OutputStream bodyStream = Mockito.mock(OutputStream.class);

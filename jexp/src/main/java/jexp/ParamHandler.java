@@ -1,7 +1,7 @@
 package jexp;
 
 public class ParamHandler implements Handler {
-    private String name;
+    private final String name;
     private int depth;
 
     public ParamHandler(String name) {

@@ -79,9 +79,6 @@ public class Server {
                 Next next = new Next();
                 try {
                     this.router.handle(request, response, next);
-                    if (next.getNext() || next.getNextRoute()) {
-                        next = new Next();
-                    }
                     response.sendResponse(exchange);
                 } catch (Exception error) {
                     request = new Request(exchange);

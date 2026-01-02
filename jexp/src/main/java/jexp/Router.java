@@ -51,6 +51,7 @@ public class Router implements Handler {
     public void use(String path, Handler handler) {
         Route route = new Route(path);
         if (route.getRoute().length == 0) {
+            //TODO  Rzuć wyjątek jeśli handler jest klasy Router
             this.handlers.add(handler);
         } else if (route.getRoute().length == 1 && handler instanceof Router) {
             ((Router) handler).setRoute(route.getActualRoute());
