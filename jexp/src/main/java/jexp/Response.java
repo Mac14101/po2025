@@ -1,5 +1,6 @@
 package jexp;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 
@@ -100,6 +101,15 @@ public class Response {
         cookie.append("Secure=false").append(";");
         cookie.append("Max-Age=").append(maxAge);
         this.headers.add("Set-Cookie", cookie.toString());
+    }
+
+    public void json(Object object) throws ResponseError {
+        try {
+            this.type("application/json");
+            this.send(JSON.stringify(object));
+        } catch (JsonProcessingException error) {
+            throw new ResponseError(error.getMessage());
+        }
     }
 
     public void sendResponse(HttpExchange exchange) throws IOException {
