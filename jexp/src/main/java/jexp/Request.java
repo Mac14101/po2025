@@ -21,6 +21,7 @@ public class Request {
     private final HashMap<String, String> query;
     private final String body;
     private final HashMap<String, String> cookies;
+    private final HashMap<String, String> params;
 
     public Request(HttpExchange exchange) throws RequestError {
         try {
@@ -54,6 +55,7 @@ public class Request {
             } else {
                 this.body = null;
             }
+            this.params = new HashMap<>();
         } catch (IOException e) {
             throw new RequestError(e.getMessage());
         }
@@ -110,6 +112,19 @@ public class Request {
 
     public HashMap<String, String> getCookies() {
         return this.cookies;
+    }
+
+    public void readParam(String name, int depth) {
+        this.params.put(name, this.route[depth]);
+        this.route[depth] = name;
+    }
+
+    public String getParam(String name) {
+        return this.params.get(":" + name);
+    }
+
+    public HashMap<String, String> getParams() {
+        return params;
     }
 
     public static class RequestError extends JExpError {

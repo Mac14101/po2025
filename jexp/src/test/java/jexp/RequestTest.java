@@ -62,4 +62,12 @@ public class RequestTest {
         assertNull(request.getQuery("c"));
     }
 
+    @Test
+    public void param() throws URISyntaxException, Request.RequestError {
+        TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/a/2/c"));
+        Request request = new Request(exchange);
+        request.readParam(":id", 1);
+        assertEquals("2", request.getParam("id"));
+        assertTrue(request.getParams().containsKey(":id"));
+    }
 }
