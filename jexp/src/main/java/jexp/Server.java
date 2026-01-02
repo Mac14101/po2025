@@ -38,11 +38,15 @@ public class Server {
     }
 
     public void listen(String host, int port) throws IOException {
+        this.mainRouter.use("/", new NotFoundHandler());
+        this.mainRouter.updateDepth();
         this.server = HttpServer.create(new InetSocketAddress(host, port), 0);
         this.server.createContext("/", new ServerHandler(this.mainRouter));
     }
 
     public void listen(int port) throws IOException {
+        this.mainRouter.use("/", new NotFoundHandler());
+        this.mainRouter.updateDepth();
         this.server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
         this.server.createContext("/", new ServerHandler(this.mainRouter));
         this.server.start();
@@ -50,12 +54,10 @@ public class Server {
 
     public static class ServerHandler implements HttpHandler {
         Router router;
-        NotFoundHandler notFoundHandler;
         ServerErrorHandler serverErrorHandler;
 
         public ServerHandler(Router router) {
             this.router = router;
-            this.notFoundHandler = new NotFoundHandler();
             this.serverErrorHandler = new ServerErrorHandler();
         }
 
@@ -69,7 +71,6 @@ public class Server {
                     this.router.handle(request, response, next);
                     if (next.getNext() || next.getNextRoute()) {
                         next = new Next();
-                        this.notFoundHandler.handle(request, response, next);
                     }
                     response.sendResponse(exchange);
                 } catch (JExpError error) {

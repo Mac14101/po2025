@@ -11,7 +11,7 @@ public class Router implements Handler {
     Router() {
         this.handlers = new ArrayList<>();
         this.route = null;
-        this.depth = 0;
+        this.depth = -1;
     }
 
     public String getRoute() {
@@ -51,6 +51,9 @@ public class Router implements Handler {
     public void use(String path, Handler handler) {
         Route route = new Route(path);
         if (route.getRoute().length == 0) {
+            this.handlers.add(handler);
+        } else if (route.getRoute().length == 1 && handler instanceof Router) {
+            ((Router) handler).setRoute(route.getActualRoute());
             this.handlers.add(handler);
         } else {
             String actualRoute = route.getActualRoute();
