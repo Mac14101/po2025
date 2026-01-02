@@ -12,9 +12,11 @@ import java.net.InetSocketAddress;
 public class Server {
     private Router mainRouter;
     private HttpServer server;
+    private ErrorHandler errorHandler;
 
     public Server() {
         this.mainRouter = new Router();
+        this.errorHandler = null;
     }
 
     public void use(String path, Handler handler) {
@@ -37,28 +39,36 @@ public class Server {
         this.mainRouter.use(path, new MethodHandler("delete", handler));
     }
 
+    public void error(ErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
+
     public void listen(String host, int port) throws IOException {
         this.mainRouter.use("/", new NotFoundHandler());
         this.mainRouter.updateDepth();
         this.server = HttpServer.create(new InetSocketAddress(host, port), 0);
-        this.server.createContext("/", new ServerHandler(this.mainRouter));
+        this.server.createContext("/", new ServerHandler(this.mainRouter, this.errorHandler));
     }
 
     public void listen(int port) throws IOException {
         this.mainRouter.use("/", new NotFoundHandler());
         this.mainRouter.updateDepth();
         this.server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
-        this.server.createContext("/", new ServerHandler(this.mainRouter));
+        this.server.createContext("/", new ServerHandler(this.mainRouter, this.errorHandler));
         this.server.start();
     }
 
     public static class ServerHandler implements HttpHandler {
         Router router;
-        ServerErrorHandler serverErrorHandler;
+        ErrorHandler serverErrorHandler;
 
-        public ServerHandler(Router router) {
+        public ServerHandler(Router router, ErrorHandler errorHandler) {
             this.router = router;
-            this.serverErrorHandler = new ServerErrorHandler();
+            if (errorHandler != null) {
+                this.serverErrorHandler = errorHandler;
+            } else {
+                this.serverErrorHandler = new ServerErrorHandler();
+            }
         }
 
         @Override
@@ -73,15 +83,15 @@ public class Server {
                         next = new Next();
                     }
                     response.sendResponse(exchange);
-                } catch (JExpError error) {
+                } catch (Exception error) {
                     request = new Request(exchange);
                     response = new Response();
                     next = new Next();
-                    this.serverErrorHandler.handle(request, response, next);
+                    this.serverErrorHandler.handle(error, request, response, next);
                     response.sendResponse(exchange);
                 }
-            } catch (JExpError error) {
-                System.out.println(error.getMessage());
+            } catch (Exception error) {
+                System.err.println(error.getMessage());
                 exchange.sendResponseHeaders(500, 0);
             }
         }

@@ -1,13 +1,11 @@
 package jexp.defaultHandlers;
 
-import jexp.Handler;
-import jexp.Next;
-import jexp.Request;
-import jexp.Response;
+import jexp.*;
 
-public class ServerErrorHandler implements Handler {
+public class ServerErrorHandler implements ErrorHandler {
     @Override
-    public void handle(Request request, Response response, Next next) throws Response.ResponseError, Next.NextError {
+    public void handle(Exception exception, Request request, Response response, Next next) throws JExpError {
+        System.err.println(exception.getMessage());
         response.status(500);
         response.send("Error 500 - Server Error");
     }
