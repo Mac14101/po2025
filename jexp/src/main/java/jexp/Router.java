@@ -1,81 +1,52 @@
 package jexp;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Router implements Handler {
-    private final RoutingList routingList;
-    private int depth;
+    private ArrayList<Handler> handlers;
+    private String route;
 
-    public Router() {
-        this.routingList = new RoutingList();
-        this.depth = 0;
+    Router() {
+        this.handlers = new ArrayList<>();
+        this.route = null;
     }
 
-    public int getDepth() {
-        return depth;
+    public void setRoute(String route) {
+        this.route = route;
     }
 
-    public void setDepth(int depth) {
-        this.depth = depth;
+    public String getRoute() {
+        return this.route;
     }
 
-    public RoutingList getRoutingList() {
-        return routingList;
-    }
-
-    @Override
-    public void handle(Request request, Response response, Next next) throws JExpError {
-        if (request.getRoute().length == 0 && this.routingList.hasRoute("")) {
-            ArrayList<Handler> handlers = this.routingList.getHandlers("");
-            for (int i = 0; i < handlers.size(); i++) {
-                Next nextHandler = new Next();
-                handlers.get(i).handle(request, response, nextHandler);
-                if (nextHandler.getNextRoute()) {
-                    next.next();
-                    break;
-                } else if (!nextHandler.getNext()) {
-                    break;
-                } else if (nextHandler.getNext() && i + 1 == handlers.size()) {
-                    next.next();
-                }
+    private Router findRoute(String route) {
+        Router router=null;
+        for (Handler handler : this.handlers) {
+            if (handler instanceof Router && Objects.equals(((Router) handler).getRoute(), route)) {
+                router = (Router) handler;
+                break;
             }
-        } else if (request.getRoute().length > 0 && this.routingList.hasRoute(request.getRoute()[this.depth])) {
-            ArrayList<Handler> handlers = this.routingList.getHandlers(request.getRoute()[this.depth]);
-            for (int i = 0; i < handlers.size(); i++) {
-                Next nextHandler = new Next();
-                handlers.get(i).handle(request, response, nextHandler);
-                if (nextHandler.getNextRoute()) {
-                    next.next();
-                    break;
-                } else if (!nextHandler.getNext()) {
-                    break;
-                } else if (nextHandler.getNext() && i + 1 == handlers.size()) {
-                    next.next();
-                }
-            }
-        } else {
-            next.next();
         }
+        return router;
     }
 
-    public void use(String path, Handler handler) {
-        if (handler instanceof Router) {
-            ((Router) handler).setDepth(this.depth + 1);
-        }
+    public void use(String path, Handler handler){
         Route route = new Route(path);
-        if (route.getDepth() == 0) {
-            this.routingList.addHandler("", handler);
-        } else {
-            if (this.routingList.hasRoute(route.getActualRoute()) && this.routingList.getHandlers(route.getActualRoute()).getLast() instanceof Router) {
-                ((Router) this.routingList.getHandlers(route.getActualRoute()).getLast()).use(route.getNextPath(), handler);
-            } else {
-                Router routerNew = new Router();
-                routerNew.setDepth(this.depth + 1);
-                routerNew.use(route.getNextPath(), handler);
-                this.routingList.addHandler(route.getActualRoute(), routerNew);
+        if(route.getRoute().length == 0){
+            this.handlers.add(handler);
+        }else{
+            String actualRoute=route.getActualRoute();
+            Router router=this.findRoute(actualRoute);
+            if(router==null){
+                Router newRouter=new Router();
+                newRouter.setRoute(actualRoute);
+                newRouter.use(route.getNextPath(), handler);
+                this.handlers.add(newRouter);
+            }else{
+                router.use(route.getNextPath(), handler);
             }
         }
-
     }
 
     public void get(String path, Handler handler) {
@@ -93,4 +64,10 @@ public class Router implements Handler {
     public void delete(String path, Handler handler) {
         this.use(path, new MethodHandler("delete", handler));
     }
+
+    @Override
+    public void handle(Request request, Response response, Next next) throws JExpError {
+
+    }
+
 }

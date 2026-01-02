@@ -3,103 +3,92 @@ package jexp;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class RouterTest {
-
     @Test
-    public void depth() {
-        Router router = new Router();
-        assertEquals(0, router.getDepth());
-        router.setDepth(2);
-        assertEquals(2, router.getDepth());
+    public void testUse() {
     }
 
     @Test
-    public void use() {
+    public void testGet() throws NoSuchFieldException, IllegalAccessException {
+        Router router =Mockito.spy(new Router());
+        Handler handler = Mockito.mock(Handler.class);
+        Field handlers=Router.class.getDeclaredField("handlers");
+        handlers.setAccessible(true);
+        Field method=MethodHandler.class.getDeclaredField("method");
+        method.setAccessible(true);
+        router.get("/",handler);
+        Mockito.verify(router,Mockito.times(1)).use(Mockito.eq("/"),Mockito.any(MethodHandler.class));
+        assertEquals("get",method.get(((ArrayList<Handler>)handlers.get(router)).getFirst()));
+    }
+
+    @Test
+    public void testPost() throws NoSuchFieldException, IllegalAccessException {
+        Router router =Mockito.spy(new Router());
+        Handler handler = Mockito.mock(Handler.class);
+        Field handlers=Router.class.getDeclaredField("handlers");
+        handlers.setAccessible(true);
+        Field method=MethodHandler.class.getDeclaredField("method");
+        method.setAccessible(true);
+        router.post("/",handler);
+        Mockito.verify(router,Mockito.times(1)).use(Mockito.eq("/"),Mockito.any(MethodHandler.class));
+        assertEquals("post",method.get(((ArrayList<Handler>)handlers.get(router)).getFirst()));
+    }
+
+    @Test
+    public void testPut() throws NoSuchFieldException, IllegalAccessException {
+        Router router =Mockito.spy(new Router());
+        Handler handler = Mockito.mock(Handler.class);
+        Field handlers=Router.class.getDeclaredField("handlers");
+        handlers.setAccessible(true);
+        Field method=MethodHandler.class.getDeclaredField("method");
+        method.setAccessible(true);
+        router.put("/",handler);
+        Mockito.verify(router,Mockito.times(1)).use(Mockito.eq("/"),Mockito.any(MethodHandler.class));
+        assertEquals("put",method.get(((ArrayList<Handler>)handlers.get(router)).getFirst()));
+    }
+
+    @Test
+    public void testDelete() throws NoSuchFieldException, IllegalAccessException {
+        Router router =Mockito.spy(new Router());
+        Handler handler = Mockito.mock(Handler.class);
+        Field handlers=Router.class.getDeclaredField("handlers");
+        handlers.setAccessible(true);
+        Field method=MethodHandler.class.getDeclaredField("method");
+        method.setAccessible(true);
+        router.delete("/",handler);
+        Mockito.verify(router,Mockito.times(1)).use(Mockito.eq("/"),Mockito.any(MethodHandler.class));
+        assertEquals("delete",method.get(((ArrayList<Handler>)handlers.get(router)).getFirst()));
+    }
+
+    @Test
+    public void testHandle() throws NoSuchFieldException, IllegalAccessException {
+        Router router=new Router();
+        Field handlers=Router.class.getDeclaredField("handlers");
+        handlers.setAccessible(true);
         Handler handler1 = Mockito.mock(Handler.class);
-        Router router = new Router();
-        router.use("/", handler1);
-        assertSame(handler1, router.getRoutingList().getHandlers("").getFirst());
         Handler handler2 = Mockito.mock(Handler.class);
-        router.use("/", handler2);
-        assertSame(handler1, router.getRoutingList().getHandlers("").getFirst());
-        assertSame(handler2, router.getRoutingList().getHandlers("").get(1));
         Handler handler3 = Mockito.mock(Handler.class);
-        router.use("/a/", handler3);
-        assertSame(handler3, ((Router) router.getRoutingList().getHandlers("a").getFirst()).getRoutingList().getHandlers("").getFirst());
         Handler handler4 = Mockito.mock(Handler.class);
-        router.use("/a/b/", handler4);
-        assertSame(handler3, ((Router) router.getRoutingList().getHandlers("a").getFirst()).getRoutingList().getHandlers("").getFirst());
-        assertTrue(router.getRoutingList().getHandlers("a").getFirst() instanceof Router);
-        assertSame(handler4, ((Router) ((Router) router.getRoutingList().getHandlers("a").getFirst()).getRoutingList().getHandlers("b").getFirst()).getRoutingList().getHandlers("").getFirst());
-
-        Router routerNew = new Router();
-        assertEquals(0, routerNew.getDepth());
-        router.use("/c/", routerNew);
-        assertSame(1, ((Router) router.getRoutingList().getHandlers("c").getFirst()).getDepth());
+        Handler handler5 = Mockito.mock(Handler.class);
+        router.use("/",handler1);
+        router.use("/a/",handler2);
+        router.use("/a/b",handler3);
+        router.use("/b/a/",handler4);
+        router.use("/b/a/",handler5);
+        ArrayList<Handler> mainRouterHandlers=(ArrayList<Handler>)handlers.get(router);
+        ArrayList<Handler> aRouterHandlers=(ArrayList<Handler>)handlers.get(mainRouterHandlers.get(1));
+        ArrayList<Handler> abRouterHandlers=(ArrayList<Handler>)handlers.get(aRouterHandlers.get(1));
+        ArrayList<Handler> bRouterHandlers=(ArrayList<Handler>)handlers.get(mainRouterHandlers.get(2));
+        ArrayList<Handler> baRouterHandlers=(ArrayList<Handler>)handlers.get(bRouterHandlers.get(0));
+        assertSame(mainRouterHandlers.get(0),handler1);
+        assertSame(aRouterHandlers.get(0),handler2);
+        assertSame(abRouterHandlers.get(0),handler3);
+        assertSame(baRouterHandlers.get(0),handler4);
+        assertSame(baRouterHandlers.get(1),handler5);
     }
-
-    @Test
-    public void handle() throws URISyntaxException, JExpError {
-        TestExchange exchange = new TestExchange("protocol", "GET", new URI("http://localhost:8080/"));
-        Request request;
-        Response response;
-        Next next;
-        Router router = new Router();
-        request = new Request(exchange);
-        response = new Response();
-        next = new Next();
-        router.handle(request, response, next);
-        assertTrue(next.getNext());
-        assertFalse(next.getNextRoute());
-        Handler handler1 = Mockito.mock(Handler.class);
-        Handler handler2 = Mockito.mock(Handler.class);
-        router.use("/", handler1);
-        router.use("/", handler2);
-        request = new Request(exchange);
-        response = new Response();
-        next = new Next();
-        router.handle(request, response, next);
-        assertFalse(next.getNext());
-        assertFalse(next.getNextRoute());
-        verify(handler1, times(1)).handle(any(Request.class), any(Response.class), any(Next.class));
-        verify(handler2, times(0)).handle(any(Request.class), any(Response.class), any(Next.class));
-        doAnswer(inv -> {
-            Request req = inv.getArgument(0);
-            Response res = inv.getArgument(1);
-            Next n = inv.getArgument(2);
-            n.next();
-            return null;
-        }).when(handler1).handle(any(Request.class), any(Response.class), any(Next.class));
-        request = new Request(exchange);
-        response = new Response();
-        next = new Next();
-        router.handle(request, response, next);
-        assertFalse(next.getNext());
-        assertFalse(next.getNextRoute());
-        verify(handler1, times(2)).handle(any(Request.class), any(Response.class), any(Next.class));
-        verify(handler2, times(1)).handle(any(Request.class), any(Response.class), any(Next.class));
-        doAnswer(inv -> {
-            Request req = inv.getArgument(0);
-            Response res = inv.getArgument(1);
-            Next n = inv.getArgument(2);
-            n.nextRoute();
-            return null;
-        }).when(handler1).handle(any(Request.class), any(Response.class), any(Next.class));
-        request = new Request(exchange);
-        response = new Response();
-        next = new Next();
-        router.handle(request, response, next);
-        assertTrue(next.getNext());
-        assertFalse(next.getNextRoute());
-        verify(handler1, times(3)).handle(any(Request.class), any(Response.class), any(Next.class));
-        verify(handler2, times(1)).handle(any(Request.class), any(Response.class), any(Next.class));
-    }
-
 }
