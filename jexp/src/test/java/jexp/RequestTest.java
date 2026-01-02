@@ -19,22 +19,13 @@ public class RequestTest {
     }
 
     @Test
-    public void getRoute() throws URISyntaxException, Request.RequestError {
+    public void getRoutePath() throws URISyntaxException, Request.RequestError {
         TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
         assertArrayEquals(new String[]{}, request.getRoute());
         exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
         request = new Request(exchange);
         assertArrayEquals(new String[]{"abc", "abc"}, request.getRoute());
-    }
-
-    @Test
-    public void getPath() throws URISyntaxException, Request.RequestError {
-        TestExchange exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/"));
-        Request request = new Request(exchange);
-        assertEquals("/", request.getPath());
-        exchange = new TestExchange("Protocol", "GET", new URI("http://localhost:8080/abc/abc/"));
-        request = new Request(exchange);
         assertEquals("/abc/abc/", request.getPath());
     }
 

@@ -8,17 +8,17 @@ import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 
-public class JSONParserTest {
+public class JSONTest {
 
     @Test
     public void parse() throws JsonProcessingException {
         String json = "{\"a\":\"1\",\"b\":\"2\",\"c\":\"3\"}";
-        TestJson result = JSONParser.parse(json, TestJson.class);
+        TestJson result = JSON.parse(json, TestJson.class);
         assertEquals(1, result.a);
         assertEquals(2, result.b);
         assertEquals(3, result.c);
         json = "[{\"a\":\"1\",\"b\":\"2\",\"c\":\"3\"},{\"a\":\"4\",\"b\":\"5\",\"c\":\"6\"}]";
-        ArrayList<TestJson> resultNew = JSONParser.parse(json, new TypeReference<ArrayList<TestJson>>() {
+        ArrayList<TestJson> resultNew = JSON.parse(json, new TypeReference<ArrayList<TestJson>>() {
         });
         assertEquals(1, resultNew.get(0).a);
         assertEquals(2, resultNew.get(0).b);

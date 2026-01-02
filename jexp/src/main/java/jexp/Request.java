@@ -89,7 +89,7 @@ public class Request {
 
     public <T> T getBody(Class<T> type) throws RequestError {
         try {
-            return JSONParser.parse(this.body, type);
+            return JSON.parse(this.body, type);
         } catch (JsonProcessingException e) {
             throw new RequestError(e.getMessage());
         }
@@ -97,7 +97,7 @@ public class Request {
 
     public <T> T getBody(TypeReference<T> type) throws RequestError {
         try {
-            return JSONParser.parse(this.body, type);
+            return JSON.parse(this.body, type);
 
         } catch (JsonProcessingException e) {
             throw new RequestError(e.getMessage());

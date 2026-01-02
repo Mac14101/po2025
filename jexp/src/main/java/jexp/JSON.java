@@ -4,22 +4,22 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class JSONParser extends ObjectMapper {
-    private static JSONParser mapper;
+public class JSON {
+    private static ObjectMapper mapper;
 
-    private JSONParser() {
+    private JSON() {
     }
 
     public static <T> T parse(String json, Class<T> type) throws JsonProcessingException {
         if (mapper == null) {
-            mapper = new JSONParser();
+            mapper = new ObjectMapper();
         }
         return mapper.readValue(json, type);
     }
 
     public static <T> T parse(String json, TypeReference<T> type) throws JsonProcessingException {
         if (mapper == null) {
-            mapper = new JSONParser();
+            mapper = new ObjectMapper();
         }
         return mapper.readValue(json, type);
     }

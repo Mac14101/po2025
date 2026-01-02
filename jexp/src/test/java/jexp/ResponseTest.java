@@ -2,6 +2,10 @@ package jexp;
 
 import com.sun.net.httpserver.Headers;
 import org.junit.Test;
+import org.mockito.Mockito;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import static org.junit.Assert.*;
 
@@ -62,6 +66,30 @@ public class ResponseTest {
         assertThrows(Response.ResponseError.class, () -> {
             response.end();
         });
+    }
+    @Test
+    public void cookie(){
+        Response response = new Response();
+        response.cookie("cookie", "cookieValue",10,"path");
+        assertTrue(response.getHeaders().containsKey("Set-Cookie"));
+        assertEquals("cookie=cookieValue;Path=path;HttpOnly;Secure=false;Max-Age=10",response.getHeaders().get("Set-Cookie").getFirst());
+    }
+    @Test
+    public void sendResponse() throws Response.ResponseError, IOException {
+        Response response = new Response();
+        response.header("header1", "header1Value");
+        String body = "body";
+        response.send(body);
+        TestExchange exchange= Mockito.mock(TestExchange.class);
+        Headers headers = Mockito.mock(Headers.class);
+        Mockito.when(exchange.getResponseHeaders()).thenReturn(headers);
+        OutputStream bodyStream = Mockito.mock(OutputStream.class);
+        Mockito.when(exchange.getResponseBody()).thenReturn(bodyStream);
+        response.sendResponse(exchange);
+        Mockito.verify(headers, Mockito.times(1)).putAll(Mockito.any());
+        Mockito.verify(exchange, Mockito.times(1)).sendResponseHeaders(200, body.length());
+        Mockito.verify(bodyStream, Mockito.times(1)).write(Mockito.any());
+        Mockito.verify(exchange, Mockito.times(1)).close();
     }
 
 }
