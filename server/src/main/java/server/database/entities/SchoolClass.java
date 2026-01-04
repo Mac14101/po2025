@@ -5,12 +5,18 @@ public class SchoolClass {
     private String day;
     private String startTime;
     private String endTime;
+    private SchoolGroup schoolGroup;
+    private User teacher;
+    private Subject subject;
 
     public SchoolClass(Integer id, String day, String startTime, String endTime) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.schoolGroup = null;
+        this.teacher = null;
+        this.subject = null;
     }
 
     public SchoolClass() {
@@ -18,6 +24,33 @@ public class SchoolClass {
         this.day = null;
         this.startTime = null;
         this.endTime = null;
+        this.schoolGroup = null;
+        this.teacher = null;
+        this.subject = null;
+    }
+
+    public SchoolGroup getSchoolGroup() {
+        return schoolGroup;
+    }
+
+    public void setSchoolGroup(SchoolGroup schoolGroup) {
+        this.schoolGroup = schoolGroup;
+    }
+
+    public User getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(User teacher) {
+        this.teacher = teacher;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
     }
 
     public Integer getId() {

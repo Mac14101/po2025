@@ -4,17 +4,20 @@ public class Lesson {
     private Integer id;
     private String topic;
     private String date;
+    private SchoolClass schoolClass;
 
     public Lesson(Integer id, String topic, String date) {
         this.id = id;
         this.topic = topic;
         this.date = date;
+        this.schoolClass = null;
     }
 
     public Lesson() {
         this.id = null;
         this.topic = null;
         this.date = null;
+        this.schoolClass = null;
     }
 
     public Integer getId() {
