@@ -9,28 +9,29 @@ import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import server.database.ApplicationDatabase;
+import server.database.entities.User;
 
-import java.util.ArrayList;
+public class CreateUserHandlerTest {
 
-public class AllUsersHandlerTest {
-
-    private AllUsersHandler allUsersHandler;
+    private CreateUserHandler createUserHandler;
 
     @Before
     public void setUp() {
-        allUsersHandler = new AllUsersHandler();
+        createUserHandler = new CreateUserHandler();
     }
 
     @Test
     public void handle() {
         try (MockedStatic<ApplicationDatabase> applicationDatabaseMockedStatic = Mockito.mockStatic(ApplicationDatabase.class)) {
-            applicationDatabaseMockedStatic.when(ApplicationDatabase::getAllUsers).thenReturn(Mockito.mock(ArrayList.class));
             Request request = Mockito.mock(Request.class);
+            User user = Mockito.mock(User.class);
+            Mockito.when(request.getBody(User.class)).thenReturn(user);
             Response response = Mockito.mock(Response.class);
             Next next = Mockito.mock(Next.class);
-            allUsersHandler.handle(request, response, next);
-            applicationDatabaseMockedStatic.verify(ApplicationDatabase::getAllUsers, Mockito.times(1));
-            Mockito.verify(response, Mockito.times(1)).json(Mockito.any(ArrayList.class));
+            createUserHandler.handle(request, response, next);
+            applicationDatabaseMockedStatic.verify(() -> ApplicationDatabase.createUser(user), Mockito.times(1));
+            Mockito.verify(response, Mockito.times(1)).json(user);
+            Mockito.verify(response, Mockito.times(1)).status(201);
         } catch (JExpError e) {
             throw new RuntimeException(e);
         }
