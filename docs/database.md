@@ -38,7 +38,7 @@ Tabela przechowująca listę przedmiotów.
 |Nazwa kolumny|Typ|Dodatkowe opcje kolumny|Opis|
 |-|-|-|-|
 |id|INT|PRIMARY KEY|Unikatowy identyfikator przypisany do przedmiotu szkolnego|
-|id|TEXT|UNIQUE NOT NULL|Nazwa przedmiotu szkolnego|
+|name|TEXT|UNIQUE NOT NULL|Nazwa przedmiotu szkolnego|
 
 5. Plan zajęć(time_table)
 Tabela przechowująca tygodniowy plan zajęć.
@@ -51,6 +51,7 @@ Tabela przechowująca tygodniowy plan zajęć.
 |endTime|TEXT|NOT NULL|Godzina zakończenia zajęć, zapisana w formacie HH:MM:SS|
 |cid|INT|FOREIGN KEY|Identyfikator klasy, której dotyczy lekcja|
 |tid|INT|FOREIGN KEY|Identyfikator nauczyciela, który prowadzi lekcję|
+|sid|INT|FOREIGN KEY|Identyfikator przedmiotu|
 
 6. Lekcje(lessons)
 Tabela przechowująca lekcję, które się odbyły.
@@ -60,6 +61,7 @@ Tabela przechowująca lekcję, które się odbyły.
 |id|INT|AUTO INCREMENT, PRIMARY KEY|Unikatowy identyfikator lekcji|
 |topic|TEXT|NOT NULL|Temat Zajęć lekcyjnych|
 |date|TEXT|NOT NULL|Data, kiedy odbywały się zajęcia w formacie DD.MM.YYYY|
+|ttid|INT|FOREIGN KEY|Identyfikator zajęć z planu zajęć|
 
 7. Frekwencja(attendance)
 Tabela przechowująca frekwencję uczniów na zajęciach.
@@ -79,3 +81,4 @@ Tabela przechowująca oceny uczniów.
 |sid|INT|FOREIGN KEY|Identyfikator ucznia, który otrzymał ocenę|
 |sbid|INT|FOREIGN KEY|Identyfikator przedmiotu|
 |tid|INT|NOT NULL|Identyfikator nauczyciela, który wystawił ocenę|
+|grade|VARCHAR(10)|NOT NULL|Ocena|

@@ -27,3 +27,6 @@ build/
 
 # Pliki cache
 *.cache
+
+# Baza danych SQLite
+*.db
