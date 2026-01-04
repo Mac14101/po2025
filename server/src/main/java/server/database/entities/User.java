@@ -6,7 +6,7 @@ public class User {
     private String name;
     private String surname;
     private String password;
-    private String role;
+    private Role role;
 
     public User(Integer id, String email, String name, String surname, String password, String role) {
         this.id = id;
@@ -14,7 +14,7 @@ public class User {
         this.name = name;
         this.surname = surname;
         this.password = password;
-        this.role = role;
+        this.role = Role.getRoleFromName(role);
     }
 
     public User() {
@@ -40,7 +40,9 @@ public class User {
 
     public void setEmail(String email) {
         if (!email.matches("^[A-Za-z0-9_%+-]+@[A-Za-z]+.[A-Za-z]$")) {
-            throw new IllegalArgumentException(email + " is not a valid email address!");
+            throw new IllegalArgumentException("Invalid email address!");
+        } else if (email.length() > 100) {
+            throw new IllegalArgumentException("Email address is too long!");
         }
         this.email = email;
     }
@@ -52,6 +54,8 @@ public class User {
     public void setSurname(String surname) {
         if (!surname.matches("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$")) {
             throw new IllegalArgumentException("Invalid surname format!");
+        } else if (surname.length() > 50) {
+            throw new IllegalArgumentException("Surname is too long!");
         }
         this.surname = surname;
     }
@@ -63,6 +67,8 @@ public class User {
     public void setName(String name) {
         if (!name.matches("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$")) {
             throw new IllegalArgumentException("Invalid name format!");
+        } else if (name.length() > 50) {
+            throw new IllegalArgumentException("Name is too long!");
         }
         this.name = name;
     }
@@ -75,12 +81,33 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
+    public enum Role {
+        ADMIN("admin"), STUDENT("student"), TEACHER("teacher");
+        private final String role;
+
+        private Role(String role) {
+            this.role = role;
+        }
+
+        public static Role getRoleFromName(String name) {
+            for (Role role : Role.values()) {
+                if (role.name().equalsIgnoreCase(name)) {
+                    return role;
+                }
+            }
+            throw new IllegalArgumentException("Invalid role!");
+        }
+
+        public String getRole() {
+            return role;
+        }
+    }
 }
