@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 
 public class RouterTest {
     @Test
-    public void use() throws NoSuchFieldException, IllegalAccessException {
+    public void use() throws NoSuchFieldException, IllegalAccessException, Router.RouterError {
         Router router = new Router();
         Field handlers = Router.class.getDeclaredField("handlers");
         handlers.setAccessible(true);
@@ -43,7 +43,7 @@ public class RouterTest {
     }
 
     @Test
-    public void updateDepth() {
+    public void updateDepth() throws Router.RouterError {
         Router router = new Router();
         Router router1 = Mockito.mock(Router.class);
         Router router2 = Mockito.mock(Router.class);
@@ -61,7 +61,7 @@ public class RouterTest {
 
 
     @Test
-    public void get() throws NoSuchFieldException, IllegalAccessException {
+    public void get() throws NoSuchFieldException, IllegalAccessException, Router.RouterError {
         Router router = Mockito.spy(new Router());
         Handler handler = Mockito.mock(Handler.class);
         Field handlers = Router.class.getDeclaredField("handlers");
@@ -74,7 +74,7 @@ public class RouterTest {
     }
 
     @Test
-    public void post() throws NoSuchFieldException, IllegalAccessException {
+    public void post() throws NoSuchFieldException, IllegalAccessException, Router.RouterError {
         Router router = Mockito.spy(new Router());
         Handler handler = Mockito.mock(Handler.class);
         Field handlers = Router.class.getDeclaredField("handlers");
@@ -87,7 +87,7 @@ public class RouterTest {
     }
 
     @Test
-    public void put() throws NoSuchFieldException, IllegalAccessException {
+    public void put() throws NoSuchFieldException, IllegalAccessException, Router.RouterError {
         Router router = Mockito.spy(new Router());
         Handler handler = Mockito.mock(Handler.class);
         Field handlers = Router.class.getDeclaredField("handlers");
@@ -100,7 +100,7 @@ public class RouterTest {
     }
 
     @Test
-    public void delete() throws NoSuchFieldException, IllegalAccessException {
+    public void delete() throws NoSuchFieldException, IllegalAccessException, Router.RouterError {
         Router router = Mockito.spy(new Router());
         Handler handler = Mockito.mock(Handler.class);
         Field handlers = Router.class.getDeclaredField("handlers");
@@ -113,7 +113,7 @@ public class RouterTest {
     }
 
     @Test
-    public void testHandle() throws JExpError {
+    public void handle() throws JExpError {
         Router router = Mockito.spy(new Router());
         Handler handler1 = Mockito.mock(Handler.class);
         Handler handler2 = Mockito.mock(Handler.class);

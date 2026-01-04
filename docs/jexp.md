@@ -201,16 +201,16 @@ Server--*Router
       * private **String** route - nazwa węzła trasy
       * private **int** depth - głębokość w trasie
    Metody:
-      * public String getRoute() - zwraca nazwę węzła trasy
+      * public **String** getRoute() - zwraca nazwę węzła trasy
       * public **void** setRoute() - ustawia nazwę węzła trasy
       * public **void** setDepth() - ustawia głębokość
       * public **void** updateDepth() - aktualizuje głębokość we wszystkich podległych obiektach
       * private Router findRoute() - przeszukuje listę obiektów obsługi tras, w poszukiwaniu routera o podanej nazwie węzła trasy
-      * public **void** use() - dodaje obiekt obsługi trasy do listy obiektów obsługi trasy
-      * public **void** get() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'GET', opakowuje obiekt w obiekt klasy 'MethodHandler'
-      * public **void** post() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'POST', opakowuje obiekt w obiekt klasy 'MethodHandler'
-      * public **void** put() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'PUT', opakowuje obiekt w obiekt klasy 'MethodHandler'
-      * public **void** delete() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'DELETE', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** use() throws **RouterError** - dodaje obiekt obsługi trasy do listy obiektów obsługi trasy
+      * public **void** get() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'GET', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** post() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'POST', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** put() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'PUT', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** delete() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'DELETE', opakowuje obiekt w obiekt klasy 'MethodHandler'
       * public **void** handle() - metoda obsługująca żądanie HTTP
 5. Server
    Wrapper serwera HTTP java.
@@ -219,13 +219,13 @@ Server--*Router
       * private **HttpServer** server - instancja serwera HTTP
       * private **ErrorHandler** errorHandler - obiekt obsługujący błędy serwera
    Metody:
-      * public **void** use() - dodaje obiekt obsługi trasy do głównego routera serwera
-      * public **void** get() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'GET', opakowuje obiekt w obiekt klasy 'MethodHandler'
-      * public **void** post() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'POST', opakowuje obiekt w obiekt klasy 'MethodHandler'
-      * public **void** put() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'PUT', opakowuje obiekt w obiekt klasy 'MethodHandler'
-      * public **void** delete() - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'DELETE', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** use() throws **RouterError** - dodaje obiekt obsługi trasy do głównego routera serwera
+      * public **void** get() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'GET', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** post() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'POST', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** put() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'PUT', opakowuje obiekt w obiekt klasy 'MethodHandler'
+      * public **void** delete() throws **RouterError** - dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'DELETE', opakowuje obiekt w obiekt klasy 'MethodHandler'
       * public **void** error() - ustawia obiekt obsługi błędów serwera
-      * public **void** listen() - tworzy serwer, który rozpoczyna nasłuchiwanie na podanym porcie aplikacji, dodaje domyślny obiekt obsługi niedopasowanych tras, aktualizuję strukturę routerów zapisanych w głównym routerze serwera
+      * public **void** listen() throws **RouterError** - tworzy serwer, który rozpoczyna nasłuchiwanie na podanym porcie aplikacji, dodaje domyślny obiekt obsługi niedopasowanych tras, aktualizuję strukturę routerów zapisanych w głównym routerze serwera
 
 ### Obiekty dodatkowe
 1. JSON
@@ -254,6 +254,7 @@ Server--*Router
 2. Request - wyjątek obiektu żądania
 2. ResponseError - wyjątek obiektu odpowiedzi
 3. NextError - wyjątek obiektu odpowiedzialnego za przetwarzanie potokowe
+4. RouterError - wyjątek obiektu routera
 
 ## Diagramy sekwencji
 

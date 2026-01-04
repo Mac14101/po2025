@@ -83,12 +83,14 @@ public class Router implements Handler {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void use(String path, Handler handler) {
+    public void use(String path, Handler handler) throws RouterError {
         Route route = new Route(path);
         //Sprawdzenie złożoności ścieżki
         if (route.getRoute().length == 0) {
             //Ścieżka jest pusta
-            //TODO  Rzuć wyjątek jeśli handler jest klasy Router
+            if (handler instanceof Router) {
+                throw new RouterError("Wrong object handler");
+            }
             //Dodaj obiekt do listy obiektów obsługi tras
             this.handlers.add(handler);
         } else if (route.getRoute().length == 1 && handler instanceof Router) {
@@ -132,7 +134,7 @@ public class Router implements Handler {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void get(String path, Handler handler) {
+    public void get(String path, Handler handler) throws RouterError {
         this.use(path, new MethodHandler("get", handler));
     }
 
@@ -143,7 +145,7 @@ public class Router implements Handler {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void post(String path, Handler handler) {
+    public void post(String path, Handler handler) throws RouterError {
         this.use(path, new MethodHandler("post", handler));
     }
 
@@ -154,7 +156,7 @@ public class Router implements Handler {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void put(String path, Handler handler) {
+    public void put(String path, Handler handler) throws RouterError {
         this.use(path, new MethodHandler("put", handler));
     }
 
@@ -165,7 +167,7 @@ public class Router implements Handler {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void delete(String path, Handler handler) {
+    public void delete(String path, Handler handler) throws RouterError {
         this.use(path, new MethodHandler("delete", handler));
     }
 
@@ -201,4 +203,9 @@ public class Router implements Handler {
         }
     }
 
+    public static class RouterError extends JExpError {
+        public RouterError(String message) {
+            super(message);
+        }
+    }
 }

@@ -28,7 +28,7 @@ public class Server {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void use(String path, Handler handler) {
+    public void use(String path, Handler handler) throws Router.RouterError {
         this.mainRouter.use(path, handler);
     }
 
@@ -39,8 +39,8 @@ public class Server {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void get(String path, Handler handler) {
-        this.mainRouter.use(path, new MethodHandler("get", handler));
+    public void get(String path, Handler handler) throws Router.RouterError {
+        this.mainRouter.get(path, handler);
     }
 
     /**
@@ -50,8 +50,8 @@ public class Server {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void post(String path, Handler handler) {
-        this.mainRouter.use(path, new MethodHandler("post", handler));
+    public void post(String path, Handler handler) throws Router.RouterError {
+        this.mainRouter.post(path, handler);
     }
 
     /**
@@ -61,8 +61,8 @@ public class Server {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void put(String path, Handler handler) {
-        this.mainRouter.use(path, new MethodHandler("put", handler));
+    public void put(String path, Handler handler) throws Router.RouterError {
+        this.mainRouter.put(path, handler);
     }
 
     /**
@@ -72,8 +72,8 @@ public class Server {
      * @param path    ścieżka do obiektu obsługi trasy
      * @param handler obiekt obsługi trasy
      */
-    public void delete(String path, Handler handler) {
-        this.mainRouter.use(path, new MethodHandler("delete", handler));
+    public void delete(String path, Handler handler) throws Router.RouterError {
+        this.mainRouter.delete(path, handler);
     }
 
     /**
@@ -92,7 +92,7 @@ public class Server {
      * @param port numer portu aplikacji
      * @throws IOException błąd występujący przy starcie serwera
      */
-    public void listen(String host, int port) throws IOException {
+    public void listen(String host, int port) throws IOException, Router.RouterError {
         //Dodaje obiekt obsługujący niedopasowane trasy
         this.mainRouter.use("/", new NotFoundHandler());
         //Aktualizuje głębokości routerów
@@ -110,7 +110,7 @@ public class Server {
      * @throws IOException błąd występujący przy starcie serwera
      */
 
-    public void listen(int port) throws IOException {
+    public void listen(int port) throws IOException, Router.RouterError {
         this.listen("localhost", port);
     }
 
