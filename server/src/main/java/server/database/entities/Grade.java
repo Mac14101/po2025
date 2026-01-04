@@ -5,14 +5,14 @@ public class Grade {
     private User student;
     private Subject subject;
     private User teacher;
-    private String grade;
+    private GradeName grade;
 
     public Grade(Integer id, User student, Subject subject, User teacher, String grade) {
         this.id = id;
         this.student = student;
         this.subject = subject;
         this.teacher = teacher;
-        this.grade = grade;
+        this.grade = GradeName.fromGrade(grade);
     }
 
     public Grade() {
@@ -47,11 +47,11 @@ public class Grade {
         this.subject = subject;
     }
 
-    public String getGrade() {
+    public GradeName getGrade() {
         return grade;
     }
 
-    public void setGrade(String grade) {
+    public void setGrade(GradeName grade) {
         this.grade = grade;
     }
 
@@ -61,5 +61,27 @@ public class Grade {
 
     public void setTeacher(User teacher) {
         this.teacher = teacher;
+    }
+
+    public static enum GradeName {
+        NDOP("1"), DOP("2"), DOST("3"), DB("4"), BDB("5"), CEL("6"), NP("np"), NB("nb");
+        private final String grade;
+
+        private GradeName(String grade) {
+            this.grade = grade;
+        }
+
+        public static GradeName fromGrade(String grade) {
+            for (GradeName gr : GradeName.values()) {
+                if (gr.grade.equals(grade)) {
+                    return gr;
+                }
+            }
+            throw new IllegalArgumentException("Unknown grade!");
+        }
+
+        public String getGrade() {
+            return grade;
+        }
     }
 }
