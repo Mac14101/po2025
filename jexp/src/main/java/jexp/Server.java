@@ -9,6 +9,9 @@ import jexp.defaultHandlers.ServerErrorHandler;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 
+/**
+ * Klasa będąca wrapperem dla serwera HTTP.
+ */
 public class Server {
     private Router mainRouter;
     private HttpServer server;
@@ -19,45 +22,101 @@ public class Server {
         this.errorHandler = null;
     }
 
+    /**
+     * Dodaje nowy obiekt obsługi tras do głównego routera serwera.
+     *
+     * @param path    ścieżka do obiektu obsługi trasy
+     * @param handler obiekt obsługi trasy
+     */
     public void use(String path, Handler handler) {
         this.mainRouter.use(path, handler);
     }
 
+    /**
+     * Dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'GET'.
+     * Opakowuje obiekt w obiekt klasy 'MethodHandler'.
+     *
+     * @param path    ścieżka do obiektu obsługi trasy
+     * @param handler obiekt obsługi trasy
+     */
     public void get(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("get", handler));
     }
 
+    /**
+     * Dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'POST'.
+     * Opakowuje obiekt w obiekt klasy 'MethodHandler'.
+     *
+     * @param path    ścieżka do obiektu obsługi trasy
+     * @param handler obiekt obsługi trasy
+     */
     public void post(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("post", handler));
     }
 
+    /**
+     * Dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'PUT'.
+     * Opakowuje obiekt w obiekt klasy 'MethodHandler'.
+     *
+     * @param path    ścieżka do obiektu obsługi trasy
+     * @param handler obiekt obsługi trasy
+     */
     public void put(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("put", handler));
     }
 
+    /**
+     * Dodaje obiekt obsługi trasy, który jest aktywny, tylko gdy żądanie posiada metodę HTTP 'DELETE'.
+     * Opakowuje obiekt w obiekt klasy 'MethodHandler'.
+     *
+     * @param path    ścieżka do obiektu obsługi trasy
+     * @param handler obiekt obsługi trasy
+     */
     public void delete(String path, Handler handler) {
         this.mainRouter.use(path, new MethodHandler("delete", handler));
     }
 
+    /**
+     * Zapisuje obiekt obsługi błędów serwera.
+     *
+     * @param errorHandler obiekt obsługi błędów
+     */
     public void error(ErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
     }
 
+    /**
+     * Aktywuje serwer HTTP, który zaczyna nasłuchiwać na podanym porcie.
+     *
+     * @param host nazwa hosta
+     * @param port numer portu aplikacji
+     * @throws IOException błąd występujący przy starcie serwera
+     */
     public void listen(String host, int port) throws IOException {
+        //Dodaje obiekt obsługujący niedopasowane trasy
         this.mainRouter.use("/", new NotFoundHandler());
+        //Aktualizuje głębokości routerów
         this.mainRouter.updateDepth();
+        //Uruchamia serwer
         this.server = HttpServer.create(new InetSocketAddress(host, port), 0);
-        this.server.createContext("/", new ServerHandler(this.mainRouter, this.errorHandler));
-    }
-
-    public void listen(int port) throws IOException {
-        this.mainRouter.use("/", new NotFoundHandler());
-        this.mainRouter.updateDepth();
-        this.server = HttpServer.create(new InetSocketAddress("localhost", port), 0);
         this.server.createContext("/", new ServerHandler(this.mainRouter, this.errorHandler));
         this.server.start();
     }
 
+    /**
+     * Aktywuje serwer HTTP, który zaczyna nasłuchiwać na podanym porcie.
+     *
+     * @param port numer portu aplikacji
+     * @throws IOException błąd występujący przy starcie serwera
+     */
+
+    public void listen(int port) throws IOException {
+        this.listen("localhost", port);
+    }
+
+    /**
+     * Klasa opakowująca interfejs HttpHandler, aby był zgodny z działaniem przetwarzania obiektów żądań i odpowiedzi w routerach.
+     */
     public static class ServerHandler implements HttpHandler {
         Router router;
         ErrorHandler serverErrorHandler;
@@ -83,8 +142,7 @@ public class Server {
                 } catch (Exception error) {
                     request = new Request(exchange);
                     response = new Response();
-                    next = new Next();
-                    this.serverErrorHandler.handle(error, request, response, next);
+                    this.serverErrorHandler.handle(error, request, response);
                     response.sendResponse(exchange);
                 }
             } catch (Exception error) {

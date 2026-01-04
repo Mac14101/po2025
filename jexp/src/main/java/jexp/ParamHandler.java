@@ -1,5 +1,9 @@
 package jexp;
 
+/**
+ * {@inheritDoc Handler}
+ * Klasa odpowiedzialna za odczytanie parametrów trasy z adresu URL żądania.
+ */
 public class ParamHandler implements Handler {
     private final String name;
     private int depth;
