@@ -6,8 +6,8 @@ public class Database {
     private Connection connection;
     private String url;
 
-    public Database(String url) {
-        this.url = url;
+    public Database(String name) {
+        this.url = "jdbc:sqlite:" + name;
         this.connection = null;
     }
 
@@ -16,8 +16,8 @@ public class Database {
         this.connection = null;
     }
 
-    public void connect(String url) throws SQLException {
-        this.url = url;
+    public void connect(String name) throws SQLException {
+        this.url = "jdbc:sqlite:" + name;
         this.connect();
     }
 

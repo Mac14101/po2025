@@ -22,9 +22,9 @@ public class DatabaseTest {
     public void connect() {
         try (MockedStatic<DriverManager> driverMock = Mockito.mockStatic(DriverManager.class)) {
             Connection connectionMock = Mockito.mock(Connection.class);
-            driverMock.when(() -> DriverManager.getConnection("jdbc:test")).thenReturn(connectionMock);
-            database.connect("jdbc:test");
-            driverMock.verify(() -> DriverManager.getConnection("jdbc:test"));
+            driverMock.when(() -> DriverManager.getConnection("jdbc:sqlite:test")).thenReturn(connectionMock);
+            database.connect("test");
+            driverMock.verify(() -> DriverManager.getConnection("jdbc:sqlite:test"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -34,8 +34,8 @@ public class DatabaseTest {
     public void close() throws SQLException {
         try (MockedStatic<DriverManager> driverMock = Mockito.mockStatic(DriverManager.class)) {
             Connection connectionMock = Mockito.mock(Connection.class);
-            driverMock.when(() -> DriverManager.getConnection("jdbc:test")).thenReturn(connectionMock);
-            database.connect("jdbc:test");
+            driverMock.when(() -> DriverManager.getConnection("jdbc:sqlite:test")).thenReturn(connectionMock);
+            database.connect("test");
             database.close();
             Mockito.verify(connectionMock, Mockito.times(1)).close();
         } catch (SQLException e) {
@@ -49,10 +49,10 @@ public class DatabaseTest {
             Connection connectionMock = Mockito.mock(Connection.class);
             Statement statementMock = Mockito.mock(Statement.class);
             ResultSet resultSetMock = Mockito.mock(ResultSet.class);
-            driverMock.when(() -> DriverManager.getConnection("jdbc:test")).thenReturn(connectionMock);
+            driverMock.when(() -> DriverManager.getConnection("jdbc:sqlite:test")).thenReturn(connectionMock);
             Mockito.when(connectionMock.createStatement()).thenReturn(statementMock);
             Mockito.when(statementMock.executeQuery(Mockito.anyString())).thenReturn(resultSetMock);
-            database.connect("jdbc:test");
+            database.connect("test");
             assertSame(resultSetMock, database.execute("query"));
             Mockito.verify(connectionMock, Mockito.times(1)).createStatement();
             Mockito.verify(statementMock, Mockito.times(1)).executeQuery("query");
