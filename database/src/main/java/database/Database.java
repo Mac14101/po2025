@@ -1,8 +1,6 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Database {
     private Connection connection;
@@ -29,5 +27,13 @@ public class Database {
 
     public void close() throws SQLException {
         this.connection.close();
+    }
+
+    public ResultSet execute(String query) throws SQLException {
+        if (this.connection == null) {
+            throw new SQLException("Database connection is null");
+        }
+        Statement statement = this.connection.createStatement();
+        return statement.executeQuery(query);
     }
 }
