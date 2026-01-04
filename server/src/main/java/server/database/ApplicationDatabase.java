@@ -1,8 +1,13 @@
 package server.database;
 
 import database.Database;
+import server.database.entities.SchoolGroup;
+import server.database.entities.Student;
+import server.database.entities.Subject;
+import server.database.entities.User;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ApplicationDatabase extends Database {
     private static ApplicationDatabase instance;
@@ -38,4 +43,41 @@ public class ApplicationDatabase extends Database {
         instance.close();
         instance = null;
     }
+
+    public static ArrayList<User> getAllUsers() {
+        //TODO
+        return null;
+    }
+
+    public static void createUser(User user) {
+        //TODO
+    }
+
+    public static ArrayList<Subject> getAllSubjects() {
+        //TODO
+        return null;
+    }
+
+    public static void createSubject(Subject subject) {
+        //TODO
+    }
+
+    public static ArrayList<SchoolGroup> getAllClass() {
+        //TODO
+        return null;
+    }
+
+    public static void createClass(SchoolGroup schoolClass) {
+        //TODO
+    }
+
+    public static ArrayList<Student> getAllStudents() {
+        //TODO
+        return null;
+    }
+
+    public static void addStudent(Student student) {
+        //TODO
+    }
+
 }
