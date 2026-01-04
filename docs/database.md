@@ -81,3 +81,4 @@ Tabela przechowująca oceny uczniów.
 |sid|INT|FOREIGN KEY|Identyfikator ucznia, który otrzymał ocenę|
 |sbid|INT|FOREIGN KEY|Identyfikator przedmiotu|
 |tid|INT|NOT NULL|Identyfikator nauczyciela, który wystawił ocenę|
+|grade|VARCHAR(10)|NOT NULL|Ocena|
