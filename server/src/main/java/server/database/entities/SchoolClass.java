@@ -1,20 +1,23 @@
 package server.database.entities;
 
 public class SchoolClass {
-    Integer id;
-    Integer number;
-    Character letter;
+    private Integer id;
+    private String day;
+    private String startTime;
+    private String endTime;
 
-    public SchoolClass(Integer id, Integer number, Character letter) {
+    public SchoolClass(Integer id, String day, String startTime, String endTime) {
         this.id = id;
-        this.number = number;
-        this.letter = letter;
+        this.day = day;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public SchoolClass() {
         this.id = null;
-        this.number = null;
-        this.letter = null;
+        this.day = null;
+        this.startTime = null;
+        this.endTime = null;
     }
 
     public Integer getId() {
@@ -25,26 +28,27 @@ public class SchoolClass {
         this.id = id;
     }
 
-    public Integer getNumber() {
-        return number;
+    public String getDay() {
+        return day;
     }
 
-    public void setNumber(Integer number) {
-        if (number < 0) {
-            throw new IllegalArgumentException("Class number is lower than 0!");
-        }
-        this.number = number;
+    public void setDay(String day) {
+        this.day = day;
     }
 
-    public Character getLetter() {
-        return letter;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setLetter(Character letter) {
-        if (!letter.toString().matches("^[A-Z]$")) {
-            throw new IllegalArgumentException("Class letter is not valid!");
-        }
-        this.letter = letter;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
 }
