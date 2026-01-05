@@ -1,4 +1,4 @@
-package server.database.entities;
+package entities;
 
 public class Student {
     User user;

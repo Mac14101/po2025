@@ -1,4 +1,4 @@
-package server.database.entities;
+package entities;
 
 import java.util.ArrayList;
 

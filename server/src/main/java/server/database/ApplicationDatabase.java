@@ -1,10 +1,10 @@
 package server.database;
 
 import database.Database;
-import server.database.entities.SchoolGroup;
-import server.database.entities.Student;
-import server.database.entities.Subject;
-import server.database.entities.User;
+import entities.SchoolGroup;
+import entities.Student;
+import entities.Subject;
+import entities.User;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
