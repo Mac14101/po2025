@@ -4,6 +4,7 @@
 1. [Opis projektu](#opis-projektu)
 2. [Aktorzy systemu](#aktorzy-systemu)
 3. [Działanie systemu](#działanie-systemu)
+4. [Serwer i endpointy API](#serwer-i-endpointy-api)
 
 ## Opis projektu
 Aplikacja e‑Dziennik to system wspierający pracę szkół poprzez umożliwienie elektronicznego zarządzania ocenami, obecnościami oraz planem lekcji. Aplikacja działa w architekturze klient-serwer używając protokołu HTTP (REST API) do przysyłania danych oraz bazy danych SQLite, aby zapewnić funkcjonalny i wydajny dostęp do danych. 
@@ -12,34 +13,17 @@ Aplikacja e‑Dziennik to system wspierający pracę szkół poprzez umożliwien
 Najważniejsze funkcje są zaznaczone pogrubioną czcionką.
 
 1. Administrator(admin)
-   * **wyświetlanie listy użytkowników**
-   * **dodawanie użytkowników**
-   * edytowanie kont użytkowników
-   * usuwanie użytkowników
-   * **wyświetlanie listy przedmiotów**
-   * **dodawanie przedmiotów do listy przedmiotów**
-   * edytowanie przedmiotu z listy przedmiotów
-   * usuwanie przedmiotu z listy przedmiotów
-   * **wyświetlanie listy klas**
-   * **dodawanie klas do listy klas**
-   * edytowanie klasy z listy klas
-   * usuwanie klasy z listy klas
-   * **wyświetlanie listy uczniów**
-   * **dodawanie uczniów do listy uczniów**
-   * edytowanie ucznia z listy uczniów
-   * **wyświetlanie listy nauczycieli**
-   * **dodawanie nauczyciela do listy nauczycieli**
-   * edytowanie nauczyciela z listy nauczycieli
-   * usuwanie nauczyciela z listy nauczycieli
-   * **wyświetlanie uczniów w klasie**
-   * **dodawanie ucznia do klasy**
-   * usuwanie ucznia z klasy
-   * **wyświetlanie planu zajęć**
-   * **dodawanie planu zajęć**
-   * **usuwanie planu zajęć**
-   * **dodawanie zajęć do planu zajęć**
-   * edytowanie zajęć z planu zajęć
-   * usuwanie zajęć z planu zajęć
+   * wyświetlanie listy użytkowników (`/user/` **GET**)
+   * dodawanie użytkowników (`/user/` **POST**)
+   * wyświetlanie listy przedmiotów (`/subject/` **GET**)
+   * dodawanie przedmiotów do listy przedmiotów(`/subject/` **POST**)
+   * wyświetlanie listy klas (`/class/` **GET**)
+   * dodawanie klas do listy klas (`/class/` **POST**)
+   * wyświetlanie listy uczniów (`/student/` **GET**)
+   * wyświetlanie listy uczniów klasy (`/student/:classId` **GET**)
+   * dodawania ucznia do klasy (`/student/` **POST**)
+   * wyświetlanie planu zajęć klasy (`/timetable/:classId` **GET**)
+   * dodawania zajęć do planu zajęć klasy (`/timetable/:classId` **POST**)
 2. Nauczyciel(teacher)
    * **wyświetlanie listy klasy**
    * **wyświetlanie listy obecności**
@@ -85,6 +69,26 @@ deactivate UIController
 @enduml
 ```
 
+## Serwer i endpointy API
+1. Uwierzytelnianie
+2. Konta użytkowników
+   * `/user/` **GET** - lista wszystkich użytkowników
+   * `/user/` **POST** - tworzy nowego użytkownika
+3. Przedmioty szkolne
+   * `/subject/` **GET** - lista wszystkich przedmiotów
+   * `/subject/` **POST** - tworzy nowy przedmiot
+4. Klasy
+   * `/class/` **GET** - lista wszystkich klas
+   * `/class/` **POST** - tworzy nową klasę
+5. Uczniowie
+   * `/student/` **GET** - lista wszystkich uczniów
+   * `/student/:classId` **GET** - lista uczniów w klasie o id **classId**
+   * `/student/` **POST** - dodaje wybranego ucznia do wybranej klasy
+6. Plan zajęć
+   * `/timetable/:classId` **GET** - lista zajęć z planu zajęć klasy
+
+
 ## Więcej dokumentacji
 
 * [baza danych](./docs/database.md)
+* [moduł jexp](./docs/jexp.md)
