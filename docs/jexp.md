@@ -134,14 +134,6 @@ class Server{
     + void error();
     + void listen()
 }
-class JSON{
-    - static JSON instance;
-    - ObjectMapper mapper;
-    - static JSON getInstance();
-    - ObjectMapper getMapper();
-    + static <T> parse();
-    + static String stringify();
-}
 class Route{
     - String[] route;
     + String getPath();
@@ -153,7 +145,6 @@ class Route{
 Handler..>Request
 Handler..>Response
 Handler..>Next
-Request..>JSON
 Request..>Route
 Router..>Route
 MethodHandler--|>Handler
@@ -276,17 +267,7 @@ Przykład użycia:
       * public **void** listen() throws **RouterError** - tworzy serwer, który rozpoczyna nasłuchiwanie na podanym porcie aplikacji, dodaje domyślny obiekt obsługi niedopasowanych tras, aktualizuję strukturę routerów zapisanych w głównym routerze serwera
 
 ### Obiekty dodatkowe
-1. JSON
-   Klasa odpowiedzialna za przetwarzanie JSON, oparta o wzorzec singleton
-   Atrybuty:
-      * private static **JSON** instance - jedyna istniejąca instancja obiektu JSON
-      * private **ObjectMapper** mapper - obiekt mappera Jackson
-   Metody:
-      * private static **JSON** getInstance() - zwraca instancję obiektu JSON, jeżeli instancja nie istnieje tworzy ją
-      * private ObjectMapper getMapper() - zwraca obiekt mappera
-      * public static **T** parse() throws **JsonProcessingException** - zamienia JSON na obiekt Java wybranej klasy
-      * public static **String** stringify() throws **JsonProcessingException** - zamienia obiekt Java na JSON
-2. Route
+1. Route
    Klasa przetwarzająca ścieżkę żądania.
    Atrybuty:
       * private final **String[]** route - trasa otrzymana z przetworzenia podanej ścieżki
