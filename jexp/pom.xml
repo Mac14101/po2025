@@ -27,6 +27,12 @@
             <version>5.21.0</version>
             <scope>test</scope>
         </dependency>
+        <!-- Local dependency -->
+        <dependency>
+            <groupId>database</groupId>
+            <artifactId>entities</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
