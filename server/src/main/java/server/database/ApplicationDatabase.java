@@ -1,10 +1,7 @@
 package server.database;
 
 import database.Database;
-import entities.SchoolGroup;
-import entities.Student;
-import entities.Subject;
-import entities.User;
+import entities.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -76,8 +73,21 @@ public class ApplicationDatabase extends Database {
         return null;
     }
 
-    public static void addStudent(Student student) {
+    public static ArrayList<Student> getClassStudents(int classId) {
+        //TODO
+        return null;
+    }
+
+    public static void addStudent(int studentId, int classId) {
         //TODO
     }
 
+    public static ArrayList<SchoolClass> getClassSchedule() {
+        //TODO
+        return null;
+    }
+
+    public static void addClassSchedule(SchoolClass schoolClass) {
+        //TODO
+    }
 }
