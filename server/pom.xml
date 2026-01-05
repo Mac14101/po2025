@@ -29,7 +29,7 @@
         </dependency>
         <!-- Local dependency -->
         <dependency>
-            <groupId>database</groupId>
+            <groupId>entities</groupId>
             <artifactId>entities</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
