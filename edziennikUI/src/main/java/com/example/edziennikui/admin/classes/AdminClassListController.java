@@ -8,7 +8,8 @@ public class AdminClassListController {
 
     @FXML private TableView<Object> classTable;
     @FXML private TableColumn<Object, Integer> colId;
-    @FXML private TableColumn<Object, String> colClassName;
+    @FXML private TableColumn<Object, Integer> colNumber;
+    @FXML private TableColumn<Object, String> colLetter;
     @FXML private TableColumn<Object, Integer> colStudentCount;
 
     @FXML

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.admin.classes.AdminClassListController">
+<VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="com.example.edziennikui.admin.classes.AdminClassListController">
     <children>
         <Label text="Zarządzanie Klasami">
             <font>
@@ -19,8 +19,9 @@
 
         <TableView fx:id="classTable" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colId" minWidth="80.0" maxWidth="80.0" text="ID" />
-                <TableColumn fx:id="colClassName" text="Nazwa Klasy" />
+                <TableColumn fx:id="colId"  text="ID" />
+                <TableColumn fx:id="colNumber" text="Numer klasy" />
+                <TableColumn fx:id="colLetter" text="Litera klasy" />
                 <TableColumn fx:id="colStudentCount" text="Liczba Uczniów" />
             </columns>
             <columnResizePolicy>
