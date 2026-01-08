@@ -6,10 +6,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class SamochoGUIControler {
     private static final ArrayList<Samochod> samochody = new ArrayList<>();
@@ -33,6 +36,7 @@ public class SamochoGUIControler {
     private ComboBox selectCarComboBox;
     @FXML
     private Button newCarButton;
+    private ImageView carImageView = new ImageView();
 
     public static void dodajSamochod(Samochod samochod) {
         samochody.add(samochod);
@@ -108,4 +112,21 @@ public class SamochoGUIControler {
         stage.setResizable(false);
         stage.show();
     }
+
+    @FXML
+    public void initialize() {
+        System.out.println("HelloController initialized");
+        // Load and set the car image
+        Image carImage = new
+                Image(Objects.requireNonNull(getClass().getResource("/car.jpg")).toExternalForm());
+        System.out.println("Image width: " +
+                carImage.getWidth() + ", height: " + carImage.getHeight());
+        this.carImageView.setImage(carImage);
+        this.carImageView.setFitWidth(carImage.getWidth());
+        this.carImageView.setFitHeight(carImage.getHeight());
+        this.carImageView.setTranslateX(100);
+        this.carImageView.setTranslateY(100);
+        this.carImageView.setVisible(true);
+    }
+
 }

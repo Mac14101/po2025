@@ -1,6 +1,7 @@
 package gui.symulator;
 
-public class Samochod {
+public class Samochod extends Thread {
+    public Pozycja cel;
     // Wartość 'false' oznacza samochód wyłączony, 'true' samochód włączony
     private boolean stanWlaczenia;
     private String nrRejestr;
@@ -8,6 +9,7 @@ public class Samochod {
     private Silnik silnik;
     private SkrzyniaBiegow skrzyniaBiegow;
     private Pozycja pozycja;
+    private double dt;
 
     public Samochod(String nrRejestr, String model, Silnik silnik, SkrzyniaBiegow skrzyniaBiegow, Pozycja pozycja) {
         this.stanWlaczenia = false;
@@ -16,6 +18,8 @@ public class Samochod {
         this.silnik = silnik;
         this.skrzyniaBiegow = skrzyniaBiegow;
         this.pozycja = pozycja;
+        this.cel = pozycja;
+        this.start();
     }
 
 
@@ -55,7 +59,7 @@ public class Samochod {
 
 
     public void jedzDo(Pozycja cel) {
-        // TODO
+        this.pozycja.przemiesc(cel, this.getAktPredkosc(), this.dt);
     }
 
     public double getWaga() {
@@ -68,5 +72,16 @@ public class Samochod {
 
     public Pozycja getAktpozycja() {
         return this.pozycja;
+    }
+
+    @Override
+    public void run() {
+        while (true) {
+            while (this.cel.getX() != this.pozycja.getX() && this.cel.getY() != this.pozycja.getY()) {
+                this.jedzDo(this.cel);
+                System.out.println(this.cel.getX() + " " + this.cel.getY());
+            }
+            System.out.println(this.pozycja.getX() + " " + this.pozycja.getY());
+        }
     }
 }
