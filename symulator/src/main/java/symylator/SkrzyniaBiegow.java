@@ -1,0 +1,60 @@
+package symylator;
+
+public class SkrzyniaBiegow extends Komponent {
+    Sprzeglo sprzeglo;
+    private int aktualnyBieg;
+    private int iloscBiegow;
+    private double aktualnePrzelozenie;
+
+    public SkrzyniaBiegow(String nazwa, int aktualnyBieg, int iloscBiegow, double aktualnePrzelozenie, Sprzeglo sprzeglo, double waga, double cena) {
+        super(nazwa, waga, cena);
+        this.aktualnyBieg = aktualnyBieg;
+        this.iloscBiegow = iloscBiegow;
+        this.aktualnePrzelozenie = aktualnePrzelozenie;
+        this.sprzeglo = sprzeglo;
+    }
+
+    public SkrzyniaBiegow(String nazwa, Sprzeglo sprzeglo, double waga, double cena) {
+        super(nazwa, waga, cena);
+        this.iloscBiegow = 6;
+        this.aktualnyBieg = 0;
+        this.aktualnePrzelozenie = 0;
+        this.sprzeglo = sprzeglo;
+    }
+
+    void nacisnijSprzeglo() {
+        this.sprzeglo.wcisnij();
+    }
+
+    void zwolnijSprzeglo() {
+        this.sprzeglo.zwolnij();
+    }
+
+    void zwiekszBieg() {
+        if (!this.sprzeglo.getStanSprzegla()) {
+            if (this.aktualnyBieg < this.iloscBiegow) {
+                this.aktualnyBieg++;
+            }
+        } else {/* TODO Wyrzuć błąd */}
+    }
+
+    void zmniejszBieg() {
+        if (!this.sprzeglo.getStanSprzegla()) {
+            if (this.aktualnyBieg > 0) {
+                this.aktualnyBieg--;
+            }
+        } else {/* TODO Wyrzuć błąd */}
+    }
+
+    public int getAktualnyBieg() {
+        return this.aktualnyBieg;
+    }
+
+    public double getAktualnePrzelozenie() {
+        return this.aktualnePrzelozenie;
+    }
+
+    public double getWaga() {
+        return this.waga + this.sprzeglo.getWaga();
+    }
+}
