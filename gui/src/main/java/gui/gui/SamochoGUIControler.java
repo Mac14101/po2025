@@ -1,5 +1,6 @@
 package gui.gui;
 
+import gui.symulator.Samochod;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -8,33 +9,34 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SamochoGUIControler {
+    private static final ArrayList<Samochod> samochody = new ArrayList<>();
     @FXML
     private Button startButton;
     @FXML
     private Button stopButton;
-
     @FXML
     private Button upshiftGearButton;
     @FXML
     private Button downshiftGearButton;
-
     @FXML
     private Button pushGasButton;
     @FXML
     private Button releaseGasButton;
-
     @FXML
     private Button pushClutchButton;
     @FXML
     private Button releaseClutchButton;
-
     @FXML
     private ComboBox selectCarComboBox;
-
     @FXML
     private Button newCarButton;
+
+    public static void dodajSamochod(Samochod samochod) {
+        samochody.add(samochod);
+    }
 
     @FXML
     private void onStartButton() {
@@ -87,13 +89,11 @@ public class SamochoGUIControler {
     @FXML
     private void onSelectCarComboBox() {
         System.out.println("SelectCarComboBox show");
-        this.refresh();
     }
 
     @FXML
     private void onNewCarButton() throws IOException {
         this.openNewCarWindow();
-        this.refresh();
     }
 
     private void refresh() {

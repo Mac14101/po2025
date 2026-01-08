@@ -1,4 +1,4 @@
-package symylator;
+package gui.symulator;
 
 public class Sprzeglo extends Komponent {
     // Wartość 'false' oznacza sprzęgło wciścięte, 'true' oznacza sprzęgło zwolnione

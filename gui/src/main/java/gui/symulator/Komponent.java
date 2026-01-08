@@ -1,4 +1,4 @@
-package symylator;
+package gui.symulator;
 
 public abstract class Komponent {
     protected double waga;

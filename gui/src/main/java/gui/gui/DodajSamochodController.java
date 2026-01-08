@@ -1,10 +1,14 @@
 package gui.gui;
 
+import gui.symulator.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class DodajSamochodController {
+    @FXML
+    private Button submitButton;
     @FXML
     private Button carNumberGenerateButton;
     @FXML
@@ -38,28 +42,40 @@ public class DodajSamochodController {
 
     @FXML
     private void onCarNumberGenerateButton() {
-        carNumberGenerateButton.setText("KRA XXXXX");
+        carNumberTextField.setText("KRA XXXXX");
     }
 
     @FXML
     private void onSubmitButton() {
-        String carModel = carModelTextField.getText();
-        String carNumber = carNumberTextField.getText();
-        String carEngineName = carEngineNameTextField.getText();
-        String carEngineWeight = carEngineWeightTextField.getText();
-        String carEnginePrice = carEnginePriceTextField.getText();
-        String carEngineMaxRPM = carEngineMaxRPMTextField.getText();
-        String carGearboxName = carGearboxNameTextField.getText();
-        String carGearboxWeight = carGearboxWeightTextField.getText();
-        String carGearboxPrice = carGearboxPriceTextField.getText();
-        String carGearboxMaxGear = carGearboxMaxGearTextField.getText();
-        String carClutchName = carClutchNameTextField.getText();
-        String carClutchWeight = carClutchWeightTextField.getText();
-        String carClutchPrice = carClutchPriceTextField.getText();
+        try {
+            String carModel = carModelTextField.getText();
+            String carNumber = carNumberTextField.getText();
+            String carEngineName = carEngineNameTextField.getText();
+            double carEngineWeight = Double.parseDouble(carEngineWeightTextField.getText());
+            double carEnginePrice = Double.parseDouble(carEnginePriceTextField.getText());
+            int carEngineMaxRPM = Integer.parseInt(carEngineMaxRPMTextField.getText());
+            Silnik silnik = new Silnik(carEngineName, carEngineMaxRPM, carEngineWeight, carEnginePrice);
+            String carClutchName = carClutchNameTextField.getText();
+            double carClutchWeight = Double.parseDouble(carClutchWeightTextField.getText());
+            double carClutchPrice = Double.parseDouble(carClutchPriceTextField.getText());
+            Sprzeglo sprzeglo = new Sprzeglo(carClutchName, carClutchWeight, carClutchPrice);
+            String carGearboxName = carGearboxNameTextField.getText();
+            double carGearboxWeight = Double.parseDouble(carGearboxWeightTextField.getText());
+            double carGearboxPrice = Double.parseDouble(carGearboxPriceTextField.getText());
+            int carGearboxMaxGear = Integer.parseInt(carGearboxMaxGearTextField.getText());
+            SkrzyniaBiegow skrzyniaBiegow = new SkrzyniaBiegow(carGearboxName, carGearboxMaxGear, sprzeglo, carGearboxWeight, carGearboxPrice);
+            Samochod samochod = new Samochod(carNumber, carModel, silnik, skrzyniaBiegow, new Pozycja());
+            SamochoGUIControler.dodajSamochod(samochod);
+            Stage stage = (Stage) submitButton.getScene().getWindow();
+            stage.close();
+        } catch (NumberFormatException e) {
+            System.err.println(e);
+        }
     }
 
     @FXML
     private void onCancelButton() {
-        System.out.println("onCancelButton click");
+        Stage stage = (Stage) submitButton.getScene().getWindow();
+        stage.close();
     }
 }

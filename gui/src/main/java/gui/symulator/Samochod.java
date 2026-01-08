@@ -1,34 +1,23 @@
-package symylator;
+package gui.symulator;
 
 public class Samochod {
     // Wartość 'false' oznacza samochód wyłączony, 'true' samochód włączony
     private boolean stanWlaczenia;
     private String nrRejestr;
     private String model;
-    private double predkoscMax;
     private Silnik silnik;
     private SkrzyniaBiegow skrzyniaBiegow;
     private Pozycja pozycja;
-
-    public Samochod(boolean stanWlaczenia, String nrRejestr, String model, double predkoscMax, Silnik silnik, SkrzyniaBiegow skrzyniaBiegow, Pozycja pozycja) {
-        this.stanWlaczenia = stanWlaczenia;
-        this.nrRejestr = nrRejestr;
-        this.model = model;
-        this.predkoscMax = predkoscMax;
-        this.silnik = silnik;
-        this.skrzyniaBiegow = skrzyniaBiegow;
-        this.pozycja = pozycja;
-    }
 
     public Samochod(String nrRejestr, String model, Silnik silnik, SkrzyniaBiegow skrzyniaBiegow, Pozycja pozycja) {
         this.stanWlaczenia = false;
         this.nrRejestr = nrRejestr;
         this.model = model;
-        this.predkoscMax = 160;
         this.silnik = silnik;
         this.skrzyniaBiegow = skrzyniaBiegow;
         this.pozycja = pozycja;
     }
+
 
     public void wlacz() {
         this.stanWlaczenia = true;

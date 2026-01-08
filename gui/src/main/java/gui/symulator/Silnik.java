@@ -1,18 +1,13 @@
-package symylator;
+package gui.symulator;
 
 public class Silnik extends Komponent {
     private int maxObroty;
     private int obroty;
 
-    public Silnik(String nazwa, int maxObroty, int obroty, double waga, double cena) {
+
+    public Silnik(String nazwa, int maxObroty, double waga, double cena) {
         super(nazwa, waga, cena);
         this.maxObroty = maxObroty;
-        this.obroty = obroty;
-    }
-
-    public Silnik(String nazwa, double waga, double cena) {
-        super(nazwa, waga, cena);
-        this.maxObroty = 8000;
         this.obroty = 0;
     }
 

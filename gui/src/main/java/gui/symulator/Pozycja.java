@@ -1,4 +1,4 @@
-package symylator;
+package gui.symulator;
 
 public class Pozycja {
     private double x;

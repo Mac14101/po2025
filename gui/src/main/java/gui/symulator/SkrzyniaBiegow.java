@@ -1,4 +1,4 @@
-package symylator;
+package gui.symulator;
 
 public class SkrzyniaBiegow extends Komponent {
     Sprzeglo sprzeglo;
@@ -6,18 +6,10 @@ public class SkrzyniaBiegow extends Komponent {
     private int iloscBiegow;
     private double aktualnePrzelozenie;
 
-    public SkrzyniaBiegow(String nazwa, int aktualnyBieg, int iloscBiegow, double aktualnePrzelozenie, Sprzeglo sprzeglo, double waga, double cena) {
+    public SkrzyniaBiegow(String nazwa, int iloscBiegow, Sprzeglo sprzeglo, double waga, double cena) {
         super(nazwa, waga, cena);
-        this.aktualnyBieg = aktualnyBieg;
-        this.iloscBiegow = iloscBiegow;
-        this.aktualnePrzelozenie = aktualnePrzelozenie;
-        this.sprzeglo = sprzeglo;
-    }
-
-    public SkrzyniaBiegow(String nazwa, Sprzeglo sprzeglo, double waga, double cena) {
-        super(nazwa, waga, cena);
-        this.iloscBiegow = 6;
         this.aktualnyBieg = 0;
+        this.iloscBiegow = iloscBiegow;
         this.aktualnePrzelozenie = 0;
         this.sprzeglo = sprzeglo;
     }
