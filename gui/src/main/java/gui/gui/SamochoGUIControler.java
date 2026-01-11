@@ -1,26 +1,26 @@
 package gui.gui;
 
 import gui.symulator.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class SamochoGUIControler {
-    private static final ArrayList<Samochod> samochody = new ArrayList<>();
+    private static ObservableList<Samochod> samochody =
+            FXCollections.observableArrayList();
     public VBox map;
-    public TextField carNameTextField;
+    public TextField carModelTextField;
     public TextField carRegisterNumberTextField;
     public TextField carWeightTextField;
     public Label carSpeedTextField;
@@ -65,65 +65,101 @@ public class SamochoGUIControler {
 
     @FXML
     private void onStartButton() {
-        aktywnySamochod.wlacz();
-        this.refresh();
+        try {
+            aktywnySamochod.wlacz();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onStopButton() {
-        aktywnySamochod.wylacz();
-        this.refresh();
+        try {
+            aktywnySamochod.wylacz();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onUpshiftGearButton() {
-        aktywnySamochod.zwiekszBieg();
-        this.refresh();
+        try {
+            aktywnySamochod.zwiekszBieg();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onDownshiftGearButton() {
-        aktywnySamochod.zmniejszBieg();
-        this.refresh();
+        try {
+            aktywnySamochod.zmniejszBieg();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onPushGasButton() {
-        aktywnySamochod.dodajGazu();
-        this.refresh();
+        try {
+            aktywnySamochod.dodajGazu();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onReleaseGasButton() {
-        aktywnySamochod.ujmijGazu();
-        this.refresh();
+        try {
+            aktywnySamochod.ujmijGazu();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onPushClutchButton() {
-        aktywnySamochod.nacisnijSprzeglo();
-        this.refresh();
+        try {
+            aktywnySamochod.nacisnijSprzeglo();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onReleaseClutchButton() {
-        aktywnySamochod.zwolnijsprezglo();
-        this.refresh();
-    }
-
-    @FXML
-    private void onSelectCarComboBox() {
-        System.out.println("SelectCarComboBox show");
+        try {
+            aktywnySamochod.zwolnijsprezglo();
+        } catch (NullPointerException e) {
+            showErrorWindow("Wybierz samochód");
+        } finally {
+            this.refresh();
+        }
     }
 
     @FXML
     private void onNewCarButton() throws IOException {
         this.openNewCarWindow();
+        this.refresh();
     }
 
     private void refresh() {
         if (this.aktywnySamochod == null) {
-            this.carNameTextField.setText("");
+            this.carModelTextField.setText("");
             this.carRegisterNumberTextField.setText("");
             this.carWeightTextField.setText("");
             this.carSpeedTextField.setText("");
@@ -140,7 +176,7 @@ public class SamochoGUIControler {
             this.clutchStatusTextField.setText("");
             this.clutchWeightTextField.setText("");
         } else {
-            this.carNameTextField.setText(this.aktywnySamochod.getName());
+            this.carModelTextField.setText(this.aktywnySamochod.getModel());
             this.carRegisterNumberTextField.setText(this.aktywnySamochod.getNrRejestr());
             this.carWeightTextField.setText("1000");
             this.carSpeedTextField.setText(String.valueOf(this.aktywnySamochod.getAktPredkosc()));
@@ -191,7 +227,32 @@ public class SamochoGUIControler {
             Pozycja nowaPozycja = new Pozycja(x, y);
             aktywnySamochod.jedzDo(nowaPozycja);
         });
+        selectCarComboBox.setItems(samochody);
+        selectCarComboBox.setOnAction(event -> {
+            aktywnySamochod = (Samochod) selectCarComboBox.getSelectionModel().getSelectedItem();
+            refresh();
+        });
+        selectCarComboBox.setConverter(new StringConverter<Samochod>() {
+            @Override
+            public String toString(Samochod car) {
+                if (car == null) return "";
+                return car.getModel() + " " + car.getNrRejestr();
+            }
+
+            @Override
+            public Samochod fromString(String string) {
+                return null;
+            }
+
+        });
     }
 
+    public void showErrorWindow(String error) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Błąd");
+        alert.setHeaderText(null);
+        alert.setContentText(error);
+        alert.showAndWait();
+    }
 
 }

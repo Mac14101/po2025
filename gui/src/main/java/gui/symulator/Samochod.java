@@ -90,9 +90,7 @@ public class Samochod extends Thread {
         while (true) {
             while (this.cel.getX() != this.pozycja.getX() && this.cel.getY() != this.pozycja.getY()) {
                 this.jedzDo(this.cel);
-                System.out.println(this.cel.getX() + " " + this.cel.getY());
             }
-            System.out.println(this.pozycja.getX() + " " + this.pozycja.getY());
         }
     }
 
