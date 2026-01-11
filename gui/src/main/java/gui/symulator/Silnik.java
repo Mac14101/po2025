@@ -4,11 +4,14 @@ public class Silnik extends Komponent {
     private int maxObroty;
     private int obroty;
 
-
     public Silnik(String nazwa, int maxObroty, double waga, double cena) {
         super(nazwa, waga, cena);
         this.maxObroty = maxObroty;
         this.obroty = 0;
+    }
+
+    public int getObroty() {
+        return obroty;
     }
 
     public void uruchom() {

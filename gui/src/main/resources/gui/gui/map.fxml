@@ -3,7 +3,6 @@
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity"
             prefWidth="600" styleClass="default-size" stylesheets="@style.css"
@@ -16,24 +15,27 @@
                         <FlowPane styleClass="menu-titled-pane-element">
                             <children>
                                 <Label styleClass="menu-titled-pane-label" text="Nazwa"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="carNameTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Nr rejestracyjny"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="carRegisterNumberTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Waga"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="carWeightTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
-                                <Label styleClass="menu-titled-pane-label" text="Prędkość"/>
+                                <Label styleClass="menu-titled-pane-label" text="Prędkość" fx:id="carSpeedTextField"/>
                                 <TextField editable="false" styleClass="menu-titled-pane-textField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
@@ -60,25 +62,29 @@
                         <FlowPane styleClass="menu-titled-pane-element">
                             <children>
                                 <Label styleClass="menu-titled-pane-label" text="Nazwa"/>
-                                <TextField editable="false" prefWidth="220.0" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" prefWidth="220.0" styleClass="menu-titled-pane-textField"
+                                           fx:id="gearboxNameTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Cena"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="gearboxPriceTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Waga"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="gearboxWeightTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Bieg"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="gearboxGearTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
@@ -106,25 +112,29 @@
                         <FlowPane styleClass="menu-titled-pane-element">
                             <children>
                                 <Label styleClass="menu-titled-pane-label" text="Nazwa"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="engineNameTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Cena"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="enginePriceTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Waga"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="engineWeightTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Obroty"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="engineRPMTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
@@ -150,25 +160,29 @@
                         <FlowPane prefHeight="200.0" styleClass="menu-titled-pane-element">
                             <children>
                                 <Label styleClass="menu-titled-pane-label" text="Nazwa"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="clutchNameTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Cena"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="clutchPriceTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Waga"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="clutchWeightTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
                                 </TextField>
                                 <Label styleClass="menu-titled-pane-label" text="Stan"/>
-                                <TextField editable="false" styleClass="menu-titled-pane-textField">
+                                <TextField editable="false" styleClass="menu-titled-pane-textField"
+                                           fx:id="clutchStatusTextField">
                                     <FlowPane.margin>
                                         <Insets bottom="5.0" top="5.0"/>
                                     </FlowPane.margin>
@@ -210,7 +224,8 @@
         </MenuBar>
     </top>
     <center>
-        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #66ff66;" BorderPane.alignment="CENTER">
+        <VBox prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #66ff66;" BorderPane.alignment="CENTER"
+              fx:id="map">
             <children>
                 <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" prefHeight="200.0" prefWidth="200.0">
                     <children>

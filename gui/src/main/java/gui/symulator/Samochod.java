@@ -22,6 +22,17 @@ public class Samochod extends Thread {
         this.start();
     }
 
+    public Silnik getSilnik() {
+        return silnik;
+    }
+
+    public SkrzyniaBiegow getSkrzyniaBiegow() {
+        return skrzyniaBiegow;
+    }
+
+    public String getModel() {
+        return model;
+    }
 
     public void wlacz() {
         this.stanWlaczenia = true;
@@ -59,7 +70,7 @@ public class Samochod extends Thread {
 
 
     public void jedzDo(Pozycja cel) {
-        this.pozycja.przemiesc(cel, this.getAktPredkosc(), this.dt);
+        this.cel = cel;
     }
 
     public double getWaga() {
@@ -83,5 +94,9 @@ public class Samochod extends Thread {
             }
             System.out.println(this.pozycja.getX() + " " + this.pozycja.getY());
         }
+    }
+
+    public String getNrRejestr() {
+        return this.nrRejestr;
     }
 }

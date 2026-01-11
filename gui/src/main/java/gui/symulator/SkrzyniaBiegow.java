@@ -18,6 +18,10 @@ public class SkrzyniaBiegow extends Komponent {
         this.sprzeglo.wcisnij();
     }
 
+    public Sprzeglo getSprzeglo() {
+        return sprzeglo;
+    }
+
     void zwolnijSprzeglo() {
         this.sprzeglo.zwolnij();
     }
