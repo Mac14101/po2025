@@ -77,7 +77,7 @@ public class Car extends Thread {
         this.engine.decreaseRPM();
     }
 
-    public double getWaga() {
+    public double getWeight() {
         return this.weight + this.gearbox.getWeight() + this.engine.getWeight();
     }
 

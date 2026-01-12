@@ -6,7 +6,7 @@
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
             minWidth="-Infinity"
             prefWidth="600" styleClass="default-size" stylesheets="@style.css"
-            xmlns="http://javafx.com/javafx/17.0.12" fx:controller="gui.gui.SamochoGUIControler">
+            xmlns="http://javafx.com/javafx/17.0.12" fx:controller="gui.gui.ApplicationController">
     <left>
         <VBox styleClass="menu-vbox" BorderPane.alignment="CENTER">
             <children>

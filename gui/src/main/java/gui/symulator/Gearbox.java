@@ -31,6 +31,7 @@ public class Gearbox extends Component {
         }
     }
 
+
     void decreaseGear() throws GearboxError {
         if (!this.clutch.getStatus()) {
             if (this.gear > 0) {
@@ -48,6 +49,10 @@ public class Gearbox extends Component {
 
     public Clutch getClutch() {
         return this.clutch;
+    }
+
+    public int getMaxGear() {
+        return maxGear;
     }
 
     public static class GearboxError extends Exception {

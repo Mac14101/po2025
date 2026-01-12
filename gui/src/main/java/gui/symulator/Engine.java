@@ -14,6 +14,10 @@ public class Engine extends Component {
         return RPM;
     }
 
+    public int getMaxRPM() {
+        return maxRPM;
+    }
+
     public void turnOn() {
         if (this.RPM == 0) {
             this.RPM = 800;

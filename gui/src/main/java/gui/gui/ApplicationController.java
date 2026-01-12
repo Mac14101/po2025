@@ -1,6 +1,6 @@
 package gui.gui;
 
-import gui.symulator.*;
+import gui.symulator.Listener;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class SamochoGUIControler implements Listener {
+public class ApplicationController implements Listener {
     private static ObservableList<Samochod> samochody =
             FXCollections.observableArrayList();
     public VBox map;
