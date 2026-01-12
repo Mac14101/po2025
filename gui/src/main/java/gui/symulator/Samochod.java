@@ -89,7 +89,8 @@ public class Samochod extends Thread {
     public void run() {
         while (true) {
             while (this.cel.getX() != this.pozycja.getX() && this.cel.getY() != this.pozycja.getY()) {
-                this.jedzDo(this.cel);
+                this.pozycja.przemiesc(this.cel, this.getAktPredkosc(), this.dt);
+                System.out.println(this.getAktPredkosc());
             }
         }
     }

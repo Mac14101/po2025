@@ -234,7 +234,7 @@
                         <ComboBox fx:id="selectCarComboBox" prefWidth="150.0"/>
                         <Button mnemonicParsing="false" text="Dodaj nowy" fx:id="newCarButton"
                                 onAction="#onNewCarButton"/>
-                        <Button mnemonicParsing="false" text="Usuń"/>
+                        <Button mnemonicParsing="false" text="Usuń" onAction="#onDeleteCarButton"/>
                     </children>
                 </FlowPane>
             </children>

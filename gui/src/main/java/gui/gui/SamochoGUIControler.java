@@ -1,12 +1,16 @@
 package gui.gui;
 
 import gui.symulator.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
@@ -14,16 +18,18 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class SamochoGUIControler {
+public class SamochoGUIControler implements Listener {
     private static ObservableList<Samochod> samochody =
             FXCollections.observableArrayList();
     public VBox map;
     public TextField carModelTextField;
     public TextField carRegisterNumberTextField;
     public TextField carWeightTextField;
-    public Label carSpeedTextField;
+    public TextField carSpeedTextField;
     public TextField gearboxGearTextField;
     public TextField gearboxWeightTextField;
     public TextField gearboxNameTextField;
@@ -58,9 +64,24 @@ public class SamochoGUIControler {
     @FXML
     private Button newCarButton;
     private ImageView carImageView = new ImageView();
+    private List<Listener> listeners = new ArrayList<>();
 
     public static void dodajSamochod(Samochod samochod) {
         samochody.add(samochod);
+    }
+
+    public void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
+        }
     }
 
     @FXML
@@ -196,6 +217,18 @@ public class SamochoGUIControler {
             this.clutchStatusTextField.setText(sprzeglo.getStanSprzegla() ? "zwolnione" : "naciśnięte");
             this.clutchWeightTextField.setText(String.valueOf(sprzeglo.getWaga()));
         }
+        Platform.runLater(() -> {
+            if (aktywnySamochod != null && carImageView != null) {
+                try {
+                    Pozycja aktualnaPozycja = aktywnySamochod.getAktpozycja();
+                    carImageView.setTranslateX(aktualnaPozycja.getX());
+                    carImageView.setTranslateY(aktualnaPozycja.getY());
+
+                } catch (Exception e) {
+                    System.out.println("Błąd: Nie można pobrać pozycji samochodu lub ikony: " + e.getMessage());
+                }
+            }
+        });
     }
 
     private void openNewCarWindow() throws IOException {
@@ -215,12 +248,11 @@ public class SamochoGUIControler {
                 Image(Objects.requireNonNull(getClass().getResource("/car.jpg")).toExternalForm());
         System.out.println("Image width: " +
                 carImage.getWidth() + ", height: " + carImage.getHeight());
-        this.carImageView.setImage(carImage);
-        this.carImageView.setFitWidth(carImage.getWidth());
-        this.carImageView.setFitHeight(carImage.getHeight());
-        this.carImageView.setTranslateX(100);
-        this.carImageView.setTranslateY(100);
-        this.carImageView.setVisible(true);
+        carImageView.setImage(carImage);
+        carImageView.setFitWidth(carImage.getWidth());
+        carImageView.setFitHeight(carImage.getHeight());
+        carImageView.setTranslateX(100);
+        carImageView.setTranslateY(100);
         map.setOnMouseClicked(event -> {
             double x = event.getX();
             double y = event.getY();
@@ -255,4 +287,16 @@ public class SamochoGUIControler {
         alert.showAndWait();
     }
 
+    @Override
+    public void update() {
+        refresh();
+    }
+
+    @FXML
+    public void onDeleteCarButton() {
+        aktywnySamochod.interrupt();
+        samochody.remove(aktywnySamochod);
+        aktywnySamochod = null;
+        refresh();
+    }
 }
