@@ -14,6 +14,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 
 import java.util.Random;
 
@@ -46,7 +47,25 @@ public class AddCarController {
 
     @FXML
     public void initialize() {
+        // KIA Ceed
+        Engine kiaEngine = new Engine("1.6 CRDi 128KM", 6000, 320d, 15000d);
+        Clutch kiaClutch = new Clutch("SACHS", 5d, 389d);
+        Gearbox kiaGearBox = new Gearbox("S71767", 6, kiaClutch, 72d, 3500d);
+        Car kiaCeed = new Car("", "KIA Ceed", 1523d, kiaEngine, kiaGearBox);
+        carList.add(kiaCeed);
         modelComboBox.setItems(carList);
+        modelComboBox.setConverter(new StringConverter<Car>() {
+            @Override
+            public String toString(Car car) {
+                if (car == null) return "";
+                return car.getModel();
+            }
+
+            @Override
+            public Car fromString(String string) {
+                return null;
+            }
+        });
     }
 
     public void onCarNumberGenerateButton(ActionEvent actionEvent) {

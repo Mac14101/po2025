@@ -60,9 +60,8 @@ public class ApplicationController implements Listener {
         carImageView = new ImageView(carImage);
         carImageView.setFitWidth(carImage.getWidth() / 10);
         carImageView.setFitHeight(carImage.getHeight() / 10);
-        carImageView.setTranslateX(100);
-        carImageView.setTranslateY(100);
-        carImageView.setVisible(true);
+        carImageView.setTranslateX(0);
+        carImageView.setTranslateY(0);
         map.getChildren().add(carImageView);
     }
 
@@ -212,6 +211,7 @@ public class ApplicationController implements Listener {
 
     public void onDeleteCarButton(ActionEvent actionEvent) {
         if (selectedCar != null) {
+            carImageView.setVisible(false);
             selectedCar.interrupt();
             carList.remove(selectedCar);
             selectedCar = null;
@@ -227,6 +227,7 @@ public class ApplicationController implements Listener {
 
     public void onselectCarComboBox(ActionEvent actionEvent) {
         selectedCar = selectCarComboBox.getSelectionModel().getSelectedItem();
+        carImageView.setVisible(true);
         refresh();
     }
 
