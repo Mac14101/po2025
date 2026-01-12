@@ -104,19 +104,23 @@ public class AddCarController {
     }
 
     public void onModelComboBox(ActionEvent actionEvent) {
+        // Właściwości samochodu
         Car selectedModel = modelComboBox.getSelectionModel().getSelectedItem();
         carModelTextField.setText(selectedModel.getModel());
         carWeightTextField.setText(String.valueOf(selectedModel.getWeight()));
+        // Właściwości Silnika
         Engine selectedEngine = selectedModel.getEngine();
         engineNameTextField.setText(selectedEngine.getName());
         enginePriceTextField.setText(String.valueOf(selectedEngine.getPrice()));
         engineWeightTextField.setText(String.valueOf(selectedEngine.getWeight()));
         engineMaxRPMTextField.setText(String.valueOf(selectedEngine.getMaxRPM()));
+        // Właściwości Skrzyni biegów
         Gearbox selectedGearbox = selectedModel.getGearbox();
         gearboxNameTextField.setText(selectedGearbox.getName());
         gearboxWeightTextField.setText(String.valueOf(selectedGearbox.getWeight()));
         gearboxPriceTextField.setText(String.valueOf(selectedGearbox.getPrice()));
         gearboxMaxGearTextField.setText(String.valueOf(selectedGearbox.getMaxGear()));
+        // Właściwości Sprzęgła
         Clutch selectedClutch = selectedGearbox.getClutch();
         clutchNameTextField.setText(selectedClutch.getName());
         clutchPriceTextField.setText(String.valueOf(selectedClutch.getPrice()));

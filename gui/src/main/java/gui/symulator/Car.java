@@ -77,6 +77,10 @@ public class Car extends Thread {
         this.engine.decreaseRPM();
     }
 
+    public void setDestination(Position destination) {
+        this.destination = destination;
+    }
+
     public double getWeight() {
         return this.weight + this.gearbox.getWeight() + this.engine.getWeight();
     }
@@ -84,8 +88,8 @@ public class Car extends Thread {
     @Override
     public void run() {
         while (true) {
-            while (this.destination.getX() != this.position.getX() && this.destination.getY() != this.destination.getY()) {
-                this.position.przemiesc(this.destination, 0, this.dt);
+            while (this.destination.getX() != this.position.getX() && this.destination.getY() != this.position.getY()) {
+                this.position.przemiesc(this.destination, 0, dt);
             }
         }
     }

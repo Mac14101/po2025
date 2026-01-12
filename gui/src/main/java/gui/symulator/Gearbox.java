@@ -16,6 +16,10 @@ public class Gearbox extends Component {
         this.clutch.press();
     }
 
+    public int getGear() {
+        return gear;
+    }
+
     void releaseClutch() {
         this.clutch.release();
     }
@@ -24,7 +28,7 @@ public class Gearbox extends Component {
     void increaseGear() throws GearboxError {
         if (!this.clutch.getStatus()) {
             if (this.gear < this.maxGear) {
-                this.gear++;
+                this.gear += 1;
             }
         } else {
             throw new GearboxError("Najpierw naciśnij sprzęgło.");
@@ -35,7 +39,7 @@ public class Gearbox extends Component {
     void decreaseGear() throws GearboxError {
         if (!this.clutch.getStatus()) {
             if (this.gear > 0) {
-                this.gear--;
+                this.gear -= 1;
             }
         } else {
             throw new GearboxError("Najpierw naciśnij sprzęgło.");

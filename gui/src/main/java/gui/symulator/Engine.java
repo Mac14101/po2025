@@ -29,13 +29,13 @@ public class Engine extends Component {
     }
 
     public void increaseRPM() {
-        if (this.RPM + 10 < this.maxRPM) {
+        if (this.RPM + 10 < this.maxRPM && this.RPM > 0) {
             this.RPM += 10;
         }
     }
 
     public void decreaseRPM() {
-        if (this.RPM - 10 < 800) {
+        if (this.RPM - 10 >= 800) {
             this.RPM -= 10;
         }
     }
