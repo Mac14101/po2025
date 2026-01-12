@@ -29,11 +29,11 @@ public class Database {
         this.connection.close();
     }
 
-    public ResultSet execute(String query) throws SQLException {
-        if (this.connection == null) {
-            throw new SQLException("Database connection is null");
-        }
-        Statement statement = this.connection.createStatement();
-        return statement.executeQuery(query);
+    public Statement getStatement() throws SQLException {
+        return this.connection.createStatement();
+    }
+
+    public PreparedStatement getPreparedStatement(String sql) throws SQLException {
+        return this.connection.prepareStatement(sql);
     }
 }
