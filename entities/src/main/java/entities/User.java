@@ -41,7 +41,7 @@ public class User extends Entity {
         return user;
     }
 
-    public static ArrayList<User> readUserArray(ResultSet resultSet) throws SQLException {
+    public static ArrayList<User> readUserArray(ResultSet resultSet) {
         try {
             ArrayList<User> users = new ArrayList<>();
             while (resultSet.next()) {

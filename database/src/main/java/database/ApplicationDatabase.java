@@ -96,12 +96,26 @@ public class ApplicationDatabase extends Database {
     }
 
     public static ArrayList<Subject> getAllSubjects() {
-        //TODO
-        return null;
+        try {
+            Database currentInstance = getInstance();
+            String selectSubjectsSQL = "";
+            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectSubjectsSQL));
+            return Subject.readSubjectsArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void createSubject(Subject subject) {
-        //TODO
+        try {
+            Database currentInstance = getInstance();
+            String createSubjectSQL = "";
+            PreparedStatement createSubjectStatement = currentInstance.getPreparedStatement(createSubjectSQL);
+            createSubjectStatement.setString(1, subject.getName());
+            currentInstance.executeUpdateStatement(createSubjectStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ArrayList<SchoolGroup> getAllClass() {
