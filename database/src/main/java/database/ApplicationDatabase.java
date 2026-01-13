@@ -119,12 +119,27 @@ public class ApplicationDatabase extends Database {
     }
 
     public static ArrayList<SchoolGroup> getAllClass() {
-        //TODO
-        return null;
+        try {
+            Database currentInstance = getInstance();
+            String selectSchoolGroupsSQL = "";
+            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectSchoolGroupsSQL));
+            return SchoolGroup.readSchoolGroupArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void createClass(SchoolGroup schoolClass) {
-        //TODO
+        try {
+            Database currentInstance = getInstance();
+            String createClassSQL = "";
+            PreparedStatement createClassStatement = currentInstance.getPreparedStatement(createClassSQL);
+            createClassStatement.setInt(1, schoolClass.getId());
+            createClassStatement.setString(2, String.valueOf(schoolClass.getLetter()));
+            currentInstance.executeUpdateStatement(createClassStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ArrayList<Student> getAllStudents() {

@@ -1,8 +1,10 @@
 package entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SchoolGroup {
+public class SchoolGroup extends Entity {
     private Integer id;
     private Integer number;
     private Character letter;
@@ -20,6 +22,26 @@ public class SchoolGroup {
         this.number = null;
         this.letter = null;
         this.students = new ArrayList<>();
+    }
+
+    public static SchoolGroup readSchoolGroup(ResultSet resultSet) {
+        Integer id = getIntColumn(resultSet, "id");
+        Integer number = getIntColumn(resultSet, "number");
+        Character letter = getStringColumn(resultSet, "letter").charAt(0);
+        return new SchoolGroup(id, number, letter);
+    }
+
+    public static ArrayList<SchoolGroup> readSchoolGroupArray(ResultSet resultSet) {
+        try {
+            ArrayList<SchoolGroup> schoolGroups = new ArrayList<>();
+            while (resultSet.next()) {
+                schoolGroups.add(readSchoolGroup(resultSet));
+            }
+            return schoolGroups;
+        } catch (SQLException e) {
+            return null;
+        }
+
     }
 
     public Integer getId() {
