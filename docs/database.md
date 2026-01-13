@@ -21,6 +21,7 @@ Kwerendy:
 * CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT, email VARCHAR(100) UNIQUE NOT NULL, name VARCHAR(50) NOT
   NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL, PRIMARY KEY(id));
 * INSERT INTO users (email, name, surname, password, role) VALUES (:email, :name, :surname, :password, :role);
+* SELECT U.id, U.email, U.name, U.surname, U.role FROM users AS U; - wybranie wszystkich użytkowników
 
 2. Klasy(classes)
    Tabela przechowująca listę klas.

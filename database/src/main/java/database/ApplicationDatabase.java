@@ -1,8 +1,10 @@
 package database;
 
 import entities.*;
+import jexp.JExpError;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -66,26 +68,41 @@ public class ApplicationDatabase extends Database {
         instance.commit();
     }
 
-    public static void insertAdmin() throws SQLException {
+    public static void insertAdmin() {
         Database instance = getInstance();
         User admin = new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString());
-        String adminInsertSQL = "INSERT INTO users (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?);";
-        PreparedStatement adminInsertStatement = instance.getPreparedStatement(adminInsertSQL);
-        adminInsertStatement.setString(1, admin.getEmail());
-        adminInsertStatement.setString(2, admin.getName());
-        adminInsertStatement.setString(3, admin.getSurname());
-        adminInsertStatement.setString(4, admin.getPassword());
-        adminInsertStatement.setString(5, admin.getRole().toString());
-        instance.getPreparedStatement(adminInsertSQL).execute();
+        try {
+            createUser(admin);
+        } catch (JExpError e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public static ArrayList<User> getAllUsers() {
-        //TODO
-        return null;
+    public static ArrayList<User> getAllUsers() throws JExpError {
+        try {
+            String selectUsersSQL = "SELECT U.id, U.email, U.name, U.surname, U.role FROM users AS U;";
+            ResultSet result = instance.executeQueryStatement(instance.getPreparedStatement(selectUsersSQL));
+            ArrayList<User> users = User.readUserArray(result);
+            return users;
+        } catch (SQLException e) {
+            throw new JExpError(e.getMessage());
+        }
     }
 
-    public static void createUser(User user) {
-        //TODO
+    public static void createUser(User user) throws JExpError {
+        try {
+            Database instance = getInstance();
+            String createUserSQL = "INSERT INTO users (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?);";
+            PreparedStatement createUserStatement = instance.getPreparedStatement(createUserSQL);
+            createUserStatement.setString(1, user.getEmail());
+            createUserStatement.setString(2, user.getName());
+            createUserStatement.setString(3, user.getSurname());
+            createUserStatement.setString(4, user.getPassword());
+            createUserStatement.setString(5, user.getRole().toString());
+            instance.executeUpdateStatement(createUserStatement);
+        } catch (SQLException e) {
+            throw new JExpError(e.getMessage());
+        }
     }
 
     public static ArrayList<Subject> getAllSubjects() {
