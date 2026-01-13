@@ -143,17 +143,40 @@ public class ApplicationDatabase extends Database {
     }
 
     public static ArrayList<Student> getAllStudents() {
-        //TODO
-        return null;
+        try {
+            Database currentInstance = getInstance();
+            String selectStudentsSQL = "";
+            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectStudentsSQL));
+            return Student.readStudentArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ArrayList<Student> getClassStudents(int classId) {
-        //TODO
-        return null;
+        try {
+            Database currentInstance = getInstance();
+            String selectStudentsSQL = "";
+            PreparedStatement selectStudentsStatement = currentInstance.getPreparedStatement(selectStudentsSQL);
+            selectStudentsStatement.setInt(1, classId);
+            ResultSet result = currentInstance.executeQueryStatement(selectStudentsStatement);
+            return Student.readStudentArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void addStudent(int studentId, int classId) {
-        //TODO
+        try {
+            Database currentInstance = getInstance();
+            String addStudentSQL = "";
+            PreparedStatement addStudentStatement = instance.getPreparedStatement(addStudentSQL);
+            addStudentStatement.setInt(1, studentId);
+            addStudentStatement.setInt(2, classId);
+            currentInstance.executeUpdateStatement(addStudentStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static ArrayList<SchoolClass> getClassSchedule() {
