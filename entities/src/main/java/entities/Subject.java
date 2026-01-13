@@ -19,8 +19,8 @@ public class Subject extends Entity {
     }
 
     public static Subject readSubject(ResultSet resultSet) {
-        Integer id = getIntColumn(resultSet, "id");
-        String name = getStringColumn(resultSet, "name");
+        Integer id = getIntColumn(resultSet, "sid");
+        String name = getStringColumn(resultSet, "sname");
         return new Subject(id, name);
     }
 

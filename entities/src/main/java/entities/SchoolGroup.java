@@ -25,7 +25,7 @@ public class SchoolGroup extends Entity {
     }
 
     public static SchoolGroup readSchoolGroup(ResultSet resultSet) {
-        Integer id = getIntColumn(resultSet, "id");
+        Integer id = getIntColumn(resultSet, "cid");
         Integer number = getIntColumn(resultSet, "number");
         Character letter = getStringColumn(resultSet, "letter").charAt(0);
         return new SchoolGroup(id, number, letter);

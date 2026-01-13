@@ -31,9 +31,9 @@ public class User extends Entity {
     }
 
     public static User readUser(ResultSet resultSet) {
-        Integer id = getIntColumn(resultSet, "id");
+        Integer id = getIntColumn(resultSet, "uid");
         String email = getStringColumn(resultSet, "email");
-        String name = getStringColumn(resultSet, "name");
+        String name = getStringColumn(resultSet, "uname");
         String surname = getStringColumn(resultSet, "surname");
         String password = getStringColumn(resultSet, "password");
         String role = getStringColumn(resultSet, "role");

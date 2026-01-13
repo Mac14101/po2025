@@ -34,7 +34,7 @@ public class SchoolClass extends Entity {
     }
 
     public static SchoolClass readSchoolClass(ResultSet resultSet) {
-        Integer id = getIntColumn(resultSet, "id");
+        Integer id = getIntColumn(resultSet, "ttid");
         String day = getStringColumn(resultSet, "day");
         String startTime = getStringColumn(resultSet, "startTime");
         String endTime = getStringColumn(resultSet, "endTime");

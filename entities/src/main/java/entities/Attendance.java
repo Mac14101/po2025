@@ -1,5 +1,9 @@
 package entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public class Attendance extends Entity {
     private User student;
     private Lesson lesson;
@@ -15,6 +19,26 @@ public class Attendance extends Entity {
         this.student = null;
         this.lesson = null;
         this.status = null;
+    }
+
+    public static Attendance readAttendance(ResultSet resultSet) {
+        User student = User.readUser(resultSet);
+        Lesson lesson = Lesson.readLesson(resultSet);
+        String status = getStringColumn(resultSet, "status");
+        return new Attendance(student, lesson, status);
+    }
+
+    public static ArrayList<Attendance> readAttendanceArray(ResultSet resultSet) {
+        try {
+            ArrayList<Attendance> attendances = new ArrayList<Attendance>();
+            while (resultSet.next()) {
+                attendances.add(readAttendance(resultSet));
+            }
+            return attendances;
+        } catch (SQLException e) {
+            return null;
+        }
+
     }
 
     public User getStudent() {

@@ -1,6 +1,6 @@
 package entities;
 
-public class Grade {
+public class Grade extends Entity {
     private Integer id;
     private User student;
     private Subject subject;
