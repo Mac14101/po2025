@@ -1,6 +1,7 @@
 package gui.gui;
 
 import gui.symulator.*;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -62,16 +63,18 @@ public class ApplicationController implements Listener {
         carImageView.setFitHeight(carImage.getHeight() / 10);
         carImageView.setTranslateX(0);
         carImageView.setTranslateY(0);
+        carImageView.setVisible(false);
         map.getChildren().add(carImageView);
     }
 
     public void refresh() {
         if (selectedCar != null) {
+            carImageView.setVisible(true);
             // Właściwości samochodu
             carModelTextField.setText(selectedCar.getModel());
             carRegisterNumberTextField.setText(selectedCar.getRegisterNumber());
             carWeightTextField.setText(String.valueOf(selectedCar.getWeight()));
-            carSpeedTextField.setText("0");
+            carSpeedTextField.setText(String.valueOf((double) Math.round(selectedCar.getSpeed() * 10000) / 10000));
             // Właściwości Silnika
             Engine selectedEngine = selectedCar.getEngine();
             engineNameTextField.setText(selectedEngine.getName());
@@ -90,7 +93,15 @@ public class ApplicationController implements Listener {
             clutchPriceTextField.setText(String.valueOf(selectedClutch.getPrice()));
             clutchWeightTextField.setText(String.valueOf(selectedClutch.getWeight()));
             clutchStatusTextField.setText(selectedClutch.getStatus() ? "Zwolnione" : "Wciśnięte");
+            Platform.runLater(() -> {
+                if (selectedCar != null && carImageView != null) {
+                    Position currentPosition = selectedCar.getPosition();
+                    carImageView.setTranslateX(currentPosition.getX());
+                    carImageView.setTranslateY(currentPosition.getY() - 200);
+                }
+            });
         } else {
+            carImageView.setVisible(false);
             // Właściwości samochodu
             carModelTextField.setText("");
             carRegisterNumberTextField.setText("");
@@ -116,7 +127,7 @@ public class ApplicationController implements Listener {
 
     @Override
     public void update() {
-        refresh();
+        Platform.runLater(this::refresh);
     }
 
     public void onStartButton(ActionEvent actionEvent) {
@@ -211,8 +222,8 @@ public class ApplicationController implements Listener {
 
     public void onDeleteCarButton(ActionEvent actionEvent) {
         if (selectedCar != null) {
-            carImageView.setVisible(false);
             selectedCar.interrupt();
+            selectedCar.removeListener(this);
             carList.remove(selectedCar);
             selectedCar = null;
         }
@@ -222,16 +233,17 @@ public class ApplicationController implements Listener {
         if (selectedCar != null) {
             Position destination = new Position(mouseEvent.getX(), mouseEvent.getY());
             selectedCar.setDestination(destination);
+            Platform.runLater(this::refresh);
         }
     }
 
     public void onselectCarComboBox(ActionEvent actionEvent) {
         selectedCar = selectCarComboBox.getSelectionModel().getSelectedItem();
-        carImageView.setVisible(true);
         refresh();
     }
 
     public void addNewCar(Car car) {
+        car.addListener(this);
         carList.add(car);
         car.start();
     }

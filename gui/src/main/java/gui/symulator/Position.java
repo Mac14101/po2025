@@ -14,15 +14,15 @@ public class Position {
         this.y = 0d;
     }
 
-    public void przemiesc(Position cel, double speed, double dt) {
-        double distance = Math.sqrt(Math.pow(cel.getX() - this.x, 2) + Math.pow(cel.getY() - this.y, 2));
-        double dx = speed * dt * (cel.getX() - this.x) / distance;
-        double dy = speed * dt * (cel.getY() - this.y) / distance;
+    public void move(Position destination, double speed, double dt) {
+        double distance = Math.sqrt(Math.pow(destination.getX() - this.x, 2) + Math.pow(destination.getY() - this.y, 2));
+        double dx = speed * dt * (destination.getX() - this.x) / distance;
+        double dy = speed * dt * (destination.getY() - this.y) / distance;
         if (Math.abs(dx) > distance) {
-            dx = cel.getX() - this.x;
+            dx = destination.getX() - this.x;
         }
         if (Math.abs(dy) > distance) {
-            dy = cel.getY() - this.y;
+            dy = destination.getY() - this.y;
         }
         this.x += dx;
         this.y += dy;

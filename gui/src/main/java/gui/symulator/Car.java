@@ -1,5 +1,8 @@
 package gui.symulator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Car extends Thread {
     private static double dt = 0.01;
     private final String registerNumber;
@@ -11,6 +14,7 @@ public class Car extends Thread {
     private boolean status;
     private Engine engine;
     private Gearbox gearbox;
+    private List<Listener> listeners = new ArrayList<>();
 
     public Car(String registerNumber, String model, double weight, Engine engine, Gearbox gearbox) {
         this.position = new Position();
@@ -78,7 +82,19 @@ public class Car extends Thread {
     }
 
     public void setDestination(Position destination) {
+        System.out.println("Set target");
         this.destination = destination;
+    }
+
+    public double getSpeed() {
+        if (this.destination.getX() == this.position.getX() && this.destination.getY() == this.position.getY()) {
+            return 0;
+        } else if (!this.status) {
+            return 0;
+        } else if (!this.gearbox.getClutch().getStatus()) {
+            return 0;
+        }
+        return (double) (this.engine.getRPM() * this.gearbox.getGear()) / this.gearbox.getMaxGear() / 62;
     }
 
     public double getWeight() {
@@ -87,10 +103,31 @@ public class Car extends Thread {
 
     @Override
     public void run() {
+        System.out.println("Car started");
         while (true) {
-            while (this.destination.getX() != this.position.getX() && this.destination.getY() != this.position.getY()) {
-                this.position.przemiesc(this.destination, 0, dt);
+            if (this.destination.getX() != this.position.getX() || this.destination.getY() != this.position.getY()) {
+                this.position.move(this.destination, this.getSpeed(), dt);
+                notifyListeners();
             }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
+    }
+
+    public void addListener(Listener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(Listener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifyListeners() {
+        for (Listener listener : listeners) {
+            listener.update();
         }
     }
 }
