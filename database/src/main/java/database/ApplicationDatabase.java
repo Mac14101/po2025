@@ -1,6 +1,5 @@
-package server.database;
+package database;
 
-import database.Database;
 import entities.*;
 
 import java.sql.SQLException;

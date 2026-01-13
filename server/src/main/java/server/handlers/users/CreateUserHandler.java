@@ -1,8 +1,8 @@
 package server.handlers.users;
 
+import database.ApplicationDatabase;
 import entities.User;
 import jexp.*;
-import server.database.ApplicationDatabase;
 
 public class CreateUserHandler implements Handler {
     @Override

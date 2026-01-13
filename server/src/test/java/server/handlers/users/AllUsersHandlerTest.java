@@ -1,5 +1,6 @@
 package server.handlers.users;
 
+import database.ApplicationDatabase;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -8,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import server.database.ApplicationDatabase;
 
 import java.util.ArrayList;
 
