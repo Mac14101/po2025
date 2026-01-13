@@ -13,6 +13,7 @@ public class ApplicationDatabase extends Database {
         super();
     }
 
+
     private static ApplicationDatabase getInstance() {
         return instance;
     }
@@ -38,6 +39,10 @@ public class ApplicationDatabase extends Database {
         }
         instance.close();
         instance = null;
+    }
+
+    public static void initialize() throws SQLException {
+        ApplicationDatabase instance = getInstance();
     }
 
     public static ArrayList<User> getAllUsers() {

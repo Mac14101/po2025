@@ -29,6 +29,7 @@ public class Database {
             return;
         }
         this.connection = DriverManager.getConnection(url);
+        this.connection.setAutoCommit(false);
     }
 
     public void close() throws SQLException {
@@ -37,14 +38,38 @@ public class Database {
         }
     }
 
-    public Statement getStatement() throws SQLException {
-        this.ensureConnected();
-        return this.connection.createStatement();
-    }
 
     public PreparedStatement getPreparedStatement(String sql) throws SQLException {
         this.ensureConnected();
         return this.connection.prepareStatement(sql);
+    }
+
+    public boolean executeCreateStatement(PreparedStatement statement) throws SQLException {
+        boolean result = statement.execute();
+        this.connection.commit();
+        return result;
+    }
+
+    public int executeUpdateStatement(PreparedStatement statement) throws SQLException {
+        int result = statement.executeUpdate();
+        this.connection.commit();
+        return result;
+    }
+
+    public ResultSet executeQueryStatement(PreparedStatement statement) throws SQLException {
+        ResultSet result = statement.executeQuery();
+        this.connection.commit();
+        return result;
+    }
+
+    public void commit() throws SQLException {
+        this.ensureConnected();
+        this.connection.commit();
+    }
+
+    public void rollback() throws SQLException {
+        this.ensureConnected();
+        this.connection.rollback();
     }
 
     private void ensureConnected() {
