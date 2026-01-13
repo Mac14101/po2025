@@ -1,6 +1,10 @@
 package entities;
 
-public class SchoolClass {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class SchoolClass extends Entity {
     private Integer id;
     private String day;
     private String startTime;
@@ -9,7 +13,7 @@ public class SchoolClass {
     private User teacher;
     private Subject subject;
 
-    public SchoolClass(Integer id, String day, String startTime, String endTime) {
+    public SchoolClass(Integer id, String day, String startTime, String endTime, SchoolGroup schoolGroup, User teacher, Subject subject) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;
@@ -27,6 +31,29 @@ public class SchoolClass {
         this.schoolGroup = null;
         this.teacher = null;
         this.subject = null;
+    }
+
+    public static SchoolClass readSchoolClass(ResultSet resultSet) {
+        Integer id = getIntColumn(resultSet, "id");
+        String day = getStringColumn(resultSet, "day");
+        String startTime = getStringColumn(resultSet, "startTime");
+        String endTime = getStringColumn(resultSet, "endTime");
+        SchoolGroup schoolGroup = SchoolGroup.readSchoolGroup(resultSet);
+        User teacher = User.readUser(resultSet);
+        Subject subject = Subject.readSubject(resultSet);
+        return new SchoolClass(id, day, startTime, endTime, schoolGroup, teacher, subject);
+    }
+
+    public static ArrayList<SchoolClass> readSchoolClassArray(ResultSet resultSet) {
+        try {
+            ArrayList<SchoolClass> schoolClasses = new ArrayList<>();
+            while (resultSet.next()) {
+                schoolClasses.add(readSchoolClass(resultSet));
+            }
+            return schoolClasses;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public SchoolGroup getSchoolGroup() {

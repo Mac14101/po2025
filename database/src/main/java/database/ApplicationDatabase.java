@@ -129,13 +129,13 @@ public class ApplicationDatabase extends Database {
         }
     }
 
-    public static void createClass(SchoolGroup schoolClass) {
+    public static void createClass(SchoolGroup schoolGroup) {
         try {
             Database currentInstance = getInstance();
             String createClassSQL = "";
             PreparedStatement createClassStatement = currentInstance.getPreparedStatement(createClassSQL);
-            createClassStatement.setInt(1, schoolClass.getId());
-            createClassStatement.setString(2, String.valueOf(schoolClass.getLetter()));
+            createClassStatement.setInt(1, schoolGroup.getNumber());
+            createClassStatement.setString(1, String.valueOf(schoolGroup.getLetter()));
             currentInstance.executeUpdateStatement(createClassStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -180,11 +180,30 @@ public class ApplicationDatabase extends Database {
     }
 
     public static ArrayList<SchoolClass> getClassSchedule() {
-        //TODO
-        return null;
+        try {
+            Database currentInstance = getInstance();
+            String selectSchoolClassesSQL = "";
+            ResultSet result = instance.executeQueryStatement(instance.getPreparedStatement(selectSchoolClassesSQL));
+            return SchoolClass.readSchoolClassArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void addClassSchedule(SchoolClass schoolClass) {
-        //TODO
+        try {
+            Database currentInstance = getInstance();
+            String addClassScheduleSQL = "";
+            PreparedStatement addClassScheduleStatement = instance.getPreparedStatement(addClassScheduleSQL);
+            addClassScheduleStatement.setString(1, schoolClass.getDay());
+            addClassScheduleStatement.setString(2, schoolClass.getStartTime());
+            addClassScheduleStatement.setString(3, schoolClass.getEndTime());
+            addClassScheduleStatement.setInt(4, schoolClass.getSchoolGroup().getId());
+            addClassScheduleStatement.setInt(5, schoolClass.getTeacher().getId());
+            addClassScheduleStatement.setInt(6, schoolClass.getSubject().getId());
+            instance.executeUpdateStatement(addClassScheduleStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
