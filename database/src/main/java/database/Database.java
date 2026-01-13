@@ -45,18 +45,21 @@ public class Database {
     }
 
     public boolean executeCreateStatement(PreparedStatement statement) throws SQLException {
+        this.ensureConnected();
         boolean result = statement.execute();
         this.connection.commit();
         return result;
     }
 
     public int executeUpdateStatement(PreparedStatement statement) throws SQLException {
+        this.ensureConnected();
         int result = statement.executeUpdate();
         this.connection.commit();
         return result;
     }
 
     public ResultSet executeQueryStatement(PreparedStatement statement) throws SQLException {
+        this.ensureConnected();
         ResultSet result = statement.executeQuery();
         this.connection.commit();
         return result;
@@ -74,7 +77,7 @@ public class Database {
 
     private void ensureConnected() {
         if (this.connection == null) {
-            throw new IllegalArgumentException("Database is not connected");
+            throw new IllegalStateException("Database is not connected");
         }
     }
 }

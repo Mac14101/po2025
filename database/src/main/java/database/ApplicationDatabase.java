@@ -1,7 +1,6 @@
 package database;
 
 import entities.*;
-import jexp.JExpError;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,12 +11,7 @@ public class ApplicationDatabase extends Database {
     private static Database instance;
     private static String dbName;
 
-    private ApplicationDatabase() {
-        super();
-    }
-
-
-    private static Database getInstance() {
+    public static Database getInstance() {
         if (instance == null) {
             throw new IllegalStateException("Database not connected");
         }
@@ -48,60 +42,56 @@ public class ApplicationDatabase extends Database {
     }
 
     public static void initialize() throws SQLException {
-        Database instance = getInstance();
-        String usersTable = "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT, email VARCHAR(100) UNIQUE NOT NULL, name VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL, PRIMARY KEY(id));";
-        instance.getPreparedStatement(usersTable).execute();
-        String classesTable = "CREATE TABLE IF NOT EXISTS classes (id INT PRIMARY KEY AUTO_INCREMENT, number INT NOT NULL, letter CHAR(1) NOT NULL, PRIMARY KEY(id));";
-        instance.getPreparedStatement(classesTable).execute();
-        String studentsTable = "CREATE TABLE IF NOT EXISTS students (uid INT UNIQUE, cid INT, FOREIGN KEY(uid) REFERENCES users(id), FOREIGN KEY(cid) REFERENCES classes(id));";
-        instance.getPreparedStatement(studentsTable).execute();
-        String subjectsTable = "CREATE TABLE IF NOT EXISTS subjects (id INT AUTO_INCREMENT, name TEXT UNIQUE NOT NULL, PRIMARY KEY(id));";
-        instance.getPreparedStatement(subjectsTable).execute();
-        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (id INT AUTO_INCREMENT, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INT, tid INT, sid INT, PRIMARY KEY(id), FOREIGN KEY(cid) REFERENCE classes(id), FOREIGN KEY(tid) REFERENCE users(id), FOREIGN KEY(sid) REFERENCES subjects(id));";
-        instance.getPreparedStatement(timeTabelTable).execute();
-        String lessonsTable = "CREATE TABLE IF NOT EXISTS lessons (id INT AUTO_INCREMENT, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INT, PRIMARY KEY(id), FOREIGN KEY(ttid) REFERENCE time_table(id));";
-        instance.getPreparedStatement(lessonsTable).execute();
-        String attendanceTable = "CREATE TABLE IF NOT EXISTS attendance (sid INT, lid INT, status TEXT NOT NULL, FOREIGN KEY(sid) REFERENCE students(id), FOREIGN KEY(lid) REFERENCE lessons(id));";
-        instance.getPreparedStatement(attendanceTable).execute();
-        String gradesTable = "CREATE TABLE IF NOT EXISTS grades (id INT AUTO_INCREMENT, sid INT, sbid INT, tid INT, grade VARCHAR(10) NOT NULL, PRIMARY KEY(id), FOREIGN KEY(sid) REFERENCE users(id), FOREIGN KEY(sbid) REFERENCE subjects(id), FOREIGN KEY(tid) REFERENCE users(id));";
-        instance.getPreparedStatement(gradesTable).execute();
-        instance.commit();
+        Database currentInstance = getInstance();
+        String usersTable = "";
+        currentInstance.getPreparedStatement(usersTable).execute();
+        String classesTable = "";
+        currentInstance.getPreparedStatement(classesTable).execute();
+        String studentsTable = "";
+        currentInstance.getPreparedStatement(studentsTable).execute();
+        String subjectsTable = "";
+        currentInstance.getPreparedStatement(subjectsTable).execute();
+        String timeTabelTable = "";
+        currentInstance.getPreparedStatement(timeTabelTable).execute();
+        String lessonsTable = "";
+        currentInstance.getPreparedStatement(lessonsTable).execute();
+        String attendanceTable = "";
+        currentInstance.getPreparedStatement(attendanceTable).execute();
+        String gradesTable = "";
+        currentInstance.getPreparedStatement(gradesTable).execute();
+        currentInstance.commit();
     }
 
     public static void insertAdmin() {
-        Database instance = getInstance();
         User admin = new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString());
+
+        createUser(admin);
+    }
+
+    public static ArrayList<User> getAllUsers() {
         try {
-            createUser(admin);
-        } catch (JExpError e) {
+            Database currentInstance = getInstance();
+            String selectUsersSQL = "";
+            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectUsersSQL));
+            return User.readUserArray(result);
+        } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ArrayList<User> getAllUsers() throws JExpError {
+    public static void createUser(User user) {
         try {
-            String selectUsersSQL = "SELECT U.id, U.email, U.name, U.surname, U.role FROM users AS U;";
-            ResultSet result = instance.executeQueryStatement(instance.getPreparedStatement(selectUsersSQL));
-            ArrayList<User> users = User.readUserArray(result);
-            return users;
-        } catch (SQLException e) {
-            throw new JExpError(e.getMessage());
-        }
-    }
-
-    public static void createUser(User user) throws JExpError {
-        try {
-            Database instance = getInstance();
-            String createUserSQL = "INSERT INTO users (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?);";
-            PreparedStatement createUserStatement = instance.getPreparedStatement(createUserSQL);
+            Database currentInstance = getInstance();
+            String createUserSQL = "";
+            PreparedStatement createUserStatement = currentInstance.getPreparedStatement(createUserSQL);
             createUserStatement.setString(1, user.getEmail());
             createUserStatement.setString(2, user.getName());
             createUserStatement.setString(3, user.getSurname());
             createUserStatement.setString(4, user.getPassword());
             createUserStatement.setString(5, user.getRole().toString());
-            instance.executeUpdateStatement(createUserStatement);
+            currentInstance.executeUpdateStatement(createUserStatement);
         } catch (SQLException e) {
-            throw new JExpError(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
