@@ -80,7 +80,8 @@ public class Grade {
             throw new IllegalArgumentException("Unknown grade!");
         }
 
-        public String getGrade() {
+        @Override
+        public String toString() {
             return grade;
         }
     }

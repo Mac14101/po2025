@@ -106,7 +106,8 @@ public class User {
             throw new IllegalArgumentException("Invalid role!");
         }
 
-        public String getRole() {
+        @Override
+        public String toString() {
             return role;
         }
     }

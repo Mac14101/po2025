@@ -3,10 +3,10 @@ package entities;
 import java.util.ArrayList;
 
 public class SchoolGroup {
-    Integer id;
-    Integer number;
-    Character letter;
-    ArrayList<Student> students;
+    private Integer id;
+    private Integer number;
+    private Character letter;
+    private ArrayList<Student> students;
 
     public SchoolGroup(Integer id, Integer number, Character letter) {
         this.id = id;

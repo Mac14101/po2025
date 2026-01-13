@@ -41,4 +41,26 @@ public class Attendance {
         this.status = status;
     }
 
+    public static enum Status {
+        PRESENT("present"), ABSENT("absent"), LATE("late");
+        private final String status;
+
+        private Status(String status) {
+            this.status = status;
+        }
+
+        public static Status fromString(String status) {
+            for (Status s : Status.values()) {
+                if (s.status.equals(status)) {
+                    return s;
+                }
+            }
+            throw new IllegalArgumentException("Invalid status");
+        }
+
+        @Override
+        public String toString() {
+            return status;
+        }
+    }
 }

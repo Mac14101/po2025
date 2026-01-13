@@ -1,8 +1,8 @@
 package entities;
 
 public class Student {
-    User user;
-    SchoolGroup schoolGroup;
+    private User user;
+    private SchoolGroup schoolGroup;
 
     public Student(User user, SchoolGroup schoolGroup) {
         this.user = user;
