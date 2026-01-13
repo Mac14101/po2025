@@ -68,14 +68,14 @@ public class ApplicationDatabase extends Database {
 
     public static void insertAdmin() throws SQLException {
         Database instance = getInstance();
-        User admin = new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.getRole());
+        User admin = new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString());
         String adminInsertSQL = "INSERT INTO users (email, name, surname, password, role) VALUES (?, ?, ?, ?, ?);";
         PreparedStatement adminInsertStatement = instance.getPreparedStatement(adminInsertSQL);
         adminInsertStatement.setString(1, admin.getEmail());
         adminInsertStatement.setString(2, admin.getName());
         adminInsertStatement.setString(3, admin.getSurname());
         adminInsertStatement.setString(4, admin.getPassword());
-        adminInsertStatement.setString(5, admin.getRole().getRole());
+        adminInsertStatement.setString(5, admin.getRole().toString());
         instance.getPreparedStatement(adminInsertSQL).execute();
     }
 
