@@ -2,6 +2,7 @@ package jexp;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
+import jexp.session.User;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -127,5 +128,31 @@ public class RequestTest {
         request.readParam(":id", 1);
         assertEquals("2", request.getParam("id"));
         assertArrayEquals(new String[]{"a", ":id", "c"}, request.getRoute());
+    }
+
+    @Test
+    public void getSession() throws URISyntaxException, Request.RequestError {
+        HttpExchange exchange = Mockito.mock(HttpExchange.class);
+        Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
+        Mockito.when(exchange.getRequestURI()).thenReturn(new URI("http://localhost:8080/"));
+        Request request = new Request(exchange);
+        User user = Mockito.mock(User.class);
+        Mockito.when(user.getSession(Mockito.anyString())).thenReturn("session");
+        request.setUser(user);
+        assertEquals("session", request.getSession("key"));
+        Mockito.verify(user, Mockito.times(1)).getSession("key");
+    }
+
+    @Test
+    public void setSession() throws URISyntaxException, Request.RequestError {
+        HttpExchange exchange = Mockito.mock(HttpExchange.class);
+        Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
+        Mockito.when(exchange.getRequestURI()).thenReturn(new URI("http://localhost:8080/"));
+        Request request = new Request(exchange);
+        User user = Mockito.mock(User.class);
+        Mockito.when(user.getSession(Mockito.anyString())).thenReturn("session");
+        request.setUser(user);
+        request.setSession("key", "session");
+        Mockito.verify(user, Mockito.times(1)).setSession("key", "session");
     }
 }
