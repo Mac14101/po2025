@@ -42,9 +42,13 @@ public class Manager extends Thread {
     }
 
     public String addSession() {
-        String token = generateToken();
+        String token = this.generateToken();
         this.clients.put(token, new Session(token));
         return token;
+    }
+
+    public void removeSession(String token) {
+        this.clients.remove(token);
     }
 
     public Session getSession(String token) {

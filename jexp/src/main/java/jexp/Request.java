@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import entities.JSON;
+import jexp.session.Manager;
 import jexp.session.Session;
 
 import java.io.IOException;
@@ -237,6 +238,22 @@ public class Request {
 
     public void setSession(String key, String value) {
         this.session.setSession(key, value);
+    }
+
+    public String logIn(Integer userId, String username) {
+        Manager sessionManager = Manager.getInstance();
+        String token = sessionManager.addSession();
+        this.session = sessionManager.getSession(token);
+        this.session.setSession("userId", userId.toString());
+        this.session.setSession("username", username);
+        return token;
+    }
+
+    public void logOut() {
+        Manager sessionManager = Manager.getInstance();
+        String token = this.session.getToken();
+        sessionManager.removeSession(token);
+        this.session = null;
     }
 
     public static class RequestError extends JExpError {
