@@ -1,6 +1,10 @@
 package entities;
 
-public class Subject {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class Subject extends Entity {
     private Integer id;
     private String name;
 
@@ -12,6 +16,24 @@ public class Subject {
     public Subject() {
         this.id = null;
         this.name = null;
+    }
+
+    public static Subject readSubject(ResultSet resultSet) {
+        Integer id = getIntColumn(resultSet, "sid");
+        String name = getStringColumn(resultSet, "sname");
+        return new Subject(id, name);
+    }
+
+    public static ArrayList<Subject> readSubjectsArray(ResultSet resultSet) {
+        try {
+            ArrayList<Subject> subjects = new ArrayList<>();
+            while (resultSet.next()) {
+                subjects.add(readSubject(resultSet));
+            }
+            return subjects;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public Integer getId() {

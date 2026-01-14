@@ -1,5 +1,6 @@
 package server.handlers.users;
 
+import database.ApplicationDatabase;
 import entities.User;
 import jexp.JExpError;
 import jexp.Next;
@@ -9,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-import server.database.ApplicationDatabase;
 
 public class CreateSessionHandlerTest {
 
