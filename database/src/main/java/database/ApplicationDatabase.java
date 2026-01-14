@@ -95,6 +95,19 @@ public class ApplicationDatabase extends Database {
         }
     }
 
+    public static String getUserPassword(String email) {
+        try {
+            Database currentInstance = getInstance();
+            String selectUsersSQL = "";
+            PreparedStatement selectUserStatement = currentInstance.getPreparedStatement(selectUsersSQL);
+            selectUserStatement.setString(1, email);
+            ResultSet result = selectUserStatement.executeQuery();
+            return result.getString("password");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static ArrayList<Subject> getAllSubjects() {
         try {
             Database currentInstance = getInstance();
