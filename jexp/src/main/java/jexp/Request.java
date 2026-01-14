@@ -256,6 +256,14 @@ public class Request {
         this.session = null;
     }
 
+    public String refreshSession() {
+        Manager sessionManager = Manager.getInstance();
+        String token = this.session.getToken();
+        String newToken = sessionManager.refreshToken(token);
+        this.session = sessionManager.getSession(newToken);
+        return newToken;
+    }
+
     public static class RequestError extends JExpError {
         public RequestError(String message) {
             super(message);

@@ -196,4 +196,26 @@ public class RequestTest {
             assertNull(sessionField.get(request));
         }
     }
+
+    @Test
+    public void refreshSession() throws URISyntaxException, Request.RequestError, NoSuchFieldException, IllegalAccessException {
+        try (MockedStatic<Manager> managerMockedStatic = Mockito.mockStatic(Manager.class)) {
+            Field sessionField = Request.class.getDeclaredField("session");
+            sessionField.setAccessible(true);
+            Manager manager = Mockito.mock(Manager.class);
+            Mockito.when(manager.refreshToken(Mockito.anyString())).thenReturn("newToken");
+            Session session = Mockito.mock(Session.class);
+            Mockito.when(session.getToken()).thenReturn("token");
+            Session newSession = Mockito.mock(Session.class);
+            Mockito.when(manager.getSession(Mockito.anyString())).thenReturn(newSession);
+            managerMockedStatic.when(Manager::getInstance).thenReturn(manager);
+            HttpExchange exchange = Mockito.mock(HttpExchange.class);
+            Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
+            Mockito.when(exchange.getRequestURI()).thenReturn(new URI("http://localhost:8080/"));
+            Request request = new Request(exchange);
+            request.setSessionObject(session);
+            assertEquals("newToken", request.refreshSession());
+            assertSame(newSession, sessionField.get(request));
+        }
+    }
 }
