@@ -4,12 +4,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class User {
+public class Session {
     private HashMap<String, String> session;
     private LocalDateTime tokenTime;
     private String token;
 
-    User(String token) {
+    Session(String token) {
         this.session = new HashMap<>();
         this.token = token;
         this.tokenTime = LocalDateTime.now();

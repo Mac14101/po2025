@@ -2,7 +2,7 @@ package jexp;
 
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import jexp.session.User;
+import jexp.session.Session;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -136,11 +136,11 @@ public class RequestTest {
         Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
         Mockito.when(exchange.getRequestURI()).thenReturn(new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
-        User user = Mockito.mock(User.class);
-        Mockito.when(user.getSession(Mockito.anyString())).thenReturn("session");
-        request.setUser(user);
+        Session session = Mockito.mock(Session.class);
+        Mockito.when(session.getSession(Mockito.anyString())).thenReturn("session");
+        request.setSessionObject(session);
         assertEquals("session", request.getSession("key"));
-        Mockito.verify(user, Mockito.times(1)).getSession("key");
+        Mockito.verify(session, Mockito.times(1)).getSession("key");
     }
 
     @Test
@@ -149,10 +149,10 @@ public class RequestTest {
         Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
         Mockito.when(exchange.getRequestURI()).thenReturn(new URI("http://localhost:8080/"));
         Request request = new Request(exchange);
-        User user = Mockito.mock(User.class);
-        Mockito.when(user.getSession(Mockito.anyString())).thenReturn("session");
-        request.setUser(user);
+        Session session = Mockito.mock(Session.class);
+        Mockito.when(session.getSession(Mockito.anyString())).thenReturn("session");
+        request.setSessionObject(session);
         request.setSession("key", "session");
-        Mockito.verify(user, Mockito.times(1)).setSession("key", "session");
+        Mockito.verify(session, Mockito.times(1)).setSession("key", "session");
     }
 }

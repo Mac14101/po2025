@@ -11,7 +11,7 @@ import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import server.database.ApplicationDatabase;
 
-public class CreateUserHandlerTest {
+public class CreateSessionHandlerTest {
 
     private CreateUserHandler createUserHandler;
 

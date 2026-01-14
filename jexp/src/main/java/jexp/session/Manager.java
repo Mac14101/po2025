@@ -6,7 +6,7 @@ import java.util.UUID;
 
 public class Manager extends Thread {
     private static Manager instance;
-    private HashMap<String, User> clients;
+    private HashMap<String, Session> clients;
 
     Manager() {
         this.clients = new HashMap<>();
@@ -20,17 +20,21 @@ public class Manager extends Thread {
         return instance;
     }
 
-    public static String generateToken() {
-        return UUID.randomUUID().toString();
+    private String generateToken() {
+        String token = UUID.randomUUID().toString();
+        while (this.clients.containsKey(token)) {
+            token = UUID.randomUUID().toString();
+        }
+        return token;
     }
 
     public void refreshSession() {
         for (String token : this.clients.keySet()) {
-            User user = this.clients.get(token);
-            if (!user.getToken().equals(token)) {
+            Session session = this.clients.get(token);
+            if (!session.getToken().equals(token)) {
                 this.clients.remove(token);
             }
-            if (user.getTokenTime().plusMinutes(15).isBefore(LocalDateTime.now())) {
+            if (session.getTokenTime().plusMinutes(15).isBefore(LocalDateTime.now())) {
                 this.clients.remove(token);
             }
 
@@ -39,20 +43,20 @@ public class Manager extends Thread {
 
     public String addSession() {
         String token = generateToken();
-        this.clients.put(token, new User(token));
+        this.clients.put(token, new Session(token));
         return token;
     }
 
-    public User getSession(String token) {
+    public Session getSession(String token) {
         return this.clients.get(token);
     }
 
     public String refreshToken(String token) {
-        User user = this.clients.get(token);
+        Session session = this.clients.get(token);
         this.clients.remove(token);
         String newToken = generateToken();
-        user.setToken(newToken);
-        this.clients.put(newToken, user);
+        session.setToken(newToken);
+        this.clients.put(newToken, session);
         return newToken;
     }
 

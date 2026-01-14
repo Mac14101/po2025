@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import entities.JSON;
-import jexp.session.User;
+import jexp.session.Session;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,7 +40,7 @@ public class Request {
     private final String body;
     private final HashMap<String, String> cookies;
     private final HashMap<String, String> params;
-    private User user;
+    private Session session;
 
     public Request(HttpExchange exchange) throws RequestError {
         try {
@@ -227,16 +227,16 @@ public class Request {
         return this.params.get(":" + name);
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setSessionObject(Session session) {
+        this.session = session;
     }
 
     public String getSession(String key) {
-        return this.user.getSession(key);
+        return this.session.getSession(key);
     }
 
     public void setSession(String key, String value) {
-        this.user.setSession(key, value);
+        this.session.setSession(key, value);
     }
 
     public static class RequestError extends JExpError {

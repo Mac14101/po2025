@@ -6,7 +6,7 @@ import jexp.Next;
 import jexp.Request;
 import jexp.Response;
 import jexp.session.Manager;
-import jexp.session.User;
+import jexp.session.Session;
 import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
@@ -18,8 +18,8 @@ public class SessionHandlerTest {
         try (MockedStatic<Manager> sessionManagerMock = Mockito.mockStatic(Manager.class);) {
             Manager manager = Mockito.mock(Manager.class);
             sessionManagerMock.when(Manager::getInstance).thenReturn(manager);
-            User user = Mockito.mock(User.class);
-            Mockito.when(manager.getSession(Mockito.anyString())).thenReturn(user);
+            Session session = Mockito.mock(Session.class);
+            Mockito.when(manager.getSession(Mockito.anyString())).thenReturn(session);
             Request request = Mockito.mock(Request.class);
             Headers headers = new Headers();
             headers.add("Authorization", "Basic token");
