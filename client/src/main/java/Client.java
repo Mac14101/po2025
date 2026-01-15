@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -17,15 +18,20 @@ public class Client extends Thread {
         return HttpRequest.newBuilder(URI.create(url));
     }
 
-    public HttpResponse<String> fetch(HttpRequest.Builder request) throws Exception {
+    public HttpResponse<String> fetch(HttpRequest.Builder request) throws ClientError {
         if (token != null) {
             request.headers("Authorization", "Basic" + token);
         }
-        HttpResponse<String> response = this.client.send(request.build(), HttpResponse.BodyHandlers.ofString());
-        if (response.statusCode() >= 400 && response.statusCode() < 500) {
-            throw new Exception("Something went wrong");
+        HttpResponse<String> response = null;
+        try {
+            response = this.client.send(request.build(), HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() >= 400 && response.statusCode() < 500) {
+                throw new RuntimeException("Failed to fetch response");
+            }
+            return response;
+        } catch (IOException | InterruptedException | RuntimeException e) {
+            throw new ClientError("Failed to fetch", response);
         }
-        return response;
     }
 
     public void setToken(String token) {
@@ -60,6 +66,19 @@ public class Client extends Thread {
                     }
                 }
             }
+        }
+    }
+
+    public static class ClientError extends Exception {
+        private final HttpResponse<String> response;
+
+        public ClientError(String message, HttpResponse<String> response) {
+            super(message);
+            this.response = response;
+        }
+
+        public HttpResponse<String> getResponse() {
+            return this.response;
         }
     }
 }
