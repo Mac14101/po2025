@@ -3,6 +3,7 @@ package server.handlers.authentication;
 import database.ApplicationDatabase;
 import entities.Message;
 import entities.User;
+import entities.UserCredentials;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -11,12 +12,10 @@ import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import java.sql.SQLException;
-
 public class AuthenticationHandlerTest {
 
     @Test
-    public void userFound() throws JExpError, SQLException {
+    public void userFound() throws JExpError {
         try (MockedStatic<ApplicationDatabase> databaseMockedStatic = Mockito.mockStatic(ApplicationDatabase.class)) {
             User user = Mockito.mock(User.class);
             Mockito.when(user.getEmail()).thenReturn("email");
@@ -26,10 +25,9 @@ public class AuthenticationHandlerTest {
                 ApplicationDatabase.getUserCredentials(Mockito.anyString());
             }).thenReturn(user);
             Request request = Mockito.mock(Request.class);
-            AuthenticationHandler.UserCredentials userCredentials = new AuthenticationHandler.UserCredentials();
-            userCredentials.email = "email";
-            userCredentials.password = "password";
-            Mockito.when(request.getBody(AuthenticationHandler.UserCredentials.class)).thenReturn(userCredentials);
+            Mockito.when(request.sessionEstabilished()).thenReturn(true);
+            UserCredentials userCredentials = new UserCredentials("email", "password");
+            Mockito.when(request.getBody(UserCredentials.class)).thenReturn(userCredentials);
             Mockito.when(request.logIn(Mockito.any(), Mockito.any())).thenReturn("token");
             Response response = Mockito.mock(Response.class);
             Next next = Mockito.mock(Next.class);
@@ -41,7 +39,7 @@ public class AuthenticationHandlerTest {
     }
 
     @Test
-    public void userNotFound() throws JExpError, SQLException {
+    public void userNotFound() throws JExpError {
         try (MockedStatic<ApplicationDatabase> databaseMockedStatic = Mockito.mockStatic(ApplicationDatabase.class)) {
             User user = Mockito.mock(User.class);
             Mockito.when(user.getEmail()).thenReturn(null);
@@ -51,10 +49,9 @@ public class AuthenticationHandlerTest {
                 ApplicationDatabase.getUserCredentials(Mockito.anyString());
             }).thenReturn(user);
             Request request = Mockito.mock(Request.class);
-            AuthenticationHandler.UserCredentials userCredentials = new AuthenticationHandler.UserCredentials();
-            userCredentials.email = "email";
-            userCredentials.password = "password";
-            Mockito.when(request.getBody(AuthenticationHandler.UserCredentials.class)).thenReturn(userCredentials);
+            Mockito.when(request.sessionEstabilished()).thenReturn(true);
+            UserCredentials userCredentials = new UserCredentials("email", "password");
+            Mockito.when(request.getBody(UserCredentials.class)).thenReturn(userCredentials);
             Response response = Mockito.mock(Response.class);
             Next next = Mockito.mock(Next.class);
             AuthenticationHandler authenticationHandler = new AuthenticationHandler();
@@ -65,15 +62,27 @@ public class AuthenticationHandlerTest {
     }
 
     @Test
-    public void noCredentials() throws JExpError, SQLException {
+    public void noCredentials() throws JExpError {
         Request request = Mockito.mock(Request.class);
-        AuthenticationHandler.UserCredentials userCredentials = new AuthenticationHandler.UserCredentials();
-        Mockito.when(request.getBody(AuthenticationHandler.UserCredentials.class)).thenReturn(userCredentials);
+        Mockito.when(request.sessionEstabilished()).thenReturn(true);
+        UserCredentials userCredentials = new UserCredentials();
+        Mockito.when(request.getBody(UserCredentials.class)).thenReturn(userCredentials);
         Response response = Mockito.mock(Response.class);
         Next next = Mockito.mock(Next.class);
         AuthenticationHandler authenticationHandler = new AuthenticationHandler();
         authenticationHandler.handle(request, response, next);
         Mockito.verify(response, Mockito.times(1)).status(400);
         Mockito.verify(response, Mockito.times(1)).json(Mockito.any(Message.class));
+    }
+
+    @Test
+    public void sessionEstablished() throws JExpError {
+        Request request = Mockito.mock(Request.class);
+        Mockito.when(request.sessionEstabilished()).thenReturn(false);
+        Response response = Mockito.mock(Response.class);
+        Next next = Mockito.mock(Next.class);
+        AuthenticationHandler authenticationHandler = new AuthenticationHandler();
+        authenticationHandler.handle(request, response, next);
+        Mockito.verify(next, Mockito.times(1)).next();
     }
 }
