@@ -1,6 +1,8 @@
 package server.handlers.authentication;
 
 import database.ApplicationDatabase;
+import entities.Message;
+import entities.User;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -9,7 +11,6 @@ import org.junit.Test;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
-import javax.sql.RowSet;
 import java.sql.SQLException;
 
 public class AuthenticationHandlerTest {
@@ -17,11 +18,13 @@ public class AuthenticationHandlerTest {
     @Test
     public void userFound() throws JExpError, SQLException {
         try (MockedStatic<ApplicationDatabase> databaseMockedStatic = Mockito.mockStatic(ApplicationDatabase.class)) {
-            RowSet rowSet = Mockito.mock(RowSet.class);
-            Mockito.when(rowSet.getString("password")).thenReturn("password");
+            User user = Mockito.mock(User.class);
+            Mockito.when(user.getEmail()).thenReturn("email");
+            Mockito.when(user.getPassword()).thenReturn("password");
+            Mockito.when(user.getId()).thenReturn(1);
             databaseMockedStatic.when(() -> {
                 ApplicationDatabase.getUserCredentials(Mockito.anyString());
-            }).thenReturn(rowSet);
+            }).thenReturn(user);
             Request request = Mockito.mock(Request.class);
             AuthenticationHandler.UserCredentials userCredentials = new AuthenticationHandler.UserCredentials();
             userCredentials.email = "email";
@@ -32,6 +35,7 @@ public class AuthenticationHandlerTest {
             Next next = Mockito.mock(Next.class);
             AuthenticationHandler authenticationHandler = new AuthenticationHandler();
             authenticationHandler.handle(request, response, next);
+            Mockito.verify(request, Mockito.times(1)).logIn(1, "email");
             Mockito.verify(response, Mockito.times(1)).send("token");
         }
     }
@@ -39,11 +43,13 @@ public class AuthenticationHandlerTest {
     @Test
     public void userNotFound() throws JExpError, SQLException {
         try (MockedStatic<ApplicationDatabase> databaseMockedStatic = Mockito.mockStatic(ApplicationDatabase.class)) {
-            RowSet rowSet = Mockito.mock(RowSet.class);
-            Mockito.when(rowSet.getString("password")).thenThrow(SQLException.class);
+            User user = Mockito.mock(User.class);
+            Mockito.when(user.getEmail()).thenReturn(null);
+            Mockito.when(user.getPassword()).thenReturn(null);
+            Mockito.when(user.getId()).thenReturn(null);
             databaseMockedStatic.when(() -> {
                 ApplicationDatabase.getUserCredentials(Mockito.anyString());
-            }).thenReturn(rowSet);
+            }).thenReturn(user);
             Request request = Mockito.mock(Request.class);
             AuthenticationHandler.UserCredentials userCredentials = new AuthenticationHandler.UserCredentials();
             userCredentials.email = "email";
@@ -54,6 +60,7 @@ public class AuthenticationHandlerTest {
             AuthenticationHandler authenticationHandler = new AuthenticationHandler();
             authenticationHandler.handle(request, response, next);
             Mockito.verify(response, Mockito.times(1)).status(400);
+            Mockito.verify(response, Mockito.times(1)).json(Mockito.any(Message.class));
         }
     }
 
@@ -67,6 +74,6 @@ public class AuthenticationHandlerTest {
         AuthenticationHandler authenticationHandler = new AuthenticationHandler();
         authenticationHandler.handle(request, response, next);
         Mockito.verify(response, Mockito.times(1)).status(400);
-
+        Mockito.verify(response, Mockito.times(1)).json(Mockito.any(Message.class));
     }
 }

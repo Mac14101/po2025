@@ -1,10 +1,9 @@
 package server.handlers.authentication;
 
 import database.ApplicationDatabase;
+import entities.Message;
+import entities.User;
 import jexp.*;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class AuthenticationHandler implements Handler {
     @Override
@@ -12,18 +11,24 @@ public class AuthenticationHandler implements Handler {
         UserCredentials credentials = request.getBody(UserCredentials.class);
         if (credentials == null || credentials.email == null || credentials.password == null) {
             response.status(400);
+            Message message = new Message();
+            message.addMessage("login", "Niepoprawny login lub hasło.");
+            response.json(message);
             return;
         }
-        ResultSet userRow = ApplicationDatabase.getUserCredentials(credentials.email);
-        try {
-            if ((userRow != null) && (userRow.getString("password").equals(credentials.password))) {
-                String token = request.logIn(userRow.getInt("uid"), userRow.getString("email"));
-                response.send(token);
-            } else {
-                response.status(400);
-            }
-        } catch (SQLException e) {
+        User user = ApplicationDatabase.getUserCredentials(credentials.email);
+        if (user.getEmail() == null || user.getPassword() == null) {
             response.status(400);
+            Message message = new Message();
+            message.addMessage("login", "Niepoprawny login lub hasło.");
+            response.json(message);
+            return;
+        }
+        if (user.getPassword().equals(credentials.password)) {
+            String token = request.logIn(user.getId(), user.getEmail());
+            response.status(200);
+            response.type("text/plain");
+            response.send(token);
         }
     }
 

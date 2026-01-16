@@ -95,13 +95,14 @@ public class ApplicationDatabase extends Database {
         }
     }
 
-    public static ResultSet getUserCredentials(String email) {
+    public static User getUserCredentials(String email) {
         try {
             Database currentInstance = getInstance();
             String selectUsersSQL = "";
             PreparedStatement selectUserStatement = currentInstance.getPreparedStatement(selectUsersSQL);
             selectUserStatement.setString(1, email);
-            return selectUserStatement.executeQuery();
+            ResultSet result = currentInstance.executeQueryStatement(selectUserStatement);
+            return User.readUser(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
