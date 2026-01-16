@@ -148,9 +148,10 @@ public class Response {
     public void sendResponse(HttpExchange exchange) throws IOException {
         exchange.getResponseHeaders().putAll(headers);
         if (this.body != null) {
-            exchange.sendResponseHeaders(statusCode, body.length());
+            byte[] body = this.body.getBytes();
+            exchange.sendResponseHeaders(statusCode, body.length);
             try (OutputStream os = exchange.getResponseBody()) {
-                os.write(body.getBytes());
+                os.write(body);
             }
         } else {
             exchange.sendResponseHeaders(statusCode, 0);
