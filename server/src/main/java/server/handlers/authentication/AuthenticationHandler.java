@@ -7,6 +7,12 @@ import entities.UserCredentials;
 import jexp.*;
 
 public class AuthenticationHandler implements Handler {
+    private ApplicationDatabase database;
+
+    public AuthenticationHandler() {
+        this.database = ApplicationDatabase.getInstance();
+    }
+
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
         if (!request.sessionEstabilished()) {
@@ -21,7 +27,7 @@ public class AuthenticationHandler implements Handler {
             response.json(message);
             return;
         }
-        User user = ApplicationDatabase.getUserCredentials(credentials.getEmail());
+        User user = this.database.getUserCredentials(credentials.getEmail());
         if (user.getEmail() == null || user.getPassword() == null) {
             response.status(400);
             Message message = new Message();
