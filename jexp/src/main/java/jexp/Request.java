@@ -232,6 +232,10 @@ public class Request {
         this.session = session;
     }
 
+    public boolean sessionEstabilished() {
+        return this.session != null;
+    }
+
     public String getSession(String key) {
         return this.session.getSession(key);
     }
