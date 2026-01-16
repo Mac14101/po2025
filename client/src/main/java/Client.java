@@ -9,6 +9,7 @@ public class Client extends Thread {
     private final HttpClient client;
     private String token;
     private LocalDateTime tokenTime;
+    private String refreshUrl;
 
     public Client() {
         this.client = HttpClient.newHttpClient();
@@ -18,6 +19,10 @@ public class Client extends Thread {
         return HttpRequest.newBuilder(URI.create(url));
     }
 
+    public void setRefreshUrl(String refreshUrl) {
+        this.refreshUrl = refreshUrl;
+    }
+    
     public HttpResponse<String> fetch(HttpRequest.Builder request) throws ClientError {
         if (token != null) {
             request.headers("Authorization", "Basic" + token);
@@ -41,8 +46,11 @@ public class Client extends Thread {
 
     private void refreshToken() {
         try {
+            if (this.refreshUrl == null) {
+                return;
+            }
             HttpRequest.Builder request =
-                    this.request("");
+                    this.request(this.refreshUrl);
             HttpResponse<String> response = this.fetch(request);
             String newToken = response.body();
             this.setToken(newToken);
@@ -51,9 +59,10 @@ public class Client extends Thread {
         }
     }
 
+
     public void run() {
         while (true) {
-            if (this.token != null) {
+            if (this.token != null && this.tokenTime != null) {
                 if (this.tokenTime.plusMinutes(10).isBefore(LocalDateTime.now())) {
                     this.token = null;
                     this.tokenTime = null;
