@@ -1,6 +1,10 @@
 package entities;
 
-public class Lesson {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class Lesson extends Entity {
     private Integer id;
     private String topic;
     private String date;
@@ -18,6 +22,26 @@ public class Lesson {
         this.topic = null;
         this.date = null;
         this.schoolClass = null;
+    }
+
+    public static Lesson readLesson(ResultSet resultSet) {
+        Integer id = getIntColumn(resultSet, "lid");
+        String topic = getStringColumn(resultSet, "topic");
+        String date = getStringColumn(resultSet, "date");
+        SchoolClass schoolClass = SchoolClass.readSchoolClass(resultSet);
+        return new Lesson(id, topic, date);
+    }
+
+    public static ArrayList<Lesson> readLessonArray(ResultSet resultSet) {
+        try {
+            ArrayList<Lesson> lessons = new ArrayList<>();
+            while (resultSet.next()) {
+                lessons.add(readLesson(resultSet));
+            }
+            return lessons;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public Integer getId() {
