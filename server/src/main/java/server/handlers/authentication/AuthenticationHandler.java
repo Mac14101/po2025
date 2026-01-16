@@ -15,7 +15,7 @@ public class AuthenticationHandler implements Handler {
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        if (!request.sessionEstabilished()) {
+        if (request.sessionEstabilished()) {
             next.next();
             return;
         }
