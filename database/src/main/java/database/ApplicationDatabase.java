@@ -8,213 +8,179 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ApplicationDatabase extends Database {
-    private static Database instance;
-    private static String dbName;
+    private static ApplicationDatabase instance = new ApplicationDatabase();
 
-    public static Database getInstance() {
-        if (instance == null) {
-            throw new IllegalStateException("Database not connected");
-        }
+    public static ApplicationDatabase getInstance() {
         return instance;
     }
 
-    public static void openConnection() throws SQLException {
-        if (instance != null) {
-            throw new IllegalStateException("Database already connected!");
+    public void initialize(User admin) throws SQLException {
+        String usersTable = "CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, email VARCHAR(100) UNIQUE NOT NULL, uname VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL);";
+        this.getPreparedStatement(usersTable).execute();
+        String classesTable = "CREATE TABLE IF NOT EXISTS classes (cid INTEGER PRIMARY KEY, number INTEGER NOT NULL, letter CHAR(1) NOT NULL);";
+        this.getPreparedStatement(classesTable).execute();
+        String studentsTable = "CREATE TABLE IF NOT EXISTS students (uid INTEGER UNIQUE, cid INTEGER, FOREIGN KEY(uid) REFERENCES users(uid), FOREIGN KEY(cid) REFERENCES classes(cid));";
+        this.getPreparedStatement(studentsTable).execute();
+        String subjectsTable = "CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQUE NOT NULL);";
+        this.getPreparedStatement(subjectsTable).execute();
+        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sid) REFERENCES subjects(sbid));";
+        this.getPreparedStatement(timeTabelTable).execute();
+        String lessonsTable = "CREATE TABLE IF NOT EXISTS lessons (lid INTEGER PRIMARY KEY, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INTEGER, FOREIGN KEY(ttid) REFERENCES time_table(ttid));";
+        this.getPreparedStatement(lessonsTable).execute();
+        String attendanceTable = "CREATE TABLE IF NOT EXISTS attendance (sid INTEGER, lid INTEGER, status TEXT NOT NULL, FOREIGN KEY(sid) REFERENCES students(sid), FOREIGN KEY(lid) REFERENCES lessons(lid));";
+        this.getPreparedStatement(attendanceTable).execute();
+        String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
+        this.getPreparedStatement(gradesTable).execute();
+        if (!this.getPreparedStatement("SELECT * FROM users;").executeQuery().next()) {
+            String insertAdmin = "INSERT INTO users (email, uname, surname, password, role) VALUES (?, ?, ?, ?, ?);";
+            PreparedStatement insertAdminStatement = this.getPreparedStatement(insertAdmin);
+            insertAdminStatement.setString(1, admin.getEmail());
+            insertAdminStatement.setString(2, admin.getName());
+            insertAdminStatement.setString(3, admin.getSurname());
+            insertAdminStatement.setString(4, admin.getPassword());
+            insertAdminStatement.setString(5, admin.getRole().toString());
+            insertAdminStatement.execute();
         }
-        instance = new Database();
-        instance.connect(dbName);
+        this.commit();
     }
 
-    public static void config(String name) {
-        if (instance != null) {
-            throw new IllegalStateException("Connection is open, cannot configure database name!");
-        }
-        dbName = name;
-    }
-
-    public static void closeConnection() throws SQLException {
-        if (instance == null) {
-            throw new RuntimeException("Database not connected!");
-        }
-        instance.close();
-        instance = null;
-    }
-
-    public static void initialize() throws SQLException {
-        Database currentInstance = getInstance();
-        String usersTable = "";
-        currentInstance.getPreparedStatement(usersTable).execute();
-        String classesTable = "";
-        currentInstance.getPreparedStatement(classesTable).execute();
-        String studentsTable = "";
-        currentInstance.getPreparedStatement(studentsTable).execute();
-        String subjectsTable = "";
-        currentInstance.getPreparedStatement(subjectsTable).execute();
-        String timeTabelTable = "";
-        currentInstance.getPreparedStatement(timeTabelTable).execute();
-        String lessonsTable = "";
-        currentInstance.getPreparedStatement(lessonsTable).execute();
-        String attendanceTable = "";
-        currentInstance.getPreparedStatement(attendanceTable).execute();
-        String gradesTable = "";
-        currentInstance.getPreparedStatement(gradesTable).execute();
-        currentInstance.commit();
-    }
-
-    public static void insertAdmin() {
-        User admin = new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString());
-
-        createUser(admin);
-    }
-
-    public static ArrayList<User> getAllUsers() {
+    public ArrayList<User> getAllUsers() {
         try {
-            Database currentInstance = getInstance();
-            String selectUsersSQL = "";
-            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectUsersSQL));
+            String selectUsersSQL = "SELECT uid, email, uname, surname, role FROM users;";
+            ResultSet result = this.executeQueryStatement(this.getPreparedStatement(selectUsersSQL));
             return User.readUserArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void createUser(User user) {
+    public void createUser(User user) {
         try {
-            Database currentInstance = getInstance();
-            String createUserSQL = "";
-            PreparedStatement createUserStatement = currentInstance.getPreparedStatement(createUserSQL);
+            String createUserSQL = "INSERT INTO users (email, uname, surname, password, role) VALUES (?, ?, ?, ?, ?);";
+            PreparedStatement createUserStatement = this.getPreparedStatement(createUserSQL);
             createUserStatement.setString(1, user.getEmail());
             createUserStatement.setString(2, user.getName());
             createUserStatement.setString(3, user.getSurname());
             createUserStatement.setString(4, user.getPassword());
             createUserStatement.setString(5, user.getRole().toString());
-            currentInstance.executeUpdateStatement(createUserStatement);
+            this.executeUpdateStatement(createUserStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static User getUserCredentials(String email) {
+    public User getUserCredentials(String email) {
         try {
-            Database currentInstance = getInstance();
-            String selectUsersSQL = "";
-            PreparedStatement selectUserStatement = currentInstance.getPreparedStatement(selectUsersSQL);
+            String selectUsersSQL = "SELECT uid, email, password FROM users WHERE email=?";
+            PreparedStatement selectUserStatement = this.getPreparedStatement(selectUsersSQL);
             selectUserStatement.setString(1, email);
-            ResultSet result = currentInstance.executeQueryStatement(selectUserStatement);
+            ResultSet result = selectUserStatement.executeQuery();
             return User.readUser(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ArrayList<Subject> getAllSubjects() {
+    public ArrayList<Subject> getAllSubjects() {
         try {
-            Database currentInstance = getInstance();
-            String selectSubjectsSQL = "";
-            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectSubjectsSQL));
+            String selectSubjectsSQL = "SELECT sbname FROM subjects;";
+            ResultSet result = this.executeQueryStatement(this.getPreparedStatement(selectSubjectsSQL));
             return Subject.readSubjectsArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void createSubject(Subject subject) {
+    public void createSubject(Subject subject) {
         try {
-            Database currentInstance = getInstance();
-            String createSubjectSQL = "";
-            PreparedStatement createSubjectStatement = currentInstance.getPreparedStatement(createSubjectSQL);
+            String createSubjectSQL = "INSERT INTO subjects (name) VALUES (?);";
+            PreparedStatement createSubjectStatement = this.getPreparedStatement(createSubjectSQL);
             createSubjectStatement.setString(1, subject.getName());
-            currentInstance.executeUpdateStatement(createSubjectStatement);
+            this.executeUpdateStatement(createSubjectStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ArrayList<SchoolGroup> getAllClass() {
+    public ArrayList<SchoolGroup> getAllClass() {
         try {
-            Database currentInstance = getInstance();
-            String selectSchoolGroupsSQL = "";
-            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectSchoolGroupsSQL));
+            String selectSchoolGroupsSQL = "SELECT cid, number, letter FROM classes;";
+            ResultSet result = this.executeQueryStatement(this.getPreparedStatement(selectSchoolGroupsSQL));
             return SchoolGroup.readSchoolGroupArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void createClass(SchoolGroup schoolGroup) {
+    public void createClass(SchoolGroup schoolGroup) {
         try {
-            Database currentInstance = getInstance();
-            String createClassSQL = "";
-            PreparedStatement createClassStatement = currentInstance.getPreparedStatement(createClassSQL);
+            String createClassSQL = "INSERT INTO classes (number, letter) VALUES (?, ?);";
+            PreparedStatement createClassStatement = this.getPreparedStatement(createClassSQL);
             createClassStatement.setInt(1, schoolGroup.getNumber());
             createClassStatement.setString(1, String.valueOf(schoolGroup.getLetter()));
-            currentInstance.executeUpdateStatement(createClassStatement);
+            this.executeUpdateStatement(createClassStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ArrayList<Student> getAllStudents() {
+    public ArrayList<Student> getAllStudents() {
         try {
-            Database currentInstance = getInstance();
-            String selectStudentsSQL = "";
-            ResultSet result = currentInstance.executeQueryStatement(currentInstance.getPreparedStatement(selectStudentsSQL));
+            String selectStudentsSQL = "SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid;";
+            ResultSet result = this.executeQueryStatement(this.getPreparedStatement(selectStudentsSQL));
             return Student.readStudentArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ArrayList<Student> getClassStudents(int classId) {
+    public ArrayList<Student> getClassStudents(int classId) {
         try {
-            Database currentInstance = getInstance();
-            String selectStudentsSQL = "";
-            PreparedStatement selectStudentsStatement = currentInstance.getPreparedStatement(selectStudentsSQL);
+            String selectStudentsSQL = "SELECT U.name, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=?;";
+            PreparedStatement selectStudentsStatement = this.getPreparedStatement(selectStudentsSQL);
             selectStudentsStatement.setInt(1, classId);
-            ResultSet result = currentInstance.executeQueryStatement(selectStudentsStatement);
+            ResultSet result = this.executeQueryStatement(selectStudentsStatement);
             return Student.readStudentArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void addStudent(int studentId, int classId) {
+    public void addStudent(int studentId, int classId) {
         try {
-            Database currentInstance = getInstance();
-            String addStudentSQL = "";
-            PreparedStatement addStudentStatement = instance.getPreparedStatement(addStudentSQL);
+            String addStudentSQL = "INSERT INTO students (uid, cid) VALUES(?, ?);";
+            PreparedStatement addStudentStatement = this.getPreparedStatement(addStudentSQL);
             addStudentStatement.setInt(1, studentId);
             addStudentStatement.setInt(2, classId);
-            currentInstance.executeUpdateStatement(addStudentStatement);
+            this.executeUpdateStatement(addStudentStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static ArrayList<SchoolClass> getClassSchedule() {
+    public ArrayList<SchoolClass> getClassSchedule(int classId) {
         try {
-            Database currentInstance = getInstance();
-            String selectSchoolClassesSQL = "";
-            ResultSet result = instance.executeQueryStatement(instance.getPreparedStatement(selectSchoolClassesSQL));
+            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, T.uname, T.surname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid;";
+            PreparedStatement selectSchoolClassesStatement = this.getPreparedStatement(selectSchoolClassesSQL);
+            selectSchoolClassesStatement.setInt(1, classId);
+            ResultSet result = this.executeQueryStatement(selectSchoolClassesStatement);
             return SchoolClass.readSchoolClassArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static void addClassSchedule(SchoolClass schoolClass) {
+    public void addClassSchedule(SchoolClass schoolClass) {
         try {
-            Database currentInstance = getInstance();
-            String addClassScheduleSQL = "";
-            PreparedStatement addClassScheduleStatement = instance.getPreparedStatement(addClassScheduleSQL);
+            String addClassScheduleSQL = "INSERT INTO time_table (day, startTime, endTime, cid, tid, sbid) VALUES (?, ?, ?, ?, ?, ?);";
+            PreparedStatement addClassScheduleStatement = this.getPreparedStatement(addClassScheduleSQL);
             addClassScheduleStatement.setString(1, schoolClass.getDay());
             addClassScheduleStatement.setString(2, schoolClass.getStartTime());
             addClassScheduleStatement.setString(3, schoolClass.getEndTime());
             addClassScheduleStatement.setInt(4, schoolClass.getSchoolGroup().getId());
             addClassScheduleStatement.setInt(5, schoolClass.getTeacher().getId());
             addClassScheduleStatement.setInt(6, schoolClass.getSubject().getId());
-            instance.executeUpdateStatement(addClassScheduleStatement);
+            this.executeUpdateStatement(addClassScheduleStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
