@@ -37,6 +37,7 @@ public class AuthenticationHandler implements Handler {
         }
         if (user.getPassword().equals(credentials.getPassword())) {
             String token = request.logIn(user.getId(), user.getEmail());
+            request.setSession("userRole", user.getRole().toString());
             response.status(200);
             response.type("text/plain");
             response.send(token);

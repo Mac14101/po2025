@@ -22,6 +22,7 @@ public class AuthenticationHandlerTest {
         User user = Mockito.mock(User.class);
         Mockito.when(user.getEmail()).thenReturn("email");
         Mockito.when(user.getPassword()).thenReturn("password");
+        Mockito.when(user.getRole()).thenReturn(User.Role.ADMIN);
         Mockito.when(user.getId()).thenReturn(1);
         Mockito.when(applicationDatabase.getUserCredentials(Mockito.anyString())).thenReturn(user);
         Request request = Mockito.mock(Request.class);
@@ -35,6 +36,7 @@ public class AuthenticationHandlerTest {
         database.set(authenticationHandler, applicationDatabase);
         authenticationHandler.handle(request, response, next);
         Mockito.verify(request, Mockito.times(1)).logIn(1, "email");
+        Mockito.verify(request, Mockito.times(1)).setSession("userRole", User.Role.ADMIN.toString());
         Mockito.verify(response, Mockito.times(1)).send("token");
     }
 
