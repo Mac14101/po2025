@@ -8,8 +8,9 @@ import jexp.Request;
 import jexp.Response;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
+
+import java.lang.reflect.Field;
 
 public class CreateUserHandlerTest {
 
@@ -21,19 +22,20 @@ public class CreateUserHandlerTest {
     }
 
     @Test
-    public void handle() {
-        try (MockedStatic<ApplicationDatabase> applicationDatabaseMockedStatic = Mockito.mockStatic(ApplicationDatabase.class)) {
-            Request request = Mockito.mock(Request.class);
-            User user = Mockito.mock(User.class);
-            Mockito.when(request.getBody(User.class)).thenReturn(user);
-            Response response = Mockito.mock(Response.class);
-            Next next = Mockito.mock(Next.class);
-            createUserHandler.handle(request, response, next);
-            applicationDatabaseMockedStatic.verify(() -> ApplicationDatabase.createUser(user), Mockito.times(1));
-            Mockito.verify(response, Mockito.times(1)).json(user);
-            Mockito.verify(response, Mockito.times(1)).status(201);
-        } catch (JExpError e) {
-            throw new RuntimeException(e);
-        }
+    public void handle() throws NoSuchFieldException, IllegalAccessException, JExpError {
+        Field database = CreateUserHandler.class.getDeclaredField("database");
+        database.setAccessible(true);
+        ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
+        database.set(createUserHandler, applicationDatabase);
+        Request request = Mockito.mock(Request.class);
+        User user = Mockito.mock(User.class);
+        Mockito.when(request.getBody(User.class)).thenReturn(user);
+        Response response = Mockito.mock(Response.class);
+        Next next = Mockito.mock(Next.class);
+        createUserHandler.handle(request, response, next);
+        Mockito.verify(applicationDatabase, Mockito.times(1)).createUser(user);
+        Mockito.verify(response, Mockito.times(1)).json(user);
+        Mockito.verify(response, Mockito.times(1)).status(201);
+
     }
 }
