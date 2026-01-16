@@ -81,6 +81,18 @@ public class ApplicationDatabase extends Database {
         }
     }
 
+    public User getUserData(int userId) {
+        try {
+            String selectUsersSQL = "SELECT uid, email, uname, surname, role FROM users WHERE uid=?";
+            PreparedStatement selectUserStatement = this.getPreparedStatement(selectUsersSQL);
+            selectUserStatement.setInt(1, userId);
+            ResultSet result = selectUserStatement.executeQuery();
+            return User.readUser(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ArrayList<Subject> getAllSubjects() {
         try {
             String selectSubjectsSQL = "SELECT sbname FROM subjects;";
