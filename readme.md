@@ -18,8 +18,8 @@ przysyłania danych oraz bazy danych SQLite, aby zapewnić funkcjonalny i wydajn
 Najważniejsze funkcje są zaznaczone pogrubioną czcionką.
 
 1. Administrator(admin)
-    * wyświetlanie listy użytkowników (`/session/` **GET**)
-    * dodawanie użytkowników (`/session/` **POST**)
+    * wyświetlanie listy użytkowników (`/user/` **GET**)
+    * dodawanie użytkowników (`/user/` **POST**)
     * wyświetlanie listy przedmiotów (`/subject/` **GET**)
     * dodawanie przedmiotów do listy przedmiotów(`/subject/` **POST**)
     * wyświetlanie listy klas (`/class/` **GET**)
@@ -60,11 +60,11 @@ który umożliwia identyfikację użytkownika po stronie serwera.
 
 ```plantuml
 @startuml
-actor session
+actor User
 participant "DesktopAppController" AS UIController
 participant "HTTP Server" AS Server
 participant "SQLite Database" AS Database
-session --> UIController : Użytkownik wykonuje operację
+User --> UIController : Użytkownik wykonuje operację
 activate UIController
 UIController --> Server : Żądanie HTTP
 activate Server
@@ -75,7 +75,7 @@ Database --> Server : Wynik kwerendy SQL
 deactivate Database
 Server --> UIController : Odpowiedź HTTP
 deactivate Server
-UIController --> session : Wyświetlenie informacji
+UIController --> User : Wyświetlenie informacji
 deactivate UIController
 @enduml
 ```
@@ -83,23 +83,34 @@ deactivate UIController
 ## Serwer i endpointy API
 
 1. Uwierzytelnianie
+    * `/` - odczytanie nagłówka `Authorization` i znalezienie odpowiedniego obiektu sesji
+    * `/session/` - endpoint odświeżający token uwierzytelniania
+    * `/login/` - logowanie i ustawianie sesji
+    * `/logout/` - wylogowanie i zniszczenie sesji
 2. Konta użytkowników
-    * `/session/` **GET** - lista wszystkich użytkowników
-    * `/session/` **POST** - tworzy nowego użytkownika
+    * `/user/` **GET** - lista wszystkich użytkowników
+    * `/user/` **POST** - tworzy nowego użytkownika
 3. Przedmioty szkolne
-    * `/subject/` **GET** - lista wszystkich przedmiotów
-    * `/subject/` **POST** - tworzy nowy przedmiot
+    * `/subject/` **GET** - lista wszystkich przedmiotów (***nie zaimplementowano***)
+    * `/subject/` **POST** - tworzy nowy przedmiot (***nie zaimplementowano***)
 4. Klasy
-    * `/class/` **GET** - lista wszystkich klas
-    * `/class/` **POST** - tworzy nową klasę
+    * `/class/` **GET** - lista wszystkich klas (***nie zaimplementowano***)
+    * `/class/` **POST** - tworzy nową klasę (***nie zaimplementowano***)
 5. Uczniowie
-    * `/student/` **GET** - lista wszystkich uczniów
-    * `/student/:classId` **GET** - lista uczniów w klasie o id **classId**
-    * `/student/` **POST** - dodaje wybranego ucznia do wybranej klasy
+    * `/student/` **GET** - lista wszystkich uczniów (***nie zaimplementowano***)
+    * `/student/:classId` **GET** - lista uczniów w klasie o id **classId** (***nie zaimplementowano***)
+    * `/student/` **POST** - dodaje wybranego ucznia do wybranej klasy (***nie zaimplementowano***)
 6. Plan zajęć
-    * `/timetable/:classId` **GET** - lista zajęć z planu zajęć klasy
+    * `/timetable/:classId` **GET** - lista zajęć z planu zajęć klasy (***nie zaimplementowano***)
 
 ## Więcej dokumentacji
 
 * [baza danych](./docs/database.md)
 * [moduł jexp](./docs/jexp.md)
+
+## TODO
+1. Naprawić błąd pomijania żądań uwierzytelniania - usunąć negację z metody **handle()** klasy **AuthenticationHandler**
+2. Naprawić przypisywanie roli dla encji użytkownika - dodać obsługę wartości **null** w konstruktorze klasy **User**
+3. Naprawić przypisywanie statusu dla encji obecności - dodać obsługę wartości **null** w konstruktorze klasy **Attendance**
+4. Naprawić przypisywanie oceny dla encji oceny - dodać obsługę wartości **null** w konstruktorze klasy **Grade**
+5. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji

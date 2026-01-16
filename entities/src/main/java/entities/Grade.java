@@ -1,6 +1,6 @@
 package entities;
 
-public class Grade {
+public class Grade extends Entity {
     private Integer id;
     private User student;
     private Subject subject;
@@ -80,7 +80,8 @@ public class Grade {
             throw new IllegalArgumentException("Unknown grade!");
         }
 
-        public String getGrade() {
+        @Override
+        public String toString() {
             return grade;
         }
     }

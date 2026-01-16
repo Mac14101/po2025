@@ -1,6 +1,10 @@
 package entities;
 
-public class User {
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
+public class User extends Entity {
     private Integer id;
     private String email;
     private String name;
@@ -24,6 +28,29 @@ public class User {
         this.surname = null;
         this.password = null;
         this.role = null;
+    }
+
+    public static User readUser(ResultSet resultSet) {
+        Integer id = getIntColumn(resultSet, "uid");
+        String email = getStringColumn(resultSet, "email");
+        String name = getStringColumn(resultSet, "uname");
+        String surname = getStringColumn(resultSet, "surname");
+        String password = getStringColumn(resultSet, "password");
+        String role = getStringColumn(resultSet, "role");
+        User user = new User(id, email, name, surname, password, role);
+        return user;
+    }
+
+    public static ArrayList<User> readUserArray(ResultSet resultSet) {
+        try {
+            ArrayList<User> users = new ArrayList<>();
+            while (resultSet.next()) {
+                users.add(User.readUser(resultSet));
+            }
+            return users;
+        } catch (SQLException e) {
+            return null;
+        }
     }
 
     public Integer getId() {
@@ -106,7 +133,8 @@ public class User {
             throw new IllegalArgumentException("Invalid role!");
         }
 
-        public String getRole() {
+        @Override
+        public String toString() {
             return role;
         }
     }
