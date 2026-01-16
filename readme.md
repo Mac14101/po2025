@@ -110,7 +110,4 @@ deactivate UIController
 
 ## TODO
 
-1. Naprawić przypisywanie roli dla encji użytkownika - dodać obsługę wartości **null** w konstruktorze klasy **User**
-2. Naprawić przypisywanie statusu dla encji obecności - dodać obsługę wartości **null** w konstruktorze klasy **Attendance**
-3. Naprawić przypisywanie oceny dla encji oceny - dodać obsługę wartości **null** w konstruktorze klasy **Grade**
-4. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji
+1. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji

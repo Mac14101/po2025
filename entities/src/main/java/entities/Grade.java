@@ -12,7 +12,9 @@ public class Grade extends Entity {
         this.student = student;
         this.subject = subject;
         this.teacher = teacher;
-        this.grade = GradeName.fromGrade(grade);
+        if (grade != null) {
+            this.grade = GradeName.fromGrade(grade);
+        }
     }
 
     public Grade() {
