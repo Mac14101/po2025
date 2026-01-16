@@ -9,20 +9,26 @@ public class Client extends Thread {
     private final HttpClient client;
     private String token;
     private LocalDateTime tokenTime;
+    private String baseUrl;
     private String refreshUrl;
 
     public Client() {
         this.client = HttpClient.newHttpClient();
+        this.baseUrl = "http://localhost";
     }
 
     public HttpRequest.Builder request(String url) {
-        return HttpRequest.newBuilder(URI.create(url));
+        return HttpRequest.newBuilder(URI.create(this.baseUrl + url));
+    }
+
+    public void setBaseUrl(String baseUrl) {
+        this.baseUrl = baseUrl;
     }
 
     public void setRefreshUrl(String refreshUrl) {
         this.refreshUrl = refreshUrl;
     }
-    
+
     public HttpResponse<String> fetch(HttpRequest.Builder request) throws ClientError {
         if (token != null) {
             request.headers("Authorization", "Basic" + token);
@@ -31,10 +37,10 @@ public class Client extends Thread {
         try {
             response = this.client.send(request.build(), HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() >= 400 && response.statusCode() < 500) {
-                throw new RuntimeException("Failed to fetch response");
+                throw new ClientError("Failed to fetch response", response);
             }
             return response;
-        } catch (IOException | InterruptedException | RuntimeException e) {
+        } catch (IOException | InterruptedException e) {
             throw new ClientError("Failed to fetch", response);
         }
     }
