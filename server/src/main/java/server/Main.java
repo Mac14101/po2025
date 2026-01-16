@@ -8,6 +8,7 @@ import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
+import server.handlers.authentication.UserDataHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -24,6 +25,7 @@ public class Main {
         server.use("/session/", new SessionRefreshHandler());
         server.post("/login/", new AuthenticationHandler());
         server.get("/logout/", new SessionDestroyHandler());
+        server.get("/self/", new UserDataHandler());
         server.get("/user/", new AllUsersHandler());
         server.post("/user/", new CreateUserHandler());
         server.listen(8080);
