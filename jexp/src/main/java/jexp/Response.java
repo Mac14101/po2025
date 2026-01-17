@@ -3,7 +3,7 @@ package jexp;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import entities.JSON;
+import json.JSON;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -125,7 +125,7 @@ public class Response {
     }
 
     /**
-     * Ustawia ciało odpowiedzi na JSON podanego obiektu, ustawia nagłówek 'Content-Type' oraz blokuje wysyłanie następnych danych w ciele odpowiedzi.
+     * Ustawia ciało odpowiedzi na json.JSON podanego obiektu, ustawia nagłówek 'Content-Type' oraz blokuje wysyłanie następnych danych w ciele odpowiedzi.
      *
      * @param object obiekt, który ma zostać wysłany
      * @throws ResponseError błąd obiektu odpowiedzi

@@ -1,4 +1,4 @@
-package entities;
+package json;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -56,7 +56,7 @@ public class JSON {
     }
 
     /**
-     * Metoda służąca do zamiany obiektu Java na JSON.
+     * Metoda służąca do zamiany obiektu Java na json.JSON.
      *
      * @param object obiekt, który ma zostać zamieniony na JSON
      * @return ciąg znaków JSON
