@@ -39,4 +39,10 @@ public class ApplicationClient extends Client {
         HttpResponse<String> response = this.fetch(request);
         return JSON.parse(response.body(), User.class);
     }
+
+    public void logOut() throws ClientError {
+        HttpRequest.Builder request = this.request("/logout/");
+        request.GET();
+        this.fetch(request);
+    }
 }
