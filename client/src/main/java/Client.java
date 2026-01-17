@@ -15,6 +15,7 @@ public class Client extends Thread {
     public Client() {
         this.client = HttpClient.newHttpClient();
         this.baseUrl = "http://localhost";
+        this.start();
     }
 
     public HttpRequest.Builder request(String url) {
@@ -31,7 +32,7 @@ public class Client extends Thread {
 
     public HttpResponse<String> fetch(HttpRequest.Builder request) throws ClientError {
         if (token != null) {
-            request.headers("Authorization", "Basic" + token);
+            request.headers("Authorization", "Basic " + token);
         }
         HttpResponse<String> response = null;
         try {
@@ -73,12 +74,12 @@ public class Client extends Thread {
                     this.token = null;
                     this.tokenTime = null;
                 } else {
-                    this.refreshToken();
                     try {
                         Thread.sleep(5 * 60 * 1000);
                     } catch (InterruptedException e) {
                         throw new RuntimeException(e);
                     }
+                    this.refreshToken();
                 }
             }
         }
