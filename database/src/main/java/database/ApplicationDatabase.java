@@ -71,9 +71,21 @@ public class ApplicationDatabase extends Database {
 
     public User getUserCredentials(String email) {
         try {
-            String selectUsersSQL = "SELECT uid, email, password FROM users WHERE email=?";
+            String selectUsersSQL = "SELECT uid, email, password, role FROM users WHERE email=?";
             PreparedStatement selectUserStatement = this.getPreparedStatement(selectUsersSQL);
             selectUserStatement.setString(1, email);
+            ResultSet result = selectUserStatement.executeQuery();
+            return User.readUser(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public User getUserData(int userId) {
+        try {
+            String selectUsersSQL = "SELECT uid, email, uname, surname, role FROM users WHERE uid=?";
+            PreparedStatement selectUserStatement = this.getPreparedStatement(selectUsersSQL);
+            selectUserStatement.setInt(1, userId);
             ResultSet result = selectUserStatement.executeQuery();
             return User.readUser(result);
         } catch (SQLException e) {

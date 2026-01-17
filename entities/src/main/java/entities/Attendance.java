@@ -12,7 +12,9 @@ public class Attendance extends Entity {
     public Attendance(User student, Lesson lesson, String status) {
         this.student = student;
         this.lesson = lesson;
-        this.status = Status.fromString(status);
+        if (status != null) {
+            this.status = Status.fromString(status);
+        }
     }
 
     public Attendance() {

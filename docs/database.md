@@ -117,3 +117,4 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 * SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid; - pobiera wszystkich uczniów razem z informację do której klasy należą
 * SELECT U.name, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=:cid; - pobiera wszystkich uczniów przypisanych do wybranej klasy
 * SELECT TT.day, TT.startTime, TT.endTime, T.uname, T.surname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid; - pobiera tygodniowy plan zajęć dla wybranej klasy
+* SELECT uid, email, uname, surname, role FROM users WHERE uid=?; - pobiera dane wybranego użytkownika

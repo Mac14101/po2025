@@ -15,7 +15,7 @@ public class AuthenticationHandler implements Handler {
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        if (!request.sessionEstabilished()) {
+        if (request.sessionEstabilished()) {
             next.next();
             return;
         }
@@ -37,6 +37,7 @@ public class AuthenticationHandler implements Handler {
         }
         if (user.getPassword().equals(credentials.getPassword())) {
             String token = request.logIn(user.getId(), user.getEmail());
+            request.setSession("userRole", user.getRole().toString());
             response.status(200);
             response.type("text/plain");
             response.send(token);

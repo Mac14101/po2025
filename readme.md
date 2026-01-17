@@ -91,11 +91,11 @@ deactivate UIController
     * `/user/` **GET** - lista wszystkich użytkowników
     * `/user/` **POST** - tworzy nowego użytkownika
 3. Przedmioty szkolne
-    * `/subject/` **GET** - lista wszystkich przedmiotów (***nie zaimplementowano***)
-    * `/subject/` **POST** - tworzy nowy przedmiot (***nie zaimplementowano***)
+    * `/subject/` **GET** - lista wszystkich przedmiotów
+    * `/subject/` **POST** - tworzy nowy przedmiot
 4. Klasy
-    * `/class/` **GET** - lista wszystkich klas (***nie zaimplementowano***)
-    * `/class/` **POST** - tworzy nową klasę (***nie zaimplementowano***)
+    * `/class/` **GET** - lista wszystkich klas
+    * `/class/` **POST** - tworzy nową klasę
 5. Uczniowie
     * `/student/` **GET** - lista wszystkich uczniów (***nie zaimplementowano***)
     * `/student/:classId` **GET** - lista uczniów w klasie o id **classId** (***nie zaimplementowano***)
@@ -109,8 +109,5 @@ deactivate UIController
 * [moduł jexp](./docs/jexp.md)
 
 ## TODO
-1. Naprawić błąd pomijania żądań uwierzytelniania - usunąć negację z metody **handle()** klasy **AuthenticationHandler**
-2. Naprawić przypisywanie roli dla encji użytkownika - dodać obsługę wartości **null** w konstruktorze klasy **User**
-3. Naprawić przypisywanie statusu dla encji obecności - dodać obsługę wartości **null** w konstruktorze klasy **Attendance**
-4. Naprawić przypisywanie oceny dla encji oceny - dodać obsługę wartości **null** w konstruktorze klasy **Grade**
-5. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji
+
+1. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji

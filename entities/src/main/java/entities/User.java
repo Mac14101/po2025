@@ -18,7 +18,9 @@ public class User extends Entity {
         this.name = name;
         this.surname = surname;
         this.password = password;
-        this.role = Role.getRoleFromName(role);
+        if (role != null) {
+            this.role = Role.getRoleFromName(role);
+        }
     }
 
     public User() {
