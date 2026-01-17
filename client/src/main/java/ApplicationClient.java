@@ -1,10 +1,12 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import entities.JSON;
 import entities.User;
 import entities.UserCredentials;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 
 public class ApplicationClient extends Client {
     private static ApplicationClient instance;
@@ -43,6 +45,20 @@ public class ApplicationClient extends Client {
     public void logOut() throws ClientError {
         HttpRequest.Builder request = this.request("/logout/");
         request.GET();
+        this.fetch(request);
+    }
+
+    public ArrayList<User> getAllUsers() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/user/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<User>>() {
+        });
+    }
+
+    public void createUser(User user) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/user/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(user)));
         this.fetch(request);
     }
 }
