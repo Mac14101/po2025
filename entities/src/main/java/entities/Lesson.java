@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Lesson extends Entity {
+public class Lesson extends DatabaseEntity {
     private Integer id;
     private String topic;
     private String date;

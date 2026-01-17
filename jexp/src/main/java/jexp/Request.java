@@ -5,9 +5,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
-import entities.JSON;
 import jexp.session.Manager;
 import jexp.session.Session;
+import json.JSON;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -180,7 +180,7 @@ public class Request {
      */
     public <T> T getBody(TypeReference<T> type) throws RequestError {
         try {
-            return JSON.parse(this.body, type);
+            return json.JSON.parse(this.body, type);
 
         } catch (JsonProcessingException e) {
             throw new RequestError(e.getMessage());

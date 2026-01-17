@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Attendance extends Entity {
+public class Attendance extends DatabaseEntity {
     private User student;
     private Lesson lesson;
     private Status status;

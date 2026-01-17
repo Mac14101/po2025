@@ -1,6 +1,6 @@
 package entities;
 
-public class Grade extends Entity {
+public class Grade extends DatabaseEntity {
     private Integer id;
     private User student;
     private Subject subject;

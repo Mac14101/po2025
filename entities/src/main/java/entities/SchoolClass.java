@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class SchoolClass extends Entity {
+public class SchoolClass extends DatabaseEntity {
     private Integer id;
     private String day;
     private String startTime;
