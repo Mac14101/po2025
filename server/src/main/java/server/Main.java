@@ -9,6 +9,10 @@ import jexp.defaultHandlers.SessionRefreshHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
+import server.handlers.authorization.AdminOnlyHandler;
+import server.handlers.classes.CreateClassHandler;
+import server.handlers.subjects.AllSubjectsHandler;
+import server.handlers.subjects.CreateSubjectHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -21,13 +25,28 @@ public class Main {
         database.connect("database.db");
         database.initialize(new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString()));
         Server server = new Server();
+
+        AdminOnlyHandler adminOnlyHandler = new AdminOnlyHandler();
+
+        //Trasy uwierzytelniania
         server.use("/", new SessionHandler());
         server.use("/session/", new SessionRefreshHandler());
         server.post("/login/", new AuthenticationHandler());
         server.get("/logout/", new SessionDestroyHandler());
         server.get("/self/", new UserDataHandler());
+        //Trasy do manipulacji użytkownikami - tylko administratorzy
+        server.use("/user/", adminOnlyHandler);
         server.get("/user/", new AllUsersHandler());
         server.post("/user/", new CreateUserHandler());
+        //Trasy do manipulacji przedmiotami szkolnymi - tylko administratorzy
+        server.use("/subject/", adminOnlyHandler);
+        server.get("/subject/", new AllSubjectsHandler());
+        server.post("/subject/", new CreateSubjectHandler());
+        //Trasy do manipulacji klasami - tylko administratorzy
+        server.use("/class/", adminOnlyHandler);
+        server.get("/class/", new AllSubjectsHandler());
+        server.post("/class/", new CreateClassHandler());
+
         server.listen(8080);
     }
 }

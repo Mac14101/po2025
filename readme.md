@@ -91,11 +91,11 @@ deactivate UIController
     * `/user/` **GET** - lista wszystkich użytkowników
     * `/user/` **POST** - tworzy nowego użytkownika
 3. Przedmioty szkolne
-    * `/subject/` **GET** - lista wszystkich przedmiotów (***nie zaimplementowano***)
-    * `/subject/` **POST** - tworzy nowy przedmiot (***nie zaimplementowano***)
+    * `/subject/` **GET** - lista wszystkich przedmiotów
+    * `/subject/` **POST** - tworzy nowy przedmiot
 4. Klasy
-    * `/class/` **GET** - lista wszystkich klas (***nie zaimplementowano***)
-    * `/class/` **POST** - tworzy nową klasę (***nie zaimplementowano***)
+    * `/class/` **GET** - lista wszystkich klas
+    * `/class/` **POST** - tworzy nową klasę
 5. Uczniowie
     * `/student/` **GET** - lista wszystkich uczniów (***nie zaimplementowano***)
     * `/student/:classId` **GET** - lista uczniów w klasie o id **classId** (***nie zaimplementowano***)
