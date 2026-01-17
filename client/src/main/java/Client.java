@@ -18,10 +18,6 @@ public class Client extends Thread {
         this.start();
     }
 
-    public HttpRequest.Builder request(String url) {
-        return HttpRequest.newBuilder(URI.create(this.baseUrl + url));
-    }
-
     public void setBaseUrl(String baseUrl) {
         this.baseUrl = baseUrl;
     }
@@ -30,6 +26,10 @@ public class Client extends Thread {
         this.refreshUrl = refreshUrl;
     }
 
+    public HttpRequest.Builder request(String url) {
+        return HttpRequest.newBuilder(URI.create(this.baseUrl + url));
+    }
+    
     public HttpResponse<String> fetch(HttpRequest.Builder request) throws ClientError {
         if (token != null) {
             request.headers("Authorization", "Basic " + token);

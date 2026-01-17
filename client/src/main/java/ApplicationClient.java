@@ -22,6 +22,14 @@ public class ApplicationClient extends Client {
         return instance;
     }
 
+    /**
+     * Metoda służąca do uwierzytelniania użytkownika. Wysyła żądanie HTTP (`/login/` POST), jeżeli dane są poprawne,
+     * serwer zwraca token uwierzytelniania, który jest automatycznie zapisywany i dodawany do każdego następnego żądania.
+     *
+     * @param credentials obiekt z danymi uwierzytelniania
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     */
     public void authenticate(UserCredentials credentials) throws JsonProcessingException, ClientError {
         HttpRequest.Builder request = this.request("/login/");
         String body = JSON.stringify(credentials);
@@ -35,6 +43,14 @@ public class ApplicationClient extends Client {
         this.setToken(token);
     }
 
+    /**
+     * Metoda służąca do pobrania danych o zalogowanym użytkowniku. Wysyła żądanie HTTP (`/self/` GET), jeżeli użytkownik jest zalogowany,
+     * zostaje zwrócony ciąg znaków JSON zawierający dane użytkownika.
+     *
+     * @return Obiekt z danymi użytkownika
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public User getUserData() throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/self/");
         request.GET();
@@ -42,12 +58,24 @@ public class ApplicationClient extends Client {
         return JSON.parse(response.body(), User.class);
     }
 
+    /**
+     * Metoda służąca do wylogowania. Wysyła żądanie HTTP (`/logout/` GET), jeżeli użytkownik jest zalogowany, niszczy sesję logowania.
+     *
+     * @throws ClientError błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     */
     public void logOut() throws ClientError {
         HttpRequest.Builder request = this.request("/logout/");
         request.GET();
         this.fetch(request);
     }
 
+    /**
+     * Pobiera listę użytkowników zapisanych w bazie danych za pomocą żądanie HTTP (`/user/` GET).
+     *
+     * @return lista użytkowników
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public ArrayList<User> getAllUsers() throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/user/");
         request.GET();
@@ -56,6 +84,13 @@ public class ApplicationClient extends Client {
         });
     }
 
+    /**
+     * Wstawia nowego użytkownika do bazy danych, za pomocą żądania HTTP (`/user/` POST).
+     *
+     * @param user obiekt reprezentujący nowego użytkownika
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public void createUser(User user) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/user/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(user)));
