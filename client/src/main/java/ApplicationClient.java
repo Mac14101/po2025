@@ -1,8 +1,8 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import entities.JSON;
 import entities.User;
 import entities.UserCredentials;
+import json.JSON;
 
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
