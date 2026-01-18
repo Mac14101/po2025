@@ -8,6 +8,7 @@ import jexp.Request;
 import jexp.Response;
 import org.junit.Test;
 import org.mockito.Mockito;
+import server.handlers.DatabaseHandler;
 
 import java.lang.reflect.Field;
 
@@ -15,7 +16,7 @@ public class UserDataHandlerTest {
 
     @Test
     public void withSession() throws NoSuchFieldException, JExpError, IllegalAccessException {
-        Field database = UserDataHandler.class.getDeclaredField("database");
+        Field database = DatabaseHandler.class.getDeclaredField("database");
         database.setAccessible(true);
         ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
         User user = Mockito.mock(User.class);

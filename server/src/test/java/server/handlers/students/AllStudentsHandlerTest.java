@@ -8,6 +8,7 @@ import jexp.Request;
 import jexp.Response;
 import org.junit.Test;
 import org.mockito.Mockito;
+import server.handlers.DatabaseHandler;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class AllStudentsHandlerTest {
 
     @Test
     public void handle() throws NoSuchFieldException, IllegalAccessException, JExpError {
-        Field database = AllStudentsHandler.class.getDeclaredField("database");
+        Field database = DatabaseHandler.class.getDeclaredField("database");
         database.setAccessible(true);
         ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
         ArrayList<Student> students = Mockito.mock(ArrayList.class);

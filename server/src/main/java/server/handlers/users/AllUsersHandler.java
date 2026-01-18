@@ -1,16 +1,18 @@
 package server.handlers.users;
 
-import database.ApplicationDatabase;
 import entities.User;
-import jexp.*;
+import jexp.JExpError;
+import jexp.Next;
+import jexp.Request;
+import jexp.Response;
+import server.handlers.DatabaseHandler;
 
 import java.util.ArrayList;
 
-public class AllUsersHandler implements Handler {
-    private ApplicationDatabase database;
+public class AllUsersHandler extends DatabaseHandler {
 
     public AllUsersHandler() {
-        this.database = ApplicationDatabase.getInstance();
+        super();
     }
 
     @Override

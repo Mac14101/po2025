@@ -1,16 +1,17 @@
 package server.handlers.students;
 
-import database.ApplicationDatabase;
 import entities.Student;
-import jexp.*;
+import jexp.JExpError;
+import jexp.Next;
+import jexp.Request;
+import jexp.Response;
+import server.handlers.DatabaseHandler;
 
 import java.util.ArrayList;
 
-public class AllStudentsHandler implements Handler {
-    private ApplicationDatabase database;
-
+public class AllStudentsHandler extends DatabaseHandler {
     public AllStudentsHandler() {
-        this.database = ApplicationDatabase.getInstance();
+        super();
     }
 
     @Override

@@ -10,13 +10,14 @@ import jexp.Request;
 import jexp.Response;
 import org.junit.Test;
 import org.mockito.Mockito;
+import server.handlers.DatabaseHandler;
 
 import java.lang.reflect.Field;
 
 public class AuthenticationHandlerTest {
     @Test
     public void userFound() throws JExpError, NoSuchFieldException, IllegalAccessException {
-        Field database = AuthenticationHandler.class.getDeclaredField("database");
+        Field database = DatabaseHandler.class.getDeclaredField("database");
         database.setAccessible(true);
         ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
         User user = Mockito.mock(User.class);
@@ -42,7 +43,7 @@ public class AuthenticationHandlerTest {
 
     @Test
     public void userNotFound() throws JExpError, NoSuchFieldException, IllegalAccessException {
-        Field database = AuthenticationHandler.class.getDeclaredField("database");
+        Field database = DatabaseHandler.class.getDeclaredField("database");
         database.setAccessible(true);
         ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
         User user = Mockito.mock(User.class);

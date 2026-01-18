@@ -1,14 +1,15 @@
 package server.handlers.users;
 
-import database.ApplicationDatabase;
 import entities.User;
-import jexp.*;
+import jexp.JExpError;
+import jexp.Next;
+import jexp.Request;
+import jexp.Response;
+import server.handlers.DatabaseHandler;
 
-public class CreateUserHandler implements Handler {
-    private ApplicationDatabase database;
-
+public class CreateUserHandler extends DatabaseHandler {
     public CreateUserHandler() {
-        this.database = ApplicationDatabase.getInstance();
+        super();
     }
 
     @Override
