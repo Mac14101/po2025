@@ -75,6 +75,29 @@ deactivate UIController
 @enduml
 ```
 
+## Serwer i endpointy API
+
+1. Uwierzytelnianie
+    * `/` - odczytanie nagłówka `Authorization` i znalezienie odpowiedniego obiektu sesji
+    * `/session/` - endpoint odświeżający token uwierzytelniania
+    * `/login/` - logowanie i ustawianie sesji
+    * `/logout/` - wylogowanie i zniszczenie sesji
+2. Konta użytkowników
+    * `/user/` **GET** - lista wszystkich użytkowników
+    * `/user/` **POST** - tworzy nowego użytkownika
+3. Przedmioty szkolne
+    * `/subject/` **GET** - lista wszystkich przedmiotów (***nie zaimplementowano***)
+    * `/subject/` **POST** - tworzy nowy przedmiot (***nie zaimplementowano***)
+4. Klasy
+    * `/class/` **GET** - lista wszystkich klas (***nie zaimplementowano***)
+    * `/class/` **POST** - tworzy nową klasę (***nie zaimplementowano***)
+5. Uczniowie
+    * `/student/` **GET** - lista wszystkich uczniów (***nie zaimplementowano***)
+    * `/student/:classId` **GET** - lista uczniów w klasie o id **classId** (***nie zaimplementowano***)
+    * `/student/` **POST** - dodaje wybranego ucznia do wybranej klasy (***nie zaimplementowano***)
+6. Plan zajęć
+    * `/timetable/:classId` **GET** - lista zajęć z planu zajęć klasy (***nie zaimplementowano***)
+
 ## Więcej dokumentacji
 
 * [serwer HTTP](./docs/server.md)
@@ -82,5 +105,3 @@ deactivate UIController
 * [moduł jexp](./docs/jexp.md)
 
 ## TODO
-
-1. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji
