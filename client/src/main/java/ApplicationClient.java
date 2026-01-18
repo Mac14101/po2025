@@ -96,6 +96,13 @@ public class ApplicationClient extends Client {
         this.fetch(request);
     }
 
+    /**
+     * Pobiera listę przedmiotów zapisanych w bazie danych za pomocą żądanie HTTP (`/subject/` GET).
+     *
+     * @return lista przedmiotów
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public ArrayList<Subject> getAllSubjects() throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/subject/");
         request.GET();
@@ -104,12 +111,26 @@ public class ApplicationClient extends Client {
         });
     }
 
+    /**
+     * Wstawia nowy przedmiot do bazy danych, za pomocą żądania HTTP (`/subject/` POST).
+     *
+     * @param subject obiekt reprezentujący nowy przedmiot
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public void createSubject(Subject subject) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/subject/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(subject)));
         this.fetch(request);
     }
 
+    /**
+     * Pobiera listę klas zapisanych w bazie danych za pomocą żądanie HTTP (`/class/` GET).
+     *
+     * @return lista klas
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public ArrayList<SchoolGroup> getAllClass() throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/class/");
         request.GET();
@@ -118,12 +139,26 @@ public class ApplicationClient extends Client {
         });
     }
 
-    public void createSubject(SchoolGroup schoolGroup) throws ClientError, JsonProcessingException {
+    /**
+     * Wstawia nową klasę do bazy danych, za pomocą żądania HTTP (`/class/` POST).
+     *
+     * @param schoolGroup obiekt reprezentujący nową klasę
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public void createClass(SchoolGroup schoolGroup) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/class/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(schoolGroup)));
         this.fetch(request);
     }
 
+    /**
+     * Pobiera listę uczniów zapisanych w bazie danych za pomocą żądanie HTTP (`/student/` GET).
+     *
+     * @return lista uczniów
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public ArrayList<Student> getAllStudents() throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/student/");
         request.GET();
@@ -132,6 +167,14 @@ public class ApplicationClient extends Client {
         });
     }
 
+    /**
+     * Pobiera listę uczniów należących klasy o podanym numerze id za pomocą żądanie HTTP (`/student/:classId/` GET).
+     *
+     * @param classId numer id klasy
+     * @return lista uczniów należących do klasy
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public ArrayList<Student> getClassStudents(int classId) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/student/" + String.valueOf(classId) + "/");
         request.GET();
@@ -140,6 +183,13 @@ public class ApplicationClient extends Client {
         });
     }
 
+    /**
+     * Dodaje ucznia o podanym id do wybranej klasy, za pomocą żądania HTTP (`/student/` POST).
+     *
+     * @param student obiekt z zapisanym id ucznie i id klasy, do której ma zostać przypisany
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
     public void addStudent(Student student) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/student/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(student)));
