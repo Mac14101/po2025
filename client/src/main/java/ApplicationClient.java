@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import entities.SchoolGroup;
 import entities.Subject;
 import entities.User;
 import entities.UserCredentials;
@@ -16,7 +17,7 @@ public class ApplicationClient extends Client {
         super();
     }
 
-    private static ApplicationClient getInstance() {
+    public static ApplicationClient getInstance() {
         if (instance == null) {
             instance = new ApplicationClient();
         }
@@ -109,6 +110,20 @@ public class ApplicationClient extends Client {
     public void createSubject(Subject subject) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/subject/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(subject)));
+        this.fetch(request);
+    }
+
+    public ArrayList<SchoolGroup> getAllClass() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/class/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<SchoolGroup>>() {
+        });
+    }
+
+    public void createSubject(SchoolGroup schoolGroup) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/class/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(schoolGroup)));
         this.fetch(request);
     }
 }
