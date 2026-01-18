@@ -1,7 +1,8 @@
-package server.handlers.subjects;
+package server.handlers.students;
 
 import database.ApplicationDatabase;
-import entities.Subject;
+import entities.SchoolGroup;
+import entities.Student;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -11,24 +12,27 @@ import org.mockito.Mockito;
 import server.handlers.DatabaseHandler;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 
-public class AllSubjectsHandlerTest {
+public class AddStudentHandlerTest {
 
     @Test
     public void handle() throws NoSuchFieldException, IllegalAccessException, JExpError {
         Field database = DatabaseHandler.class.getDeclaredField("database");
         database.setAccessible(true);
         ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
-        ArrayList<Subject> subjects = Mockito.mock(ArrayList.class);
-        Mockito.when(applicationDatabase.getAllSubjects()).thenReturn(subjects);
         Request request = Mockito.mock(Request.class);
+        Student student = Mockito.mock(Student.class);
+        Mockito.when(student.getId()).thenReturn(1);
+        SchoolGroup schoolGroup = Mockito.mock(SchoolGroup.class);
+        Mockito.when(schoolGroup.getId()).thenReturn(2);
+        Mockito.when(student.getSchoolGroup()).thenReturn(schoolGroup);
+        Mockito.when(request.getBody(Student.class)).thenReturn(student);
         Response response = Mockito.mock(Response.class);
         Next next = Mockito.mock(Next.class);
-        AllSubjectsHandler handler = new AllSubjectsHandler();
+        AddStudentHandler handler = new AddStudentHandler();
         database.set(handler, applicationDatabase);
         handler.handle(request, response, next);
-        Mockito.verify(applicationDatabase, Mockito.times(1)).getAllSubjects();
-        Mockito.verify(response, Mockito.times(1)).json(subjects);
+        Mockito.verify(applicationDatabase, Mockito.times(1)).addStudent(1, 2);
+        Mockito.verify(response, Mockito.times(1)).json(student);
     }
 }

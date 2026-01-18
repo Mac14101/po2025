@@ -8,6 +8,7 @@ import jexp.Request;
 import jexp.Response;
 import org.junit.Test;
 import org.mockito.Mockito;
+import server.handlers.DatabaseHandler;
 
 import java.lang.reflect.Field;
 
@@ -15,7 +16,7 @@ public class CreateSubjectHandlerTest {
 
     @Test
     public void handle() throws NoSuchFieldException, IllegalAccessException, JExpError {
-        Field database = CreateSubjectHandler.class.getDeclaredField("database");
+        Field database = DatabaseHandler.class.getDeclaredField("database");
         database.setAccessible(true);
         ApplicationDatabase applicationDatabase = Mockito.mock(ApplicationDatabase.class);
         Request request = Mockito.mock(Request.class);

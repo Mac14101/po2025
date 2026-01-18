@@ -13,13 +13,20 @@ Metody:
    * public static **String** stringify() throws **JsonProcessingException** - zamienia obiekt Java na JSON
 
 ## Klasy encji
-1. DatabaseEntity
+1. Message
+Klasa zawierająca informację zwrotną o błędach w danych żądania.
+Atrybuty:
+   * private **HashMap<String, String>** messages - lista wiadomości, kluczem jest obiekt, który jest błędy (np. dla uwierzytelniania "login")
+Metody:
+   * public **void** addMessage() - ustawia wiadomość dla wybranego klucza
+   * public **HashMap<String, String>** getMessages() - zwraca wiadomość dla wybranego klucza
+2. DatabaseEntity
 Abstrakcyjna klasa zawierająca statyczne metody pobierająca wybrane kolumny z obiektu **ResultSet**.
 Metody:
    * protected static **Integer** getIntColumn() - zwraca kolumnę o wybranej nazwie, która jest typu **int**, w przypadku braku kolumny zwraca **null**
    * protected static **String** getStringColumn() - zwraca kolumnę o wybranej nazwie, która jest typu **String**, w przypadku braku kolumny o wybranej nazwie zwraca **null**
 
-2. User
+3. User
 Klasa reprezentująca użytkownika (rekord tabeli `users` z [bazy danych](./database.md)). ***Wybrane atrybuty mogą być typu null, jeżeli nie wszystkie dane zostały uzupełnione!!!***
 Atrybuty:
    * private **Integer** id - identyfikator użytkownika (kolumna `uid` z tabeli `users`)
@@ -44,7 +51,7 @@ Metody:
    * public **Role** getRole() - zwraca rolę użytkownika, ***może być null!!***
    * public **void** setRole() - ustawia rolę użytkownika
 
-3. User.Role
+4. User.Role
 Obiekt `enum`, lista roli użytkowników.
    * ADMIN - "admin"
    * STUDENT - "student"
@@ -53,7 +60,7 @@ Metody:
    * public static **Role** getRoleFromName() - zwraca wartość z listy roli użytkowników na podstawie argumentu typu **String**
    * public String toString() - zwraca przypisaną do roli wartość typu **String**
 
-4. UserCredentials
+5. UserCredentials
 Obiekt zawierający zestaw danych do uwierzytelniania.
 Atrybuty:
    * private **String** email - adres email

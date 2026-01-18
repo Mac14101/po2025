@@ -11,8 +11,13 @@ import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
 import server.handlers.authorization.AdminOnlyHandler;
 import server.handlers.classes.CreateClassHandler;
+import server.handlers.students.AddStudentHandler;
+import server.handlers.students.AllStudentsHandler;
+import server.handlers.students.StudentsClassHandler;
 import server.handlers.subjects.AllSubjectsHandler;
 import server.handlers.subjects.CreateSubjectHandler;
+import server.handlers.timeTable.AddClassTimeTableHandler;
+import server.handlers.timeTable.ClassTimeTableHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -46,7 +51,15 @@ public class Main {
         server.use("/class/", adminOnlyHandler);
         server.get("/class/", new AllSubjectsHandler());
         server.post("/class/", new CreateClassHandler());
-
+        //Trasy do manipulacji uczniami
+        server.use("/student/", adminOnlyHandler);
+        server.get("/student/:classId/", new StudentsClassHandler());
+        server.get("/student/", new AllStudentsHandler());
+        server.post("/student/", new AddStudentHandler());
+        //Trasy do manipulacji planem zajęć
+        server.use("/timetable/", adminOnlyHandler);
+        server.get("/timetable/:classId/", new ClassTimeTableHandler());
+        server.post("/timetable//", new AddClassTimeTableHandler());
         server.listen(8080);
     }
 }
