@@ -35,7 +35,7 @@ Najważniejsze funkcje są zaznaczone pogrubioną czcionką.
     * dodawanie lekcji (`/lesson/` **POST**)
     * wyświetlanie listy obecności na lekcji (`/attendance/:lessonId/` **GET**)
     * dodawanie obecności ucznia na lekcji (`/attendance/:lessonId/` **POST**)
-    * wyświetlanie ocen ucznia (`/grade/:studentId/` **GET**)
+    * wyświetlanie ocen ucznia wystawionych przez zalogowanego nauczyciela (`/grade/:studentId/` **GET**)
     * dodawanie oceny ucznia (`/grade/:studentId/` **POST**)
 3. Uczeń(student)
     * wyświetlanie planu zajęć (`/student/timetable/` **GET**)
