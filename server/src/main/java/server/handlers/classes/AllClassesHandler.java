@@ -1,6 +1,6 @@
-package server.handlers.users;
+package server.handlers.classes;
 
-import entities.User;
+import entities.SchoolGroup;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -9,15 +9,15 @@ import server.handlers.DatabaseHandler;
 
 import java.util.ArrayList;
 
-public class AllUsersHandler extends DatabaseHandler {
+public class AllClassesHandler extends DatabaseHandler {
 
-    public AllUsersHandler() {
+    public AllClassesHandler() {
         super();
     }
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        ArrayList<User> users = this.database.getAllUsers();
-        response.json(users);
+        ArrayList<SchoolGroup> classes = this.database.getAllClass();
+        response.json(classes);
     }
 }

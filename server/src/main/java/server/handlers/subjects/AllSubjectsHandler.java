@@ -1,6 +1,6 @@
-package server.handlers.users;
+package server.handlers.subjects;
 
-import entities.User;
+import entities.Subject;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -9,15 +9,14 @@ import server.handlers.DatabaseHandler;
 
 import java.util.ArrayList;
 
-public class AllUsersHandler extends DatabaseHandler {
-
-    public AllUsersHandler() {
+public class AllSubjectsHandler extends DatabaseHandler {
+    public AllSubjectsHandler() {
         super();
     }
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        ArrayList<User> users = this.database.getAllUsers();
-        response.json(users);
+        ArrayList<Subject> subjects = this.database.getAllSubjects();
+        response.json(subjects);
     }
 }

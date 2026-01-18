@@ -41,6 +41,7 @@ public class Request {
     private final String body;
     private final HashMap<String, String> cookies;
     private final HashMap<String, String> params;
+    private final Manager sessionManager;
     private Session session;
 
     public Request(HttpExchange exchange) throws RequestError {
@@ -91,6 +92,7 @@ public class Request {
             }
             //Utworzenie listy parametrów trasy, która będzie uzupełniana przez obiekty klasy ParamHandler
             this.params = new HashMap<>();
+            this.sessionManager = Manager.getInstance();
         } catch (IOException e) {
             throw new RequestError(e.getMessage());
         }
@@ -214,6 +216,9 @@ public class Request {
      * @param depth głębokość parametru
      */
     public void readParam(String name, int depth) {
+        if (this.route.length <= depth) {
+            return;
+        }
         this.params.put(name, this.route[depth]);
         this.route[depth] = name;
     }
@@ -245,26 +250,23 @@ public class Request {
     }
 
     public String logIn(Integer userId, String username) {
-        Manager sessionManager = Manager.getInstance();
-        String token = sessionManager.addSession();
-        this.session = sessionManager.getSession(token);
+        String token = this.sessionManager.addSession();
+        this.session = this.sessionManager.getSession(token);
         this.session.setSession("userId", userId.toString());
         this.session.setSession("username", username);
         return token;
     }
 
     public void logOut() {
-        Manager sessionManager = Manager.getInstance();
         String token = this.session.getToken();
-        sessionManager.removeSession(token);
+        this.sessionManager.removeSession(token);
         this.session = null;
     }
 
     public String refreshSession() {
-        Manager sessionManager = Manager.getInstance();
         String token = this.session.getToken();
-        String newToken = sessionManager.refreshToken(token);
-        this.session = sessionManager.getSession(newToken);
+        String newToken = this.sessionManager.refreshToken(token);
+        this.session = this.sessionManager.getSession(newToken);
         return newToken;
     }
 

@@ -10,7 +10,7 @@ public class SessionRefreshHandler implements Handler {
             return;
         }
         String newToken = request.refreshSession();
-        response.type("application/json");
+        response.type("text/plain");
         response.status(200);
         response.send(newToken);
     }
