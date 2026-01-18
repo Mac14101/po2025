@@ -46,7 +46,6 @@ public class Main {
         server.use("/class/", adminOnlyHandler);
         server.get("/class/", new AllSubjectsHandler());
         server.post("/class/", new CreateClassHandler());
-
         server.listen(8080);
     }
 }

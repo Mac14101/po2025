@@ -30,22 +30,17 @@ Najważniejsze funkcje są zaznaczone pogrubioną czcionką.
     * wyświetlanie planu zajęć klasy (`/timetable/:classId` **GET**)
     * dodawania zajęć do planu zajęć klasy (`/timetable/:classId` **POST**)
 2. Nauczyciel(teacher)
-    * **wyświetlanie listy klasy**
-    * **wyświetlanie listy obecności**
-    * **dodawanie obecności ucznia na lekcji**
-    * edytowanie obecności ucznia na lekcji
-    * **wyświetlanie ocen ucznia**
-    * **dodawanie oceny ucznia**
-    * edytowanie oceny ucznia
-    * usuwanie oceny ucznia
-    * wyświetlanie danych konta
-    * edytowanie danych konta
+    * wyświetlanie listy uczniów klasy (`/student/:classId`, **GET**)
+    * wyświetlanie listy ostatnich lekcji (`/lesson/` **GET**)
+    * dodawanie lekcji (`/lesson/` **POST**)
+    * wyświetlanie listy obecności na lekcji (`/attendance/:lessonId/` **GET**)
+    * dodawanie obecności ucznia na lekcji (`/attendance/:lessonId/` **POST**)
+    * wyświetlanie ocen ucznia (`/grade/:studentId/` **GET**)
+    * dodawanie oceny ucznia (`/grade/:studentId/` **POST**)
 3. Uczeń(student)
-    * **wyświetlanie planu zajęć**
-    * **wyświetlanie obecności**
-    * **wyświetlanie ocen**
-    * wyświetlanie danych konta
-    * edytowanie danych konta
+    * wyświetlanie planu zajęć (`/student/timetable/` **GET**)
+    * wyświetlanie obecności (`/student/attendance/` **GET**)
+    * wyświetlanie ocen  (`/student/grade/` **GET**)
 
 ## Działanie aplikacji
 
@@ -79,10 +74,6 @@ UIController --> User : Wyświetlenie informacji
 deactivate UIController
 @enduml
 ```
-
-## Serwer i endpointy API
-
-
 
 ## Więcej dokumentacji
 
