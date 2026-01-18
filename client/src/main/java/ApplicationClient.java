@@ -1,9 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import entities.SchoolGroup;
-import entities.Subject;
-import entities.User;
-import entities.UserCredentials;
+import entities.*;
 import json.JSON;
 
 import java.net.http.HttpRequest;
@@ -124,6 +121,28 @@ public class ApplicationClient extends Client {
     public void createSubject(SchoolGroup schoolGroup) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/class/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(schoolGroup)));
+        this.fetch(request);
+    }
+
+    public ArrayList<Student> getAllStudents() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/student/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Student>>() {
+        });
+    }
+
+    public ArrayList<Student> getClassStudents(int classId) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/student/" + String.valueOf(classId) + "/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Student>>() {
+        });
+    }
+
+    public void addStudent(Student student) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/student/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(student)));
         this.fetch(request);
     }
 }
