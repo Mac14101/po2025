@@ -16,6 +16,8 @@ import server.handlers.students.AllStudentsHandler;
 import server.handlers.students.StudentsClassHandler;
 import server.handlers.subjects.AllSubjectsHandler;
 import server.handlers.subjects.CreateSubjectHandler;
+import server.handlers.timeTable.AddClassTimeTableHandler;
+import server.handlers.timeTable.ClassTimeTableHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -54,6 +56,10 @@ public class Main {
         server.get("/student/:classId/", new StudentsClassHandler());
         server.get("/student/", new AllStudentsHandler());
         server.post("/student/", new AddStudentHandler());
+        //Trasy do manipulacji planem zajęć
+        server.use("/timetable/", adminOnlyHandler);
+        server.get("/timetable/:classId/", new ClassTimeTableHandler());
+        server.post("/timetable//", new AddClassTimeTableHandler());
         server.listen(8080);
     }
 }

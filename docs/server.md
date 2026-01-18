@@ -20,11 +20,11 @@ Moduł server jest głównym modułem w działaniu serwera HTTP. Zawiera plik *M
     * `/class/` **POST** - tworzy nową klasę, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
 5. Uczniowie
     * `/student/` **GET** - lista wszystkich uczniów , ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
-    * `/student/:classId` **GET** - lista uczniów w klasie o id **classId**, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
+    * `/student/:classId/` **GET** - lista uczniów w klasie o id **classId**, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
     * `/student/` **POST** - dodaje wybranego ucznia do wybranej klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
 6. Plan zajęć
-    * `/timetable/:classId` **GET** - lista zajęć z planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!*** (***nie zaimplementowano***)
-    * `/timetable/:classId` **POST** - dodawania zajęć do planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!*** (***nie zaimplementowano***)
+    * `/timetable/:classId/` **GET** - lista zajęć z planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
+    * `/timetable/` **POST** - dodawania zajęć do planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
     * `/student/timetable/` **GET** - wyświetlanie planu zajęć, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)
 7. Lekcje
     * `/lesson/` **GET** - wyświetlanie listy ostatnich lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!*** (***nie zaimplementowano***)
