@@ -8,7 +8,7 @@ Atrybuty:
    * private **ObjectMapper** mapper - obiekt mappera Jackson
 Metody:
    * private static **JSON** getInstance() - zwraca instancję obiektu JSON, jeżeli instancja nie istnieje tworzy ją
-   * private ObjectMapper getMapper() - zwraca obiekt mappera
+   * private **ObjectMapper** getMapper() - zwraca obiekt mappera
    * public static **T** parse() throws **JsonProcessingException** - zamienia JSON na obiekt Java wybranej klasy
    * public static **String** stringify() throws **JsonProcessingException** - zamienia obiekt Java na JSON
 
@@ -30,7 +30,7 @@ Atrybuty:
    * private **Role** role - rola użytkownika (kolumna `role` z tabeli `users`)
 Metody:
    * public static **User** readUser() - generuje obiekt użytkownika z rekordu bazy danych
-   * public static ArrayList<User> readUserArray() - generuje listę obiektów użytkownika z bazy danych
+   * public static **ArrayList<User>** readUserArray() - generuje listę obiektów użytkownika z bazy danych
    * public **Integer** getId() - zwraca id użytkownika, ***może być null!!!***
    * public **void** setId() - ustawia id użytkownika
    * public **String** getEmail() - zwraca e-mail użytkownika, ***może być null!!!***
@@ -63,3 +63,45 @@ Metody:
    * public void setEmail() - ustawia adres e-mail
    * public String getPassword() - zwraca hasło
    * public void setPassword() - ustawia hasło
+
+5. Subject
+Klasa reprezentująca przedmiot (rekord tabeli `subjects` z [bazy danych](./database.md)). ***Wybrane atrybuty mogą być typu null, jeżeli nie wszystkie dane zostały uzupełnione!!!***
+Atrybuty:
+   * private **Integer** id - identyfikator przedmiotu (kolumna `sbid` z tabeli `subjects`)
+   * private **String** name - nazwa przedmiotu (kolumna `sbname` z tabeli `subjects`)
+Metody:
+   * public static **Subject** readSubject() - generuje obiekt przedmiotu z rekordu bazy danych
+   * public static **ArrayList<Subject>** readSubjectsArray() - generuje listę obiektów przedmiotu z bazy danych
+   * public **Integer** getId() - zwraca identyfikator przedmiotu, ***może być null!!!***
+   * public **void** setId() - ustawia identyfikator przedmiotu
+   * public **String** getName() - zwraca nazwę przedmiotu, ***może być null!!!***
+   * public **void** setName() - ustawia nazwę przedmiotu, sprawdza poprawność nazwy na podstawie RegEx, jeśli nazwa jest niepoprawne rzuca wyjątek **IllegalArgumentException**
+
+5. SchoolGroup
+Klasa reprezentująca klasę (rekord tabeli `classes` z [bazy danych](./database.md)). ***Wybrane atrybuty mogą być typu null, jeżeli nie wszystkie dane zostały uzupełnione!!!***
+Atrybuty:
+   * private **Integer** id - identyfikator przedmiotu (kolumna `cid` z tabeli `classes`)
+   * private **Integer** number - numer klasy (kolumna `number` z tabeli `classes`)
+   * private **Character** letter - litera klasy (kolumna `letter` z tabeli `classes`)
+   * private **ArrayList<Student>** students - lista uczniów należących do klasy
+Metody:
+   * public static **SchoolGroup** readSchoolGroup() - generuje obiekt klasy z rekordu bazy danych
+   * public static **ArrayList<SchoolGroup>** readSchoolGroupArray() - generuje listę obiektów klas z bazy danych
+   * public **Integer** getId() - zwraca identyfikator klasy, ***może być null!!!***
+   * public **void** setId() - ustawia identyfikator klasy
+   * public **Integer** getNumber() - zwraca numer klasy, ***może być null!!!***
+   * public **void** setNumber() - ustawia numer klasy, musi być większy niż 0, w przeciwnym wypadku rzuca wyjątek **IllegalArgumentException**
+   * public **Character** getLetter() - zwraca literę klasy, ***może być null!!!***
+   * public **void** setLetter() - ustawia literę klasy z zakresu "A-Z", w przeciwnym wypadku rzuca wyjątek **IllegalArgumentException**
+   * public **ArrayList<Student>** getStudents() - zwraca listę uczniów należących do klasy, ***może być null!!!***
+   * public **void** addStudent() - dodaje ucznia do klasy
+
+6. Student
+Klasa reprezentująca ucznia (rekord tabeli `students` z [bazy danych](./database.md)). Dziedziczy po klasie **User**, aby umożliwić zapisanie danych ucznia. ***Wybrane atrybuty mogą być typu null, jeżeli nie wszystkie dane zostały uzupełnione!!!***
+Atrybuty:
+   * private **SchoolGroup** schoolGroup - klasa do której należy uczeń
+Metody:
+   * public static **Student** readStudent() - generuje obiekt ucznia z rekordu bazy danych
+   * public static **ArrayList<Student>** readStudentArray() - generuje listę obiektów uczniów z bazy danych
+   * public **SchoolGroup** getSchoolGroup() - zwraca obiekt klasy, do której należy uczeń
+   * public **void** setSchoolGroup() - ustawia obiekt klasy, do której należy uczeń

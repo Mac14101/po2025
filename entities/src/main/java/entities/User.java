@@ -99,7 +99,7 @@ public class User extends DatabaseEntity {
     }
 
     /**
-     * Ustawia adres e-mail uzytkownika. Sprawdza poprawność adresu na podstawie RegEx, jeśli adres jest niepoprawny rzuca wyjątek IllegalArgumentException.
+     * Ustawia adres e-mail użytkownika. Sprawdza poprawność adresu na podstawie RegEx, jeśli adres jest niepoprawny rzuca wyjątek IllegalArgumentException.
      *
      * @param email adres e-mail
      * @throws IllegalArgumentException niepoprawny adres e-mail

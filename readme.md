@@ -106,6 +106,7 @@ deactivate UIController
 ## Więcej dokumentacji
 
 * [baza danych](./docs/database.md)
+* [encje](./docs/entities.md)
 * [moduł jexp](./docs/jexp.md)
 
 ## TODO
