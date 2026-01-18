@@ -197,4 +197,29 @@ public class ApplicationDatabase extends Database {
             throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<Lesson> getLessons(int teacherId) {
+        try {
+            String getLessosnsSQL = "SELECT L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=:tid;";
+            PreparedStatement getLessosnsStatement = this.getPreparedStatement(getLessosnsSQL);
+            getLessosnsStatement.setInt(1, teacherId);
+            ResultSet result = this.executeQueryStatement(getLessosnsStatement);
+            return Lesson.readLessonArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addLesson(Lesson lesson) {
+        try {
+            String addLesson = "INSERT INTO lessons (topic, date, ttid) VALUES (?, ?, ?);";
+            PreparedStatement addLessonStatement = this.getPreparedStatement(addLesson);
+            addLessonStatement.setString(1, lesson.getTopic());
+            addLessonStatement.setString(2, lesson.getDate());
+            addLessonStatement.setInt(3, lesson.getSchoolClass().getId());
+            this.executeUpdateStatement(addLessonStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

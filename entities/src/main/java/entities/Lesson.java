@@ -68,4 +68,12 @@ public class Lesson extends DatabaseEntity {
         this.date = date;
     }
 
+    public SchoolClass getSchoolClass() {
+        return this.schoolClass;
+    }
+
+    public void setSchoolClass(SchoolClass schoolClass) {
+        this.schoolClass = schoolClass;
+    }
+
 }
