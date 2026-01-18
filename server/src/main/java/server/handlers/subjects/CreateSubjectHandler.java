@@ -1,14 +1,15 @@
 package server.handlers.subjects;
 
-import database.ApplicationDatabase;
 import entities.Subject;
-import jexp.*;
+import jexp.JExpError;
+import jexp.Next;
+import jexp.Request;
+import jexp.Response;
+import server.handlers.DatabaseHandler;
 
-public class CreateSubjectHandler implements Handler {
-    private ApplicationDatabase database;
-
+public class CreateSubjectHandler extends DatabaseHandler {
     public CreateSubjectHandler() {
-        this.database = ApplicationDatabase.getInstance();
+        super();
     }
 
     @Override
