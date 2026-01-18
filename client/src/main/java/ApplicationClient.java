@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import entities.Subject;
 import entities.User;
 import entities.UserCredentials;
 import json.JSON;
@@ -94,6 +95,20 @@ public class ApplicationClient extends Client {
     public void createUser(User user) throws ClientError, JsonProcessingException {
         HttpRequest.Builder request = this.request("/user/");
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(user)));
+        this.fetch(request);
+    }
+
+    public ArrayList<Subject> getAllSubjects() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/subject/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Subject>>() {
+        });
+    }
+
+    public void createSubject(Subject subject) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/subject/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(subject)));
         this.fetch(request);
     }
 }
