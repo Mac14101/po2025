@@ -1,0 +1,30 @@
+package jexp.defaultHandlers;
+
+import jexp.*;
+import jexp.session.Manager;
+import jexp.session.Session;
+
+import java.util.List;
+
+public class SessionHandler implements Handler {
+    private final Manager sessionManager;
+
+    public SessionHandler() {
+        this.sessionManager = Manager.getInstance();
+    }
+
+    @Override
+    public void handle(Request request, Response response, Next next) throws JExpError {
+        List<String> header = request.getHeaders().get("Authorization");
+        if (header != null && !header.isEmpty()) {
+            if (header.getFirst().split(" ")[0].equals("Basic")) {
+                String token = header.getFirst().split(" ")[1];
+                Session session = this.sessionManager.getSession(token);
+                if (session != null) {
+                    request.setSessionObject(session);
+                }
+            }
+        }
+        next.next();
+    }
+}
