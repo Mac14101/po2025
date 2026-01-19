@@ -10,6 +10,7 @@ import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
 import server.handlers.authorization.AdminOnlyHandler;
+import server.handlers.classes.AllClassesHandler;
 import server.handlers.classes.CreateClassHandler;
 import server.handlers.students.AddStudentHandler;
 import server.handlers.students.AllStudentsHandler;
@@ -48,8 +49,8 @@ public class Main {
         server.get("/subject/", new AllSubjectsHandler());
         server.post("/subject/", new CreateSubjectHandler());
         //Trasy do manipulacji klasami - tylko administratorzy
-        server.use("/class/", adminOnlyHandler);
-        server.get("/class/", new AllSubjectsHandler());
+        //server.use("/class/", adminOnlyHandler);
+        server.get("/class/", new AllClassesHandler());
         server.post("/class/", new CreateClassHandler());
         //Trasy do manipulacji uczniami
         server.use("/student/", adminOnlyHandler);
