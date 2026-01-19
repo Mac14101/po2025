@@ -223,4 +223,18 @@ public class ApplicationClient extends Client {
         request.PUT(HttpRequest.BodyPublishers.ofString(JSON.stringify(attendance)));
         this.fetch(request);
     }
+
+    public ArrayList<Grade> getGradesList(int studentId) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/grade/" + String.valueOf(studentId) + "/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Grade>>() {
+        });
+    }
+
+    public void addGrade(int studentId, Grade grade) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/grade/" + String.valueOf(studentId) + "/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(grade)));
+        this.fetch(request);
+    }
 }
