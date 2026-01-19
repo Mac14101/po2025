@@ -2,6 +2,7 @@ package entities;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import json.JSON;
 import org.junit.Test;
 
 import java.util.ArrayList;

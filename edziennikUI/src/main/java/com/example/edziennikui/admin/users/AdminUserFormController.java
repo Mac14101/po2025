@@ -1,43 +1,84 @@
 package com.example.edziennikui.admin.users;
 
+import client.ApplicationClient;
+import client.Client;
+import entities.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import com.example.edziennikui.shared.AlertHelper;
+import javafx.stage.Stage;
 
 public class AdminUserFormController {
 
-    @FXML
-    private Label lblTitle;
-    @FXML
-    private TextField txtFirstName;
-    @FXML
-    private TextField txtLastName;
-    @FXML
-    private TextField txtEmail;
-    @FXML
-    private PasswordField txtPassword;
-    @FXML
-    private ComboBox<String> comboRole;
+    @FXML private TextField txtName;
+    @FXML private TextField txtSurname;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtPassword;
+    @FXML private ComboBox<User.Role> comboRole;
+
+    private User currentUser;
+    private boolean isEditMode = false;
 
     @FXML
     public void initialize() {
-        // Inicjalizacja ról
-        comboRole.getItems().addAll("Admin", "Nauczyciel", "Uczeń");
+        comboRole.getItems().setAll(User.Role.values());
     }
 
-        @FXML
-        private void handleSave() {
-            String role = comboRole.getValue();
-            System.out.println("Próba zapisu użytkownika: " + txtEmail.getText() + " z rolą: " + role);
+    public void setUserData(User user) {
+        this.currentUser = user;
+        this.isEditMode = true;
 
-            if (txtEmail.getText().isEmpty() || role == null) {
-                System.err.println("Błąd: Email i Rola są wymagane!");
+        txtEmail.setText(user.getEmail());
+        txtName.setText(user.getName());
+        txtSurname.setText(user.getSurname());
+        comboRole.setValue(user.getRole());
+
+        txtPassword.setPromptText("Wpisz nowe, aby zmienić");
+    }
+
+    @FXML
+    private void handleSave() {
+        try {
+            if (!isEditMode) {
+                currentUser = new User();
             }
-        }
 
-        @FXML
-        private void handleCancel() {
+            currentUser.setEmail(txtEmail.getText());
+            currentUser.setName(txtName.getText());
+            currentUser.setSurname(txtSurname.getText());
+            currentUser.setRole(comboRole.getValue());
+
+            if (!txtPassword.getText().isEmpty()) {
+                currentUser.setPassword(txtPassword.getText());
+            }
+
+            if (isEditMode) {
+                System.out.println("Aktualizacja użytkownika: " + currentUser.getId());
+            } else {
+                ApplicationClient.getInstance().createUser(currentUser);
+            }
+
+            AlertHelper.showInfo("Sukces", "Dane użytkownika zostały zapisane.");
+            closeWindow();
+
+        } catch (IllegalArgumentException e) {
+            AlertHelper.showWarning("Błąd danych", e.getMessage());
+        } catch (Client.ClientError e) {
+            AlertHelper.showError("Błąd serwera", "Nie udało się skomunikować z bazą: " + e.getMessage());
+        } catch (Exception e) {
+            AlertHelper.showError("Błąd", "Wystąpił nieoczekiwany problem: " + e.getMessage());
         }
+    }
+
+    @FXML
+    private void handleCancel() {
+        closeWindow();
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) txtEmail.getScene().getWindow();
+        stage.close();
+    }
+
 }

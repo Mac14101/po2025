@@ -1,5 +1,6 @@
 package com.example.edziennikui.shared;
 
+import entities.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -11,7 +12,7 @@ public class DashboardController {
     public void initialize() {
     }
 
-    public void setInfo(String role) {
-        lblUserRole.setText("Zalogowano jako: " + role);
+    public void setInfo(User user) {
+        lblUserRole.setText("Zalogowano jako: " + user.getName() + " " + user.getSurname());
     }
 }

@@ -1,3 +1,5 @@
+package client;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -15,6 +17,7 @@ public class Client extends Thread {
     public Client() {
         this.client = HttpClient.newHttpClient();
         this.baseUrl = "http://localhost";
+        this.setDaemon(true);
         this.start();
     }
 

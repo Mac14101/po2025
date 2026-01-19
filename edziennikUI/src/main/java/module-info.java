@@ -2,6 +2,12 @@ module com.example.edziennikui {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.desktop;
+    requires java.net.http;
+
+    requires client;
+    requires entities;
+    requires com.fasterxml.jackson.databind;
+    requires java.logging;
 
     opens com.example.edziennikui to javafx.fxml;
     opens com.example.edziennikui.admin.classes to javafx.fxml;

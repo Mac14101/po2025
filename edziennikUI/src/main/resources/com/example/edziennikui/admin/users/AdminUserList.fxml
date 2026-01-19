@@ -28,8 +28,8 @@
         <TableView fx:id="userTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colId" maxWidth="80.0" minWidth="80.0" prefWidth="50.0" text="ID" />
-                <TableColumn fx:id="colFirstName" text="Imię" />
-                <TableColumn fx:id="colLastName" text="Nazwisko" />
+                <TableColumn fx:id="colName" text="Imię" />
+                <TableColumn fx:id="colSurname" text="Nazwisko" />
                 <TableColumn fx:id="colEmail" text="Email / Login" />
                 <TableColumn fx:id="colRole" text="Rola" />
             </columns>
