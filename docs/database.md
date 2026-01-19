@@ -204,7 +204,7 @@ SELECT G.grade, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjec
 ```
 * pobieranie planu zajęć wybranego ucznia
 ```sql
-SELECT TT.day, TT.startTime, TT.endTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN subjects AS SB ON TT.sbid=SB.sbid INNER JOIN classes ON TT.cid=C.cid INNER JOIN students AS S ON C.cid=S.cid INNER JOIN users as U ON U.uid=S.uid INNER JOIN users AS T ON TT.tid=T.uid WHERE U.uid=:uid;
+SELECT TT.day, TT.startTime, TT.startTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=:uid;
 ```
 * pobiera obecność wybranego użytkownika
 ```sql
