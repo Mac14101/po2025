@@ -19,6 +19,7 @@ import server.handlers.authorization.TeacherOnlyHandler;
 import server.handlers.classes.AllClassesHandler;
 import server.handlers.classes.CreateClassHandler;
 import server.handlers.grades.AddGradeHandler;
+import server.handlers.grades.StudentGradesHandler;
 import server.handlers.grades.TeacherGradesListHandler;
 import server.handlers.lessons.AddLessonHandler;
 import server.handlers.lessons.TeacherLessonsHandler;
@@ -58,6 +59,7 @@ public class Main {
         server.use("/self/", studentOnlyHandler);
         server.use("/self/timetable/", new StudentTimeTableHandler());
         server.use("/self/attendance/", new StudentAttendanceHandler());
+        server.use("/self/grade/", new StudentGradesHandler());
         //Trasy do manipulacji użytkownikami - tylko administratorzy
         server.use("/user/", adminOnlyHandler);
         server.get("/user/", new AllUsersHandler());
