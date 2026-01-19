@@ -105,7 +105,7 @@ public class User extends DatabaseEntity {
      * @throws IllegalArgumentException niepoprawny adres e-mail
      */
     public void setEmail(String email) {
-        if (!email.matches("^[A-Za-z0-9_%+-]+@[A-Za-z]+.[A-Za-z]$")) {
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             throw new IllegalArgumentException("Invalid email address!");
         } else if (email.length() > 100) {
             throw new IllegalArgumentException("Email address is too long!");

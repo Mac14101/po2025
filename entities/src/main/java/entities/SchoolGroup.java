@@ -38,7 +38,8 @@ public class SchoolGroup extends DatabaseEntity {
     public static SchoolGroup readSchoolGroup(ResultSet resultSet) {
         Integer id = getIntColumn(resultSet, "cid");
         Integer number = getIntColumn(resultSet, "number");
-        Character letter = getStringColumn(resultSet, "letter").charAt(0);
+        String letterString = getStringColumn(resultSet, "letter");
+        Character letter = letterString == null ? null : letterString.charAt(0);
         return new SchoolGroup(id, number, letter);
     }
 

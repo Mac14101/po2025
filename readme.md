@@ -80,6 +80,9 @@ deactivate UIController
 * [serwer HTTP](./docs/server.md)
 * [baza danych](./docs/database.md)
 * [encje](./docs/entities.md)
+* [klient HTTP](./docs/client.md)
 * [moduł jexp](./docs/jexp.md)
 
 ## TODO
+
+1. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji

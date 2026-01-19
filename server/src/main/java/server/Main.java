@@ -15,6 +15,7 @@ import server.handlers.authorization.AdminOnlyHandler;
 import server.handlers.authorization.AdminTeacherOnlyHandler;
 import server.handlers.authorization.StudentOnlyHandler;
 import server.handlers.authorization.TeacherOnlyHandler;
+import server.handlers.classes.AllClassesHandler;
 import server.handlers.classes.CreateClassHandler;
 import server.handlers.lessons.AddLessonHandler;
 import server.handlers.lessons.TeacherLessonsHandler;
@@ -58,8 +59,8 @@ public class Main {
         server.get("/subject/", new AllSubjectsHandler());
         server.post("/subject/", new CreateSubjectHandler());
         //Trasy do manipulacji klasami - tylko administratorzy
-        server.use("/class/", adminOnlyHandler);
-        server.get("/class/", new AllSubjectsHandler());
+        //server.use("/class/", adminOnlyHandler);
+        server.get("/class/", new AllClassesHandler());
         server.post("/class/", new CreateClassHandler());
         //Trasy do manipulacji uczniami
         server.get("/student/:classId/", adminTeacherOnlyHandler);
@@ -70,6 +71,7 @@ public class Main {
         //Trasy do manipulacji planem zajęć
         server.use("/timetable/", adminOnlyHandler);
         server.get("/timetable/:classId/", new ClassTimeTableHandler());
+        server.post("/timetable/", new AddClassTimeTableHandler());
         server.post("/timetable//", new AddClassTimeTableHandler());
         //Trasy do manipulacji lekcjami
         server.use("/lesson/", teacherOnlyHandler);

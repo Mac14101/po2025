@@ -23,7 +23,7 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(studentsTable).execute();
         String subjectsTable = "CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQUE NOT NULL);";
         this.getPreparedStatement(subjectsTable).execute();
-        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sid) REFERENCES subjects(sbid));";
+        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sbid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid));";
         this.getPreparedStatement(timeTabelTable).execute();
         String lessonsTable = "CREATE TABLE IF NOT EXISTS lessons (lid INTEGER PRIMARY KEY, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INTEGER, FOREIGN KEY(ttid) REFERENCES time_table(ttid));";
         this.getPreparedStatement(lessonsTable).execute();
@@ -31,6 +31,13 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(attendanceTable).execute();
         String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
         this.getPreparedStatement(gradesTable).execute();
+        String attendanceTrigger = "CREATE TRIGGER IF NOT EXISTS attendance_lessons\n" +
+                "    AFTER INSERT ON lessons\n" +
+                "BEGIN\n" +
+                "    INSERT INTO attendance (sid, lid, status)\n" +
+                "    SELECT S.uid AS sid, NEW.lid, 'undefined' AS status FROM time_table AS TT INNER JOIN students AS S ON S.cid=TT.cid WHERE TT.ttid=NEW.ttid;\n" +
+                "END;";
+        this.getPreparedStatement(attendanceTrigger).execute();
         if (!this.getPreparedStatement("SELECT * FROM users;").executeQuery().next()) {
             String insertAdmin = "INSERT INTO users (email, uname, surname, password, role) VALUES (?, ?, ?, ?, ?);";
             PreparedStatement insertAdminStatement = this.getPreparedStatement(insertAdmin);
@@ -105,7 +112,7 @@ public class ApplicationDatabase extends Database {
 
     public void createSubject(Subject subject) {
         try {
-            String createSubjectSQL = "INSERT INTO subjects (name) VALUES (?);";
+            String createSubjectSQL = "INSERT INTO subjects (sbname) VALUES (?);";
             PreparedStatement createSubjectStatement = this.getPreparedStatement(createSubjectSQL);
             createSubjectStatement.setString(1, subject.getName());
             this.executeUpdateStatement(createSubjectStatement);
@@ -129,7 +136,7 @@ public class ApplicationDatabase extends Database {
             String createClassSQL = "INSERT INTO classes (number, letter) VALUES (?, ?);";
             PreparedStatement createClassStatement = this.getPreparedStatement(createClassSQL);
             createClassStatement.setInt(1, schoolGroup.getNumber());
-            createClassStatement.setString(1, String.valueOf(schoolGroup.getLetter()));
+            createClassStatement.setString(2, String.valueOf(schoolGroup.getLetter()));
             this.executeUpdateStatement(createClassStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -148,7 +155,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Student> getClassStudents(int classId) {
         try {
-            String selectStudentsSQL = "SELECT U.uname, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=?;";
+            String selectStudentsSQL = "SELECT U.uname, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid WHERE S.cid=?;";
             PreparedStatement selectStudentsStatement = this.getPreparedStatement(selectStudentsSQL);
             selectStudentsStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectStudentsStatement);
