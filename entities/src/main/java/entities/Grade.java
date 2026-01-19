@@ -1,13 +1,17 @@
 package entities;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+
 public class Grade extends DatabaseEntity {
     private Integer id;
-    private User student;
+    private Student student;
     private Subject subject;
-    private User teacher;
+    private Teacher teacher;
     private GradeName grade;
 
-    public Grade(Integer id, User student, Subject subject, User teacher, String grade) {
+    public Grade(Integer id, Student student, Subject subject, Teacher Teacher, String grade) {
         this.id = id;
         this.student = student;
         this.subject = subject;
@@ -25,6 +29,28 @@ public class Grade extends DatabaseEntity {
         this.grade = null;
     }
 
+    public static Grade readGrade(ResultSet resultSet) {
+        Integer id = getIntColumn(resultSet, "gid");
+        Student student = Student.readStudent(resultSet);
+        Subject subject = Subject.readSubject(resultSet);
+        Teacher teacher = Teacher.readTeacher(resultSet);
+        String grade = getStringColumn(resultSet, "grade");
+        return new Grade(id, student, subject, teacher, grade);
+    }
+
+    public static ArrayList<Grade> readGrades(ResultSet resultSet) {
+        try {
+            ArrayList<Grade> grades = new ArrayList<>();
+            while (resultSet.next()) {
+                grades.add(readGrade(resultSet));
+            }
+            return grades;
+        } catch (SQLException e) {
+            return null;
+        }
+
+    }
+
     public Integer getId() {
         return id;
     }
@@ -33,11 +59,11 @@ public class Grade extends DatabaseEntity {
         this.id = id;
     }
 
-    public User getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(User student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
@@ -57,11 +83,11 @@ public class Grade extends DatabaseEntity {
         this.grade = grade;
     }
 
-    public User getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(User teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 
