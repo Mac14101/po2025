@@ -11,6 +11,8 @@ import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
 import server.handlers.authorization.AdminOnlyHandler;
 import server.handlers.authorization.AdminTeacherOnlyHandler;
+import server.handlers.authorization.StudentOnlyHandler;
+import server.handlers.authorization.TeacherOnlyHandler;
 import server.handlers.classes.CreateClassHandler;
 import server.handlers.students.AddStudentHandler;
 import server.handlers.students.AllStudentsHandler;
@@ -34,6 +36,8 @@ public class Main {
 
         AdminOnlyHandler adminOnlyHandler = new AdminOnlyHandler();
         AdminTeacherOnlyHandler adminTeacherOnlyHandler = new AdminTeacherOnlyHandler();
+        TeacherOnlyHandler teacherOnlyHandler = new TeacherOnlyHandler();
+        StudentOnlyHandler studentOnlyHandler = new StudentOnlyHandler();
 
         //Trasy uwierzytelniania
         server.use("/", new SessionHandler());
