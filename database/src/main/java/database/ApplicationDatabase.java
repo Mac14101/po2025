@@ -112,7 +112,7 @@ public class ApplicationDatabase extends Database {
 
     public void createSubject(Subject subject) {
         try {
-            String createSubjectSQL = "INSERT INTO subjects (name) VALUES (?);";
+            String createSubjectSQL = "INSERT INTO subjects (sbname) VALUES (?);";
             PreparedStatement createSubjectStatement = this.getPreparedStatement(createSubjectSQL);
             createSubjectStatement.setString(1, subject.getName());
             this.executeUpdateStatement(createSubjectStatement);
