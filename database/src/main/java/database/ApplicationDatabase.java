@@ -172,7 +172,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getClassSchedule(int classId) {
         try {
-            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, T.uname, T.surname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid;";
+            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=?;";
             PreparedStatement selectSchoolClassesStatement = this.getPreparedStatement(selectSchoolClassesSQL);
             selectSchoolClassesStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectSchoolClassesStatement);
@@ -200,10 +200,10 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Lesson> getLessons(int teacherId) {
         try {
-            String getLessosnsSQL = "SELECT L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=:tid;";
-            PreparedStatement getLessosnsStatement = this.getPreparedStatement(getLessosnsSQL);
-            getLessosnsStatement.setInt(1, teacherId);
-            ResultSet result = this.executeQueryStatement(getLessosnsStatement);
+            String getLessosnsSQL = "SELECT L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=?;";
+            PreparedStatement getLessonsStatement = this.getPreparedStatement(getLessosnsSQL);
+            getLessonsStatement.setInt(1, teacherId);
+            ResultSet result = this.executeQueryStatement(getLessonsStatement);
             return Lesson.readLessonArray(result);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -219,6 +219,31 @@ public class ApplicationDatabase extends Database {
             addLessonStatement.setInt(3, lesson.getSchoolClass().getId());
             this.executeUpdateStatement(addLessonStatement);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Student> getAttendanceList(int lessonId) {
+        try {
+            String getAttendanceListSQL = "SELECT A.status, U.uname, U.surname, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON A.sid=U.uid INNER JOIN lessons AS L ON L.lid=A.lid WHERE L.lid=?;";
+            PreparedStatement getAttendanceListStatement = this.getPreparedStatement(getAttendanceListSQL);
+            getAttendanceListStatement.setInt(1, lessonId);
+            ResultSet result = this.executeQueryStatement(getAttendanceListStatement);
+            return Student.readStudentArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateAttendance(int lessonId, Attendance attendance) {
+        try {
+            String updateAttendanceSQL = "UPDATE attendance SET status=? WHERE lid=? AND sid=?;";
+            PreparedStatement updateAttendanceStatement = this.getPreparedStatement(updateAttendanceSQL);
+            updateAttendanceStatement.setString(1, attendance.getStatus().toString());
+            updateAttendanceStatement.setInt(2, lessonId);
+            updateAttendanceStatement.setInt(3, attendance.getStudent().getId());
+            this.executeUpdateStatement(updateAttendanceStatement);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

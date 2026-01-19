@@ -5,11 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Attendance extends DatabaseEntity {
-    private User student;
+    private Student student;
     private Lesson lesson;
     private Status status;
 
-    public Attendance(User student, Lesson lesson, String status) {
+    public Attendance(Student student, Lesson lesson, String status) {
         this.student = student;
         this.lesson = lesson;
         if (status != null) {
@@ -24,7 +24,7 @@ public class Attendance extends DatabaseEntity {
     }
 
     public static Attendance readAttendance(ResultSet resultSet) {
-        User student = User.readUser(resultSet);
+        Student student = Student.readStudent(resultSet);
         Lesson lesson = Lesson.readLesson(resultSet);
         String status = getStringColumn(resultSet, "status");
         return new Attendance(student, lesson, status);
@@ -43,11 +43,11 @@ public class Attendance extends DatabaseEntity {
 
     }
 
-    public User getStudent() {
+    public Student getStudent() {
         return student;
     }
 
-    public void setStudent(User student) {
+    public void setStudent(Student student) {
         this.student = student;
     }
 
@@ -68,7 +68,7 @@ public class Attendance extends DatabaseEntity {
     }
 
     public enum Status {
-        PRESENT("present"), ABSENT("absent"), LATE("late");
+        PRESENT("present"), ABSENT("absent"), LATE("late"), UNDEFINED("undefined");
         private final String status;
 
         private Status(String status) {

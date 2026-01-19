@@ -111,7 +111,7 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 ### Pobieranie danych z tabel
 
 * SELECT uid, email, uname, surname, role FROM users; - zwraca listę wszystkich użytkowników
-* SELECT uid, email, password FROM users WHERE email=:email; - zwraca dane potrzebne do uwierzytelnienia i utworzenia sesji
+* SELECT uid, email, password, role FROM users WHERE email=:email; - zwraca dane potrzebne do uwierzytelnienia i utworzenia sesji
 * SELECT cid, number, letter FROM classes; - pobiera wszystkie klasy
 * SELECT sbname FROM subjects; - pobiera wszystkie przedmioty
 * SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid; - pobiera wszystkich uczniów razem z informację do której klasy należą
@@ -124,3 +124,7 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 * SELECT TT.day, TT.startTime, TT.endTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN subjects AS SB ON TT.sbid=SB.sbid INNER JOIN classes ON TT.cid=C.cid INNER JOIN students AS S ON C.cid=S.cid INNER JOIN users as U ON U.uid=S.uid INNER JOIN users AS T ON TT.tid=T.uid WHERE U.uid=:uid; - pobieranie planu zajęć wybranego ucznia
 * SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=:uid; - pobiera obecność wybranego użytkownika
 * SELECT G.grade, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=:uid;
+
+### Aktualizacja danych w tabeli
+
+* UPDATE attendance SET status=:status WHERE lid=:lid AND sid=:sid; - aktualizacja obecności ucznia na zajęciach
