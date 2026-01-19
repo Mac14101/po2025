@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class ApplicationDatabase extends Database {
     private static ApplicationDatabase instance = new ApplicationDatabase();
-    
 
     public static ApplicationDatabase getInstance() {
         return instance;
@@ -231,13 +230,13 @@ public class ApplicationDatabase extends Database {
         }
     }
 
-    public ArrayList<Student> getAttendanceList(int lessonId) {
+    public ArrayList<Attendance> getAttendanceList(int lessonId) {
         try {
             String getAttendanceListSQL = "SELECT A.status, U.uname, U.surname, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON A.sid=U.uid INNER JOIN lessons AS L ON L.lid=A.lid WHERE L.lid=?;";
             PreparedStatement getAttendanceListStatement = this.getPreparedStatement(getAttendanceListSQL);
             getAttendanceListStatement.setInt(1, lessonId);
             ResultSet result = this.executeQueryStatement(getAttendanceListStatement);
-            return Student.readStudentArray(result);
+            return Attendance.readAttendanceArray(result);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

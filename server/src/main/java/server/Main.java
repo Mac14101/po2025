@@ -6,12 +6,21 @@ import jexp.Router;
 import jexp.Server;
 import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
+import server.handlers.attendance.LessonAttendanceListHandler;
+import server.handlers.attendance.LessonAttendanceUpdateHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
 import server.handlers.authorization.AdminOnlyHandler;
+import server.handlers.authorization.AdminTeacherOnlyHandler;
+import server.handlers.authorization.StudentOnlyHandler;
+import server.handlers.authorization.TeacherOnlyHandler;
 import server.handlers.classes.AllClassesHandler;
 import server.handlers.classes.CreateClassHandler;
+import server.handlers.grades.AddGradeHandler;
+import server.handlers.grades.TeacherGradesListHandler;
+import server.handlers.lessons.AddLessonHandler;
+import server.handlers.lessons.TeacherLessonsHandler;
 import server.handlers.students.AddStudentHandler;
 import server.handlers.students.AllStudentsHandler;
 import server.handlers.students.StudentsClassHandler;
@@ -33,6 +42,9 @@ public class Main {
         Server server = new Server();
 
         AdminOnlyHandler adminOnlyHandler = new AdminOnlyHandler();
+        AdminTeacherOnlyHandler adminTeacherOnlyHandler = new AdminTeacherOnlyHandler();
+        TeacherOnlyHandler teacherOnlyHandler = new TeacherOnlyHandler();
+        StudentOnlyHandler studentOnlyHandler = new StudentOnlyHandler();
 
         //Trasy uwierzytelniania
         server.use("/", new SessionHandler());
@@ -53,14 +65,28 @@ public class Main {
         server.get("/class/", new AllClassesHandler());
         server.post("/class/", new CreateClassHandler());
         //Trasy do manipulacji uczniami
-        server.use("/student/", adminOnlyHandler);
+        server.get("/student/:classId/", adminTeacherOnlyHandler);
         server.get("/student/:classId/", new StudentsClassHandler());
+        server.use("/student/", adminOnlyHandler);
         server.get("/student/", new AllStudentsHandler());
         server.post("/student/", new AddStudentHandler());
         //Trasy do manipulacji planem zajęć
         server.use("/timetable/", adminOnlyHandler);
         server.get("/timetable/:classId/", new ClassTimeTableHandler());
         server.post("/timetable/", new AddClassTimeTableHandler());
+        server.post("/timetable//", new AddClassTimeTableHandler());
+        //Trasy do manipulacji lekcjami
+        server.use("/lesson/", teacherOnlyHandler);
+        server.get("/lesson/", new TeacherLessonsHandler());
+        server.post("/lesson/", new AddLessonHandler());
+        //Trasy do manipulacji obecnościami
+        server.use("/attendance/", teacherOnlyHandler);
+        server.get("/attendance/:lessonId/", new LessonAttendanceListHandler());
+        server.put("/attendance/:lessonId/", new LessonAttendanceUpdateHandler());
+        //Trasy do manipulacji ocenami
+        server.use("/grade/", teacherOnlyHandler);
+        server.get("/grade/:studentId/", new TeacherGradesListHandler());
+        server.post("/grade/:studentId/", new AddGradeHandler());
         server.listen(8080);
     }
 }
