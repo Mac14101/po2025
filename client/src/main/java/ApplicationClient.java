@@ -209,4 +209,18 @@ public class ApplicationClient extends Client {
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(lesson)));
         this.fetch(request);
     }
+
+    public ArrayList<Attendance> getAttendanceList(int lessonId) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/attendance/" + String.valueOf(lessonId) + "/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Attendance>>() {
+        });
+    }
+
+    public void updateAttendance(int lessonId, Attendance attendance) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/attendance/" + String.valueOf(lessonId) + "/");
+        request.PUT(HttpRequest.BodyPublishers.ofString(JSON.stringify(attendance)));
+        this.fetch(request);
+    }
 }
