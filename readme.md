@@ -34,13 +34,13 @@ Najważniejsze funkcje są zaznaczone pogrubioną czcionką.
     * wyświetlanie listy ostatnich lekcji (`/lesson/` **GET**)
     * dodawanie lekcji (`/lesson/` **POST**)
     * wyświetlanie listy obecności na lekcji (`/attendance/:lessonId/` **GET**)
-    * dodawanie obecności ucznia na lekcji (`/attendance/:lessonId/` **POST**)
+    * aktualizacja obecności ucznia na lekcji (`/attendance/:lessonId/` **PUT**)
     * wyświetlanie ocen ucznia wystawionych przez zalogowanego nauczyciela (`/grade/:studentId/` **GET**)
     * dodawanie oceny ucznia (`/grade/:studentId/` **POST**)
 3. Uczeń(student)
-    * wyświetlanie planu zajęć (`/student/timetable/` **GET**)
-    * wyświetlanie obecności (`/student/attendance/` **GET**)
-    * wyświetlanie ocen  (`/student/grade/` **GET**)
+    * wyświetlanie planu zajęć (`/self/timetable/` **GET**)
+    * wyświetlanie obecności (`/self/attendance/` **GET**)
+    * wyświetlanie ocen  (`/self/grade/` **GET**)
 
 ## Działanie aplikacji
 
@@ -74,29 +74,6 @@ UIController --> User : Wyświetlenie informacji
 deactivate UIController
 @enduml
 ```
-
-## Serwer i endpointy API
-
-1. Uwierzytelnianie
-    * `/` - odczytanie nagłówka `Authorization` i znalezienie odpowiedniego obiektu sesji
-    * `/session/` - endpoint odświeżający token uwierzytelniania
-    * `/login/` - logowanie i ustawianie sesji
-    * `/logout/` - wylogowanie i zniszczenie sesji
-2. Konta użytkowników
-    * `/user/` **GET** - lista wszystkich użytkowników
-    * `/user/` **POST** - tworzy nowego użytkownika
-3. Przedmioty szkolne
-    * `/subject/` **GET** - lista wszystkich przedmiotów (***nie zaimplementowano***)
-    * `/subject/` **POST** - tworzy nowy przedmiot (***nie zaimplementowano***)
-4. Klasy
-    * `/class/` **GET** - lista wszystkich klas (***nie zaimplementowano***)
-    * `/class/` **POST** - tworzy nową klasę (***nie zaimplementowano***)
-5. Uczniowie
-    * `/student/` **GET** - lista wszystkich uczniów (***nie zaimplementowano***)
-    * `/student/:classId` **GET** - lista uczniów w klasie o id **classId** (***nie zaimplementowano***)
-    * `/student/` **POST** - dodaje wybranego ucznia do wybranej klasy (***nie zaimplementowano***)
-6. Plan zajęć
-    * `/timetable/:classId` **GET** - lista zajęć z planu zajęć klasy (***nie zaimplementowano***)
 
 ## Więcej dokumentacji
 
