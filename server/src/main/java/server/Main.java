@@ -17,6 +17,8 @@ import server.handlers.authorization.StudentOnlyHandler;
 import server.handlers.authorization.TeacherOnlyHandler;
 import server.handlers.classes.AllClassesHandler;
 import server.handlers.classes.CreateClassHandler;
+import server.handlers.grades.AddGradeHandler;
+import server.handlers.grades.TeacherGradesListHandler;
 import server.handlers.lessons.AddLessonHandler;
 import server.handlers.lessons.TeacherLessonsHandler;
 import server.handlers.students.AddStudentHandler;
@@ -81,6 +83,10 @@ public class Main {
         server.use("/attendance/", teacherOnlyHandler);
         server.get("/attendance/:lessonId/", new LessonAttendanceListHandler());
         server.put("/attendance/:lessonId/", new LessonAttendanceUpdateHandler());
+        //Trasy do manipulacji ocenami
+        server.use("/grade/", teacherOnlyHandler);
+        server.get("/grade/:studentId/", new TeacherGradesListHandler());
+        server.post("/grade/:studentId/", new AddGradeHandler());
         server.listen(8080);
     }
 }
