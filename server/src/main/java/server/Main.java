@@ -14,6 +14,8 @@ import server.handlers.authorization.AdminTeacherOnlyHandler;
 import server.handlers.authorization.StudentOnlyHandler;
 import server.handlers.authorization.TeacherOnlyHandler;
 import server.handlers.classes.CreateClassHandler;
+import server.handlers.lessons.AddLessonHandler;
+import server.handlers.lessons.TeacherLessonsHandler;
 import server.handlers.students.AddStudentHandler;
 import server.handlers.students.AllStudentsHandler;
 import server.handlers.students.StudentsClassHandler;
@@ -67,6 +69,10 @@ public class Main {
         server.use("/timetable/", adminOnlyHandler);
         server.get("/timetable/:classId/", new ClassTimeTableHandler());
         server.post("/timetable//", new AddClassTimeTableHandler());
+        //Trasy do manipulacji lekcjami
+        server.use("/lesson/", teacherOnlyHandler);
+        server.get("/lesson/", new TeacherLessonsHandler());
+        server.post("/lesson/", new AddLessonHandler());
         server.listen(8080);
     }
 }
