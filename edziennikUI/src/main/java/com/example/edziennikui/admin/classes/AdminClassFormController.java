@@ -1,14 +1,16 @@
 package com.example.edziennikui.admin.classes;
 
+import client.ApplicationClient;
+import com.example.edziennikui.shared.AlertHelper;
+import entities.SchoolGroup;
 import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 public class AdminClassFormController {
 
-    @FXML private Label lblTitle;
-    @FXML private TextField txtClassName;
+    @FXML private TextField txtNumber;
+    @FXML private TextField txtLetter;
 
     @FXML
     public void initialize() {
@@ -16,9 +18,46 @@ public class AdminClassFormController {
 
     @FXML
     private void handleSave() {
+        try {
+            if (txtNumber.getText().isEmpty() || txtLetter.getText().isEmpty()) {
+                AlertHelper.showWarning("Brak danych", "Proszę uzupełnić numer i literę klasy!");
+                return;
+            }
+            SchoolGroup newClass = new SchoolGroup();
+
+            newClass.setNumber(Integer.parseInt(txtNumber.getText()));
+
+            String letterInput = txtLetter.getText().trim().toUpperCase();
+            newClass.setLetter(letterInput.charAt(0));
+
+            System.out.println("DEBUG: Wysyłam numer: " + newClass.getNumber());
+            System.out.println("DEBUG: Wysyłam literę: '" + newClass.getLetter() + "'");
+
+            try {
+                ApplicationClient.getInstance().createClass(newClass);
+                System.out.println("DEBUG: Klient wysłał żądanie bez błędu.");
+            } catch (Exception _) {
+            }
+            ApplicationClient.getInstance().createClass(newClass);
+
+            AlertHelper.showInfo("Sukces", "Klasa została dodana.");
+            closeWindow();
+        } catch (NumberFormatException e) {
+            AlertHelper.showWarning("Błąd danych", "Numer klasy musi być liczbą!");
+        } catch (IllegalArgumentException e) {
+            AlertHelper.showWarning("Błąd walidacji", "Litera musi być z zakresu A-Z!");
+        } catch (Exception e) {
+            AlertHelper.showError("Błąd", "Nie udało się zapisać klasy: " + e.getMessage());
+        }
     }
 
     @FXML
     private void handleCancel() {
+        closeWindow();
+    }
+
+    private void closeWindow() {
+        Stage stage = (Stage) txtNumber.getScene().getWindow();
+        stage.close();
     }
 }

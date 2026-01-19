@@ -16,10 +16,13 @@
             </font>
         </Label>
 
-        <VBox spacing="5.0">
+        <VBox spacing="10.0">
             <children>
-                <Label text="Nazwa Klasy:" />
-                <TextField fx:id="txtClassName"  />
+                <Label text="Numer klasy:" />
+                <TextField fx:id="txtNumber" promptText="Wpisz cyfrę..." />
+
+                <Label text="Litera klasy:" />
+                <TextField fx:id="txtLetter" promptText="Wpisz literę..." />
             </children>
         </VBox>
 

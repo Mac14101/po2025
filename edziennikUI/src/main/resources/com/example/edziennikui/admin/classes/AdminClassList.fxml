@@ -22,7 +22,6 @@
                 <TableColumn fx:id="colId"  text="ID" />
                 <TableColumn fx:id="colNumber" text="Numer klasy" />
                 <TableColumn fx:id="colLetter" text="Litera klasy" />
-                <TableColumn fx:id="colStudentCount" text="Liczba Uczniów" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

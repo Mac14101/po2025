@@ -20,7 +20,6 @@
                                 <Font name="System Bold" size="24.0" />
                             </font>
                         </Label>
-                        <Label fx:id="lblTutor" text="Wychowawca: [Imię i Nazwisko]" textFill="#7f8c8d" />
                     </children>
                 </VBox>
                 <Button mnemonicParsing="false" onAction="#handleBack" text="← Powrót do listy klas" />
