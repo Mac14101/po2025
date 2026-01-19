@@ -31,7 +31,7 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(attendanceTable).execute();
         String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
         this.getPreparedStatement(gradesTable).execute();
-        String attendanceTrigger = "CREATE TRIGGER attendance_lessons\n" +
+        String attendanceTrigger = "CREATE TRIGGER IF NOT EXISTS attendance_lessons\n" +
                 "    AFTER INSERT ON lessons\n" +
                 "BEGIN\n" +
                 "    INSERT INTO attendance (sid, lid, status)\n" +
@@ -145,7 +145,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Student> getAllStudents() {
         try {
-            String selectStudentsSQL = "SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid;";
+            String selectStudentsSQL = "SELECT U.uname, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid;";
             ResultSet result = this.executeQueryStatement(this.getPreparedStatement(selectStudentsSQL));
             return Student.readStudentArray(result);
         } catch (SQLException e) {
@@ -155,7 +155,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Student> getClassStudents(int classId) {
         try {
-            String selectStudentsSQL = "SELECT U.name, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=?;";
+            String selectStudentsSQL = "SELECT U.uname, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=?;";
             PreparedStatement selectStudentsStatement = this.getPreparedStatement(selectStudentsSQL);
             selectStudentsStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectStudentsStatement);

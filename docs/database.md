@@ -176,11 +176,11 @@ SELECT sbname FROM subjects;
 ```
 * pobiera wszystkich uczniów razem z informację do której klasy należą
 ```sql
-SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid;
+SELECT U.uname, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid;
 ```
 * pobiera wszystkich uczniów przypisanych do wybranej klasy
 ```sql
-SELECT U.name, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=:cid;
+SELECT U.uname, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=:cid;
 ```
 * pobiera tygodniowy plan zajęć dla wybranej klasy
 ```sql

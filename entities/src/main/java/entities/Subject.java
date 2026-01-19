@@ -30,7 +30,7 @@ public class Subject extends DatabaseEntity {
      */
     public static Subject readSubject(ResultSet resultSet) {
         Integer id = getIntColumn(resultSet, "sid");
-        String name = getStringColumn(resultSet, "sname");
+        String name = getStringColumn(resultSet, "sbname");
         return new Subject(id, name);
     }
 

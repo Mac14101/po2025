@@ -59,7 +59,7 @@ public class Main {
         //Trasy do manipulacji planem zajęć
         server.use("/timetable/", adminOnlyHandler);
         server.get("/timetable/:classId/", new ClassTimeTableHandler());
-        server.post("/timetable//", new AddClassTimeTableHandler());
+        server.post("/timetable/", new AddClassTimeTableHandler());
         server.listen(8080);
     }
 }
