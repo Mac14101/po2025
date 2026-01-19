@@ -216,6 +216,9 @@ public class Request {
      * @param depth głębokość parametru
      */
     public void readParam(String name, int depth) {
+        if (this.route.length <= depth) {
+            return;
+        }
         this.params.put(name, this.route[depth]);
         this.route[depth] = name;
     }

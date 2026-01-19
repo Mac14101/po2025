@@ -31,6 +31,13 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(attendanceTable).execute();
         String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
         this.getPreparedStatement(gradesTable).execute();
+        String attendanceTrigger = "CREATE TRIGGER attendance_lessons\n" +
+                "    AFTER INSERT ON lessons\n" +
+                "BEGIN\n" +
+                "    INSERT INTO attendance (sid, lid, status)\n" +
+                "    SELECT S.uid AS sid, NEW.lid, 'undefined' AS status FROM time_table AS TT INNER JOIN students AS S ON S.cid=TT.cid WHERE TT.ttid=NEW.ttid;\n" +
+                "END;";
+        this.getPreparedStatement(attendanceTrigger).execute();
         if (!this.getPreparedStatement("SELECT * FROM users;").executeQuery().next()) {
             String insertAdmin = "INSERT INTO users (email, uname, surname, password, role) VALUES (?, ?, ?, ?, ?);";
             PreparedStatement insertAdminStatement = this.getPreparedStatement(insertAdmin);
@@ -172,7 +179,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getClassSchedule(int classId) {
         try {
-            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, T.uname, T.surname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid;";
+            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=?;";
             PreparedStatement selectSchoolClassesStatement = this.getPreparedStatement(selectSchoolClassesSQL);
             selectSchoolClassesStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectSchoolClassesStatement);
@@ -194,6 +201,83 @@ public class ApplicationDatabase extends Database {
             addClassScheduleStatement.setInt(6, schoolClass.getSubject().getId());
             this.executeUpdateStatement(addClassScheduleStatement);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Lesson> getLessons(int teacherId) {
+        try {
+            String getLessosnsSQL = "SELECT L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=?;";
+            PreparedStatement getLessonsStatement = this.getPreparedStatement(getLessosnsSQL);
+            getLessonsStatement.setInt(1, teacherId);
+            ResultSet result = this.executeQueryStatement(getLessonsStatement);
+            return Lesson.readLessonArray(result);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addLesson(Lesson lesson) {
+        try {
+            String addLesson = "INSERT INTO lessons (topic, date, ttid) VALUES (?, ?, ?);";
+            PreparedStatement addLessonStatement = this.getPreparedStatement(addLesson);
+            addLessonStatement.setString(1, lesson.getTopic());
+            addLessonStatement.setString(2, lesson.getDate());
+            addLessonStatement.setInt(3, lesson.getSchoolClass().getId());
+            this.executeUpdateStatement(addLessonStatement);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Student> getAttendanceList(int lessonId) {
+        try {
+            String getAttendanceListSQL = "SELECT A.status, U.uname, U.surname, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON A.sid=U.uid INNER JOIN lessons AS L ON L.lid=A.lid WHERE L.lid=?;";
+            PreparedStatement getAttendanceListStatement = this.getPreparedStatement(getAttendanceListSQL);
+            getAttendanceListStatement.setInt(1, lessonId);
+            ResultSet result = this.executeQueryStatement(getAttendanceListStatement);
+            return Student.readStudentArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateAttendance(int lessonId, Attendance attendance) {
+        try {
+            String updateAttendanceSQL = "UPDATE attendance SET status=? WHERE lid=? AND sid=?;";
+            PreparedStatement updateAttendanceStatement = this.getPreparedStatement(updateAttendanceSQL);
+            updateAttendanceStatement.setString(1, attendance.getStatus().toString());
+            updateAttendanceStatement.setInt(2, lessonId);
+            updateAttendanceStatement.setInt(3, attendance.getStudent().getId());
+            this.executeUpdateStatement(updateAttendanceStatement);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Grade> getStudentGrades(int studentId, int teacherId) {
+        try {
+            String getStudentGrades = "SELECT G.grade, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=? AND G.sid=?;";
+            PreparedStatement getStudentsGrades = this.getPreparedStatement(getStudentGrades);
+            getStudentsGrades.setInt(1, teacherId);
+            getStudentsGrades.setInt(2, studentId);
+            ResultSet result = this.executeQueryStatement(getStudentsGrades);
+            return Grade.readGradesArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addStudentGrade(int studentId, int teacherId, Grade grade) {
+        try {
+            String addStudentGradeSQL = "INSERT INTO grades (sid, sbid, tid, grade) VALUES (?, ?, ?, ?);";
+            PreparedStatement addStudentGradeStatement = this.getPreparedStatement(addStudentGradeSQL);
+            addStudentGradeStatement.setInt(1, studentId);
+            addStudentGradeStatement.setString(2, grade.getSubject().getName());
+            addStudentGradeStatement.setInt(3, teacherId);
+            addStudentGradeStatement.setString(4, grade.getGrade().toString());
+            this.executeUpdateStatement(addStudentGradeStatement);
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }

@@ -13,13 +13,16 @@ import java.util.ArrayList;
 public class Student extends User {
     private SchoolGroup schoolGroup;
 
-    public Student(Integer id, String email, String name, String surname, String password, String role, SchoolGroup schoolGroup) {
-        super(id, email, name, surname, password, role);
+    public Student(Integer id, String email, String name, String surname, String password, SchoolGroup schoolGroup) {
+        super(id, email, name, surname, password, Role.STUDENT.toString());
         this.schoolGroup = schoolGroup;
     }
 
     public Student(User user, SchoolGroup schoolGroup) {
         super(user.getId(), user.getEmail(), user.getName(), user.getSurname(), user.getPassword(), user.getRole().toString());
+        if (this.getRole() != Role.STUDENT) {
+            throw new IllegalArgumentException("Wrong role");
+        }
         this.schoolGroup = schoolGroup;
     }
 
@@ -74,5 +77,9 @@ public class Student extends User {
      */
     public void setSchoolGroup(SchoolGroup schoolGroup) {
         this.schoolGroup = schoolGroup;
+    }
+
+    @Override
+    public void setRole(Role role) {
     }
 }

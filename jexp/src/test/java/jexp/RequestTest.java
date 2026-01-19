@@ -127,9 +127,11 @@ public class RequestTest {
         Mockito.when(exchange.getRequestHeaders()).thenReturn(new Headers());
         Mockito.when(exchange.getRequestURI()).thenReturn(new URI("http://localhost:8080/a/2/c"));
         Request request = new Request(exchange);
-        request.readParam(":id", 1);
-        assertEquals("2", request.getParam("id"));
-        assertArrayEquals(new String[]{"a", ":id", "c"}, request.getRoute());
+        request.readParam(":param1", 1);
+        assertEquals("2", request.getParam("param1"));
+        assertArrayEquals(new String[]{"a", ":param1", "c"}, request.getRoute());
+        request.readParam(":param2", 3);
+        assertNull(request.getParam("param2"));
     }
 
     @Test
