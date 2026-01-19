@@ -39,6 +39,8 @@ public class AuthenticationHandler extends DatabaseHandler {
         }
         if (user.getPassword().equals(credentials.getPassword())) {
             String token = request.logIn(user.getId(), user.getEmail());
+            request.setSession("username", null);
+            request.setSession("email", user.getEmail());
             request.setSession("userRole", user.getRole().toString());
             response.status(200);
             response.type("text/plain");

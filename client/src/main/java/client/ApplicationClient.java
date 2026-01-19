@@ -197,4 +197,95 @@ public class ApplicationClient extends Client {
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(student)));
         this.fetch(request);
     }
+
+    /**
+     * Pobiera listę lekcji nauczyciela, które już się odbyły, wysyła żądanie HTTP (`/lesson/` GET).
+     *
+     * @return lista lekcji poprowadzonych przez nauczyciela
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public ArrayList<Lesson> getLessons() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/lesson/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Lesson>>() {
+        });
+    }
+
+    /**
+     * Dodaje nową lekcję, automatycznie ustawia obecność wszystkich uczniów klasy na wartość "undefined",
+     * wysyła żądanie HTTP (`/lesson/` POST).
+     *
+     * @param lesson obiekt reprezentujący lekcję
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public void addLesson(Lesson lesson) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/lesson/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(lesson)));
+        this.fetch(request);
+    }
+
+    /**
+     * Pobiera listę obecności uczniów na wybranej lekcji o numerze id lessonId, wysyła żądanie HTTP (`/attendance/:lessonId/` GET).
+     *
+     * @param lessonId numer id lekcji, której listę obecności należy pobrać
+     * @return lista obecności uczniów na lekcji
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public ArrayList<Attendance> getAttendanceList(int lessonId) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/attendance/" + String.valueOf(lessonId) + "/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Attendance>>() {
+        });
+    }
+
+    /**
+     * Aktualizuje status obecności ucznia na wybranej lekcji, wysyła żądanie HTTP (`/lesson/` POST).
+     *
+     * @param lessonId   numer id lekcji, na której należy zmienić obecność ucznia
+     * @param attendance obiekt reprezentujący status obecności
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     * @
+     */
+    public void updateAttendance(int lessonId, Attendance attendance) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/attendance/" + String.valueOf(lessonId) + "/");
+        request.PUT(HttpRequest.BodyPublishers.ofString(JSON.stringify(attendance)));
+        this.fetch(request);
+    }
+
+    /**
+     * Pobiera listę ocen wybranego ucznia o numerze studentId, oceny muszą być wystawione przez aktualnie
+     * zalogowanego nauczyciela, wysyła żądanie HTTP (`/grades/:studentId/` GET).
+     *
+     * @param studentId numer id ucznia, którego listę ocen należy pobrać
+     * @return lista ocen ucznia, które wystawił zalogowany nauczyciel
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public ArrayList<Grade> getGradesList(int studentId) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/grade/" + String.valueOf(studentId) + "/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Grade>>() {
+        });
+    }
+
+    /**
+     * Wstawia ocenę wybranemu uczniowi o numerze id studentId, wysyła żądanie HTTP (`/grades/:studentId/` GET).
+     *
+     * @param studentId numer id ucznia, któremu należy wstawić ocenę
+     * @param grade     obiekt reprezentujący ocene do wstawienia
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public void addGrade(int studentId, Grade grade) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/grade/" + String.valueOf(studentId) + "/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(grade)));
+        this.fetch(request);
+    }
 }
