@@ -6,6 +6,8 @@ import jexp.Router;
 import jexp.Server;
 import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
+import server.handlers.attendance.LessonAttendanceListHandler;
+import server.handlers.attendance.LessonAttendanceUpdateHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
@@ -73,6 +75,10 @@ public class Main {
         server.use("/lesson/", teacherOnlyHandler);
         server.get("/lesson/", new TeacherLessonsHandler());
         server.post("/lesson/", new AddLessonHandler());
+        //Trasy do manipulacji obecnościami
+        server.use("/attendance/", teacherOnlyHandler);
+        server.get("/attendance/:lessonId/", new LessonAttendanceListHandler());
+        server.put("/attendance/:lessonId/", new LessonAttendanceUpdateHandler());
         server.listen(8080);
     }
 }
