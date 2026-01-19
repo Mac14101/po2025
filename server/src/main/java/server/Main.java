@@ -8,6 +8,7 @@ import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
 import server.handlers.attendance.LessonAttendanceListHandler;
 import server.handlers.attendance.LessonAttendanceUpdateHandler;
+import server.handlers.attendance.StudentAttendanceHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
@@ -56,6 +57,7 @@ public class Main {
         //Trasy do pobierania danych - tylko uczniowie
         server.use("/self/", studentOnlyHandler);
         server.use("/self/timetable/", new StudentTimeTableHandler());
+        server.use("/self/attendance/", new StudentAttendanceHandler());
         //Trasy do manipulacji użytkownikami - tylko administratorzy
         server.use("/user/", adminOnlyHandler);
         server.get("/user/", new AllUsersHandler());

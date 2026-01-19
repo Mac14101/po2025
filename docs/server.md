@@ -32,7 +32,7 @@ Moduł server jest głównym modułem w działaniu serwera HTTP. Zawiera plik *M
 8. Obecność na zajęciach
     * `/attendance/:lessonId/` **GET** - wyświetlanie listy obecności na lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
     * `/attendance/:lessonId/` **PUT** - aktualizacja obecności ucznia na lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
-    * `/self/attendance/` **GET** - wyświetlanie obecności, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)
+    * `/self/attendance/` **GET** - wyświetlanie obecności, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** 
 9. Oceny
     * `/grade/:studentId/` **GET** - wyświetlanie ocen ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
     * `/grade/:studentId/` **POST** - dodawanie oceny ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
