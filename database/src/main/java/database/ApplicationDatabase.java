@@ -10,6 +10,12 @@ import java.util.ArrayList;
 public class ApplicationDatabase extends Database {
     private static ApplicationDatabase instance = new ApplicationDatabase();
 
+    public static void main(String[] args) throws SQLException {
+        ApplicationDatabase app = ApplicationDatabase.getInstance();
+        app.connect("database.db");
+        System.out.println(app.getAllStudents().size());
+    }
+
     public static ApplicationDatabase getInstance() {
         return instance;
     }
@@ -136,7 +142,7 @@ public class ApplicationDatabase extends Database {
             String createClassSQL = "INSERT INTO classes (number, letter) VALUES (?, ?);";
             PreparedStatement createClassStatement = this.getPreparedStatement(createClassSQL);
             createClassStatement.setInt(1, schoolGroup.getNumber());
-            createClassStatement.setString(1, String.valueOf(schoolGroup.getLetter()));
+            createClassStatement.setString(2, String.valueOf(schoolGroup.getLetter()));
             this.executeUpdateStatement(createClassStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
