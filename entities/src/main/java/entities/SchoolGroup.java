@@ -101,6 +101,9 @@ public class SchoolGroup extends DatabaseEntity {
      * @throws IllegalArgumentException
      */
     public void setNumber(Integer number) {
+        if (number == null) {
+            return;
+        }
         if (number < 0) {
             throw new IllegalArgumentException("Class number is lower than 0!");
         }
@@ -123,6 +126,9 @@ public class SchoolGroup extends DatabaseEntity {
      * @throws IllegalArgumentException
      */
     public void setLetter(Character letter) {
+        if (letter == null) {
+            return;
+        }
         if (!letter.toString().matches("^[A-Z]$")) {
             throw new IllegalArgumentException("Class letter is not valid!");
         }
