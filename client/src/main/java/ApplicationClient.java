@@ -195,4 +195,18 @@ public class ApplicationClient extends Client {
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(student)));
         this.fetch(request);
     }
+
+    public ArrayList<Lesson> getLessons() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/lesson/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Lesson>>() {
+        });
+    }
+
+    public void addLesson(Lesson lesson) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/lesson/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(lesson)));
+        this.fetch(request);
+    }
 }
