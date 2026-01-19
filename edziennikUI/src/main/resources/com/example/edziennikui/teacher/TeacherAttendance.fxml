@@ -8,8 +8,8 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.TextField?>
 <VBox prefHeight="600.0" prefWidth="800.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.teacher.TeacherAttendanceController">
     <children>
         <HBox alignment="CENTER_LEFT" spacing="15.0" style="-fx-background-color: #f4f4f4; -fx-background-radius: 10;">
@@ -36,6 +36,13 @@
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </padding>
         </HBox>
+
+        <VBox spacing="5.0">
+            <children>
+                <Label text="Temat lekcji:" />
+                <TextField fx:id="txtTopic" promptText="Wpisz temat zajęć..." />
+            </children>
+        </VBox>
 
         <TableView fx:id="attendanceTable" VBox.vgrow="ALWAYS">
             <columns>

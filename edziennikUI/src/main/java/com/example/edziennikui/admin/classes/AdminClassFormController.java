@@ -24,20 +24,10 @@ public class AdminClassFormController {
                 return;
             }
             SchoolGroup newClass = new SchoolGroup();
-
             newClass.setNumber(Integer.parseInt(txtNumber.getText()));
-
             String letterInput = txtLetter.getText().trim().toUpperCase();
             newClass.setLetter(letterInput.charAt(0));
 
-            System.out.println("DEBUG: Wysyłam numer: " + newClass.getNumber());
-            System.out.println("DEBUG: Wysyłam literę: '" + newClass.getLetter() + "'");
-
-            try {
-                ApplicationClient.getInstance().createClass(newClass);
-                System.out.println("DEBUG: Klient wysłał żądanie bez błędu.");
-            } catch (Exception _) {
-            }
             ApplicationClient.getInstance().createClass(newClass);
 
             AlertHelper.showInfo("Sukces", "Klasa została dodana.");
