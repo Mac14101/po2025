@@ -10,11 +10,11 @@ public class Lesson extends DatabaseEntity {
     private String date;
     private SchoolClass schoolClass;
 
-    public Lesson(Integer id, String topic, String date) {
+    public Lesson(Integer id, String topic, String date, SchoolClass schoolClass) {
         this.id = id;
         this.topic = topic;
         this.date = date;
-        this.schoolClass = null;
+        this.schoolClass = schoolClass;
     }
 
     public Lesson() {
@@ -29,7 +29,7 @@ public class Lesson extends DatabaseEntity {
         String topic = getStringColumn(resultSet, "topic");
         String date = getStringColumn(resultSet, "date");
         SchoolClass schoolClass = SchoolClass.readSchoolClass(resultSet);
-        return new Lesson(id, topic, date);
+        return new Lesson(id, topic, date, schoolClass);
     }
 
     public static ArrayList<Lesson> readLessonArray(ResultSet resultSet) {
