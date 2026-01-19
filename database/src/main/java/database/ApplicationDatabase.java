@@ -247,4 +247,31 @@ public class ApplicationDatabase extends Database {
             throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<Grade> getStudentGrades(int studentId, int teacherId) {
+        try {
+            String getStudentGrades = "SELECT G.grade, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=? AND G.sid=?;";
+            PreparedStatement getStudentsGrades = this.getPreparedStatement(getStudentGrades);
+            getStudentsGrades.setInt(1, teacherId);
+            getStudentsGrades.setInt(2, studentId);
+            ResultSet result = this.executeQueryStatement(getStudentsGrades);
+            return Grade.readGradesArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void addStudentGrade(int studentId, int teacherId, Grade grade) {
+        try {
+            String addStudentGradeSQL = "INSERT INTO grades (sid, sbid, tid, grade) VALUES (?, ?, ?, ?);";
+            PreparedStatement addStudentGradeStatement = this.getPreparedStatement(addStudentGradeSQL);
+            addStudentGradeStatement.setInt(1, studentId);
+            addStudentGradeStatement.setString(2, grade.getSubject().getName());
+            addStudentGradeStatement.setInt(3, teacherId);
+            addStudentGradeStatement.setString(4, grade.getGrade().toString());
+            this.executeUpdateStatement(addStudentGradeStatement);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

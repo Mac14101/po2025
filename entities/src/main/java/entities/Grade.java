@@ -38,7 +38,7 @@ public class Grade extends DatabaseEntity {
         return new Grade(id, student, subject, teacher, grade);
     }
 
-    public static ArrayList<Grade> readGrades(ResultSet resultSet) {
+    public static ArrayList<Grade> readGradesArray(ResultSet resultSet) {
         try {
             ArrayList<Grade> grades = new ArrayList<>();
             while (resultSet.next()) {
