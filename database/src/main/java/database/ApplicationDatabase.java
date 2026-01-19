@@ -14,6 +14,12 @@ public class ApplicationDatabase extends Database {
         return instance;
     }
 
+    public static void main(String[] args) throws SQLException {
+        ApplicationDatabase database = ApplicationDatabase.getInstance();
+        database.connect("database.db");
+        System.out.println(database.getUserGrades(2));
+    }
+
     public void initialize(User admin) throws SQLException {
         String usersTable = "CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, email VARCHAR(100) UNIQUE NOT NULL, uname VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL);";
         this.getPreparedStatement(usersTable).execute();
@@ -281,4 +287,41 @@ public class ApplicationDatabase extends Database {
             throw new RuntimeException(e);
         }
     }
+
+    public ArrayList<SchoolClass> getUserSchedule(int studentId) {
+        try {
+            String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.startTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
+            PreparedStatement getUserScheduleStatement = this.getPreparedStatement(getUserScheduleSQL);
+            getUserScheduleStatement.setInt(1, studentId);
+            ResultSet result = this.executeQueryStatement(getUserScheduleStatement);
+            return SchoolClass.readSchoolClassArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Attendance> getUserAttendance(int studentId) {
+        try {
+            String getUserAttendanceSQL = "SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=?;";
+            PreparedStatement getUserAttendanceStatement = this.getPreparedStatement(getUserAttendanceSQL);
+            getUserAttendanceStatement.setInt(1, studentId);
+            ResultSet result = this.executeQueryStatement(getUserAttendanceStatement);
+            return Attendance.readAttendanceArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ArrayList<Grade> getUserGrades(int studentId) {
+        try {
+            String getUserGradeSQL = "SELECT G.grade, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=?;";
+            PreparedStatement getUserGradeStatement = this.getPreparedStatement(getUserGradeSQL);
+            getUserGradeStatement.setInt(1, studentId);
+            ResultSet result = this.executeQueryStatement(getUserGradeStatement);
+            return Grade.readGradesArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

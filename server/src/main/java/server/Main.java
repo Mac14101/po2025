@@ -8,6 +8,7 @@ import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
 import server.handlers.attendance.LessonAttendanceListHandler;
 import server.handlers.attendance.LessonAttendanceUpdateHandler;
+import server.handlers.attendance.StudentAttendanceHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
 import server.handlers.authentication.UserDataHandler;
@@ -18,6 +19,7 @@ import server.handlers.authorization.TeacherOnlyHandler;
 import server.handlers.classes.AllClassesHandler;
 import server.handlers.classes.CreateClassHandler;
 import server.handlers.grades.AddGradeHandler;
+import server.handlers.grades.StudentGradesHandler;
 import server.handlers.grades.TeacherGradesListHandler;
 import server.handlers.lessons.AddLessonHandler;
 import server.handlers.lessons.TeacherLessonsHandler;
@@ -28,6 +30,7 @@ import server.handlers.subjects.AllSubjectsHandler;
 import server.handlers.subjects.CreateSubjectHandler;
 import server.handlers.timeTable.AddClassTimeTableHandler;
 import server.handlers.timeTable.ClassTimeTableHandler;
+import server.handlers.timeTable.StudentTimeTableHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -52,6 +55,11 @@ public class Main {
         server.post("/login/", new AuthenticationHandler());
         server.get("/logout/", new SessionDestroyHandler());
         server.get("/self/", new UserDataHandler());
+        //Trasy do pobierania danych - tylko uczniowie
+        server.use("/self/", studentOnlyHandler);
+        server.use("/self/timetable/", new StudentTimeTableHandler());
+        server.use("/self/attendance/", new StudentAttendanceHandler());
+        server.use("/self/grade/", new StudentGradesHandler());
         //Trasy do manipulacji użytkownikami - tylko administratorzy
         server.use("/user/", adminOnlyHandler);
         server.get("/user/", new AllUsersHandler());
