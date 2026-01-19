@@ -19,8 +19,8 @@ public class Student extends User {
     }
 
     public Student(User user, SchoolGroup schoolGroup) {
-        super(user.getId(), user.getEmail(), user.getName(), user.getSurname(), user.getPassword(), user.getRole().toString());
-        if (this.getRole() != Role.STUDENT) {
+        super(user.getId(), user.getEmail(), user.getName(), user.getSurname(), user.getPassword(), user.getRole() == null ? null : user.getRole().name());
+        if (this.getRole() != null && this.getRole() != Role.STUDENT) {
             throw new IllegalArgumentException("Wrong role");
         }
         this.schoolGroup = schoolGroup;
