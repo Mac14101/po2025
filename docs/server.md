@@ -25,15 +25,15 @@ Moduł server jest głównym modułem w działaniu serwera HTTP. Zawiera plik *M
 6. Plan zajęć
     * `/timetable/:classId/` **GET** - lista zajęć z planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
     * `/timetable/` **POST** - dodawania zajęć do planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
-    * `/student/timetable/` **GET** - wyświetlanie planu zajęć, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)
+    * `/self/timetable/` **GET** - wyświetlanie planu zajęć, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** 
 7. Lekcje
     * `/lesson/` **GET** - wyświetlanie listy ostatnich lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
     * `/lesson/` **POST** - dodawanie lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
 8. Obecność na zajęciach
-    * `/attendance/:lessonId/` **GET** - wyświetlanie listy obecności na lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!*** (***nie zaimplementowano***)
-    * `/attendance/:lessonId/` **PUT** - aktualizacja obecności ucznia na lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!*** (***nie zaimplementowano***)
-    * `/student/attendance/` **GET** - wyświetlanie obecności, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)
+    * `/attendance/:lessonId/` **GET** - wyświetlanie listy obecności na lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
+    * `/attendance/:lessonId/` **PUT** - aktualizacja obecności ucznia na lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
+    * `/self/attendance/` **GET** - wyświetlanie obecności, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)
 9. Oceny
-    * `/grade/:studentId/` **GET** - wyświetlanie ocen ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!*** (***nie zaimplementowano***)
-    * `/grade/:studentId/` **POST** - dodawanie oceny ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!*** (***nie zaimplementowano***)
-    * `/student/grade/` **GET** - wyświetlanie ocen, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)
+    * `/grade/:studentId/` **GET** - wyświetlanie ocen ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
+    * `/grade/:studentId/` **POST** - dodawanie oceny ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
+    * `/self/grade/` **GET** - wyświetlanie ocen, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** (***nie zaimplementowano***)

@@ -28,6 +28,7 @@ import server.handlers.subjects.AllSubjectsHandler;
 import server.handlers.subjects.CreateSubjectHandler;
 import server.handlers.timeTable.AddClassTimeTableHandler;
 import server.handlers.timeTable.ClassTimeTableHandler;
+import server.handlers.timeTable.StudentTimeTableHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -52,6 +53,9 @@ public class Main {
         server.post("/login/", new AuthenticationHandler());
         server.get("/logout/", new SessionDestroyHandler());
         server.get("/self/", new UserDataHandler());
+        //Trasy do pobierania danych - tylko uczniowie
+        server.use("/self/", studentOnlyHandler);
+        server.use("/self/timetable/", new StudentTimeTableHandler());
         //Trasy do manipulacji użytkownikami - tylko administratorzy
         server.use("/user/", adminOnlyHandler);
         server.get("/user/", new AllUsersHandler());
