@@ -86,6 +86,9 @@ public class Subject extends DatabaseEntity {
      * @throws IllegalArgumentException
      */
     public void setName(String name) {
+        if (name == null) {
+            return;
+        }
         if (!name.matches("^[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]+$")) {
             throw new IllegalArgumentException("Invalid subject name!");
         }
