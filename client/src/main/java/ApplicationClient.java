@@ -197,6 +197,35 @@ public class ApplicationClient extends Client {
     }
 
     /**
+     * Pobiera plan zaję klasy o podanym numerze id classId za pomocą żądanie HTTP (`/timetable/:classId/` GET).
+     *
+     * @param classId numer id klasy
+     * @return plan zajęć klasy
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public ArrayList<SchoolClass> getClassSchedule(int classId) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/timetable/" + String.valueOf(classId) + "/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<SchoolClass>>() {
+        });
+    }
+
+    /**
+     * Dodaje zajęcia szkolne do planu zajęć dla wybranej klasy za pomocą żądania HTTP (`/timetable/` POST).
+     *
+     * @param schoolClass obiekt reprezentujący zajęcia szkolne
+     * @throws ClientError             błąd wysłania żądania lub otrzymana odpowiedź ma status HTTP oznaczający błąd
+     * @throws JsonProcessingException błąd przetwarzania obiektu danych na JSON
+     */
+    public void addClassSchedule(SchoolClass schoolClass) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/timetable/");
+        request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(schoolClass)));
+        this.fetch(request);
+    }
+
+    /**
      * Pobiera listę lekcji nauczyciela, które już się odbyły, wysyła żądanie HTTP (`/lesson/` GET).
      *
      * @return lista lekcji poprowadzonych przez nauczyciela
