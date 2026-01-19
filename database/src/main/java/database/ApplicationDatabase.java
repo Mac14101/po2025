@@ -9,12 +9,7 @@ import java.util.ArrayList;
 
 public class ApplicationDatabase extends Database {
     private static ApplicationDatabase instance = new ApplicationDatabase();
-
-    public static void main(String[] args) throws SQLException {
-        ApplicationDatabase app = ApplicationDatabase.getInstance();
-        app.connect("database.db");
-        System.out.println(app.getAllStudents().size());
-    }
+    
 
     public static ApplicationDatabase getInstance() {
         return instance;
@@ -29,7 +24,7 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(studentsTable).execute();
         String subjectsTable = "CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQUE NOT NULL);";
         this.getPreparedStatement(subjectsTable).execute();
-        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sid) REFERENCES subjects(sbid));";
+        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sbid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid));";
         this.getPreparedStatement(timeTabelTable).execute();
         String lessonsTable = "CREATE TABLE IF NOT EXISTS lessons (lid INTEGER PRIMARY KEY, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INTEGER, FOREIGN KEY(ttid) REFERENCES time_table(ttid));";
         this.getPreparedStatement(lessonsTable).execute();
@@ -161,7 +156,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Student> getClassStudents(int classId) {
         try {
-            String selectStudentsSQL = "SELECT U.uname, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=?;";
+            String selectStudentsSQL = "SELECT U.uname, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid WHERE S.cid=?;";
             PreparedStatement selectStudentsStatement = this.getPreparedStatement(selectStudentsSQL);
             selectStudentsStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectStudentsStatement);

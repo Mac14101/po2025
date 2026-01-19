@@ -18,9 +18,9 @@ public class SchoolClass extends DatabaseEntity {
         this.day = day;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.schoolGroup = null;
-        this.teacher = null;
-        this.subject = null;
+        this.schoolGroup = schoolGroup;
+        this.teacher = teacher;
+        this.subject = subject;
     }
 
     public SchoolClass() {
