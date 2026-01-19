@@ -10,10 +10,10 @@ public class SchoolClass extends DatabaseEntity {
     private String startTime;
     private String endTime;
     private SchoolGroup schoolGroup;
-    private User teacher;
+    private Teacher teacher;
     private Subject subject;
 
-    public SchoolClass(Integer id, String day, String startTime, String endTime, SchoolGroup schoolGroup, User teacher, Subject subject) {
+    public SchoolClass(Integer id, String day, String startTime, String endTime, SchoolGroup schoolGroup, Teacher teacher, Subject subject) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;
@@ -39,7 +39,7 @@ public class SchoolClass extends DatabaseEntity {
         String startTime = getStringColumn(resultSet, "startTime");
         String endTime = getStringColumn(resultSet, "endTime");
         SchoolGroup schoolGroup = SchoolGroup.readSchoolGroup(resultSet);
-        User teacher = User.readUser(resultSet);
+        Teacher teacher = Teacher.readTeacher(resultSet);
         Subject subject = Subject.readSubject(resultSet);
         return new SchoolClass(id, day, startTime, endTime, schoolGroup, teacher, subject);
     }
@@ -64,11 +64,11 @@ public class SchoolClass extends DatabaseEntity {
         this.schoolGroup = schoolGroup;
     }
 
-    public User getTeacher() {
+    public Teacher getTeacher() {
         return teacher;
     }
 
-    public void setTeacher(User teacher) {
+    public void setTeacher(Teacher teacher) {
         this.teacher = teacher;
     }
 

@@ -38,7 +38,7 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 
 | Nazwa kolumny | Typ     | Dodatkowe opcje kolumny | Opis                                                       |
 |---------------|---------|-------------------------|------------------------------------------------------------|
-| sbid           | INTEGER | PRIMARY KEY             | Unikatowy identyfikator przypisany do przedmiotu szkolnego |
+| sbid          | INTEGER | PRIMARY KEY             | Unikatowy identyfikator przypisany do przedmiotu szkolnego |
 | sbname        | TEXT    | UNIQUE NOT NULL         | Nazwa przedmiotu szkolnego                                 |
 
 5. Plan zajęć(time_table)
@@ -52,7 +52,7 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 | endTime       | TEXT    | NOT NULL                | Godzina zakończenia zajęć, zapisana w formacie HH:MM:SS  |
 | cid           | INTEGER | FOREIGN KEY             | Identyfikator klasy, której dotyczy lekcja               |
 | tid           | INTEGER | FOREIGN KEY             | Identyfikator nauczyciela, który prowadzi lekcję         |
-| sbid           | INTEGER | FOREIGN KEY             | Identyfikator przedmiotu                                 |
+| sbid          | INTEGER | FOREIGN KEY             | Identyfikator przedmiotu                                 |
 
 6. Lekcje(lessons)
    Tabela przechowująca lekcję, które się odbyły.
@@ -88,33 +88,147 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 
 ### Tworzenie tabel
 
-* CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, email VARCHAR(100) UNIQUE NOT NULL, uname VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL); - tworzy tabelę `users`
-* CREATE TABLE IF NOT EXISTS classes (cid INTEGER PRIMARY KEY, number INTEGER NOT NULL, letter CHAR(1) NOT NULL); - tworzy tabelę `classes`
-* CREATE TABLE IF NOT EXISTS students (uid INTEGER UNIQUE, cid INTEGER, FOREIGN KEY(uid) REFERENCES users(uid), FOREIGN KEY(cid) REFERENCES classes(cid)); - tworzy tabelę `students`
-* CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQUE NOT NULL); - tworzy tabelę `subjects`
-* CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sid) REFERENCES subjects(sbid)); - tworzy tabelę `time_table`
-* CREATE TABLE IF NOT EXISTS lessons (lid INTEGER PRIMARY KEY, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INTEGER, FOREIGN KEY(ttid) REFERENCES time_table(ttid)); - tworzy tabelę `lessons`
-* CREATE TABLE IF NOT EXISTS attendance (sid INTEGER, lid INTEGER, status TEXT NOT NULL, FOREIGN KEY(sid) REFERENCES students(sid), FOREIGN KEY(lid) REFERENCES lessons(lid)); - tworzy tabelę `attendance`
-* CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid)); - tworzy tabelę `grades`
+* tworzy tabelę `users`
+```sql
+CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, email VARCHAR(100) UNIQUE NOT NULL, uname VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL);
+```
+* tworzy tabelę `classes`
+```sql
+CREATE TABLE IF NOT EXISTS classes (cid INTEGER PRIMARY KEY, number INTEGER NOT NULL, letter CHAR(1) NOT NULL);
+```
+* tworzy tabelę `students`
+```sql
+CREATE TABLE IF NOT EXISTS students (uid INTEGER UNIQUE, cid INTEGER, FOREIGN KEY(uid) REFERENCES users(uid), FOREIGN KEY(cid) REFERENCES classes(cid));
+```
+* tworzy tabelę `subjects`
+```sql
+CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQUE NOT NULL);
+```
+* tworzy tabelę `time_table`
+```sql
+CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sid) REFERENCES subjects(sbid));
+```
+* tworzy tabelę `lessons`
+```sql
+CREATE TABLE IF NOT EXISTS lessons (lid INTEGER PRIMARY KEY, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INTEGER, FOREIGN KEY(ttid) REFERENCES time_table(ttid));
+```
+* tworzy tabelę `attendance`
+```sql
+CREATE TABLE IF NOT EXISTS attendance (sid INTEGER, lid INTEGER, status TEXT NOT NULL, FOREIGN KEY(sid) REFERENCES students(sid), FOREIGN KEY(lid) REFERENCES lessons(lid));
+```
+* tworzy tabelę `grades`
+```sql
+CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));
+```
 
 ### Wstawianie danych do tabeli
 
-* INSERT INTO users (email, uname, surname, password, role) VALUES (:email, :uname, :surname, :password, :role); - wstawia nowego użytkownika do tabeli `users`
-* INSERT INTO classes (number, letter) VALUES (:number, :letter); - dodaje nową klasę w tabeli `classes`
-* INSERT INTO students (uid, cid) VALUES(:uid, :cid); - przypisuje ucznia do klasy
-* INSERT INTO subjects (sbname) VALUES (:sbname); - dodaje nowy przedmiot
-* INSERT INTO time_table (day, startTime, endTime, cid, tid, sid) VALUES (:day, :startTime, :endTime, :cid, :tid, :sid); - wstawia nowe zajęcia do tabeli `time_table`
-* INSERT INTO lessons (topic, date, ttid) VALUES (:topic, :date, :ttid); - wstawia nową lekcję do tabeli `lessons`
-* INSERT INTO attendance (sid, lid, status) VALUES (:sid, :lid, :status); - dodaje nowy status frekwencji ucznia na zajęciach
-* INSERT INTO grades (sid, sbid, tid, grade) VALUES (:sid, :sbid, :tid, :grade); - dodaje nową ocenę ucznia do tabeli `grades`
+* wstawia nowego użytkownika do tabeli `users`
+```sql
+INSERT INTO users (email, uname, surname, password, role) VALUES (:email, :uname, :surname, :password, :role);
+```
+* dodaje nową klasę w tabeli `classes`
+```sql
+INSERT INTO classes (number, letter) VALUES (:number, :letter); 
+```
+* przypisuje ucznia do klasy
+```sql
+INSERT INTO students (uid, cid) VALUES(:uid, :cid); 
+```
+* dodaje nowy przedmiot
+```sql
+INSERT INTO subjects (sbname) VALUES (:sbname);
+```
+* wstawia nowe zajęcia do tabeli `time_table`
+```sql
+INSERT INTO time_table (day, startTime, endTime, cid, tid, sid) VALUES (:day, :startTime, :endTime, :cid, :tid, :sid);
+```
+* wstawia nową lekcję do tabeli `lessons`
+```sql
+INSERT INTO lessons (topic, date, ttid) VALUES (:topic, :date, :ttid); - 
+```
+* dodaje nowy status frekwencji ucznia na zajęciach
+```sql
+INSERT INTO attendance (sid, lid, status) VALUES (:sid, :lid, :status); 
+```
+* dodaje nową ocenę ucznia do tabeli `grades`
+```sql
+INSERT INTO grades (sid, sbid, tid, grade) VALUES (:sid, :sbid, :tid, :grade); 
+```
 
 ### Pobieranie danych z tabel
 
-* SELECT uid, email, uname, surname, role FROM users; - zwraca listę wszystkich użytkowników
-* SELECT uid, email, password FROM users WHERE email=:email; - zwraca dane potrzebne do uwierzytelnienia i utworzenia sesji
-* SELECT cid, number, letter FROM classes; - pobiera wszystkie klasy
-* SELECT sbname FROM subjects; - pobiera wszystkie przedmioty
-* SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid; - pobiera wszystkich uczniów razem z informację do której klasy należą
-* SELECT U.name, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=:cid; - pobiera wszystkich uczniów przypisanych do wybranej klasy
-* SELECT TT.day, TT.startTime, TT.endTime, T.uname, T.surname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid; - pobiera tygodniowy plan zajęć dla wybranej klasy
-* SELECT uid, email, uname, surname, role FROM users WHERE uid=?; - pobiera dane wybranego użytkownika
+* zwraca listę wszystkich użytkowników
+```sql
+SELECT uid, email, uname, surname, role FROM users;
+```
+* zwraca dane potrzebne do uwierzytelnienia i utworzenia sesji
+```sql
+SELECT uid, email, password, role FROM users WHERE email=:email;
+```
+* pobiera wszystkie klasy
+```sql
+SELECT cid, number, letter FROM classes;
+```
+* pobiera wszystkie przedmioty
+```sql
+SELECT sbname FROM subjects;
+```
+* pobiera wszystkich uczniów razem z informację do której klasy należą
+```sql
+SELECT U.name, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid;
+```
+* pobiera wszystkich uczniów przypisanych do wybranej klasy
+```sql
+SELECT U.name, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=:cid;
+```
+* pobiera tygodniowy plan zajęć dla wybranej klasy
+```sql
+SELECT TT.day, TT.startTime, TT.endTime, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid;
+```
+* pobiera dane wybranego użytkownika
+```sql
+SELECT uid, email, uname, surname, role FROM users WHERE uid=:uid;
+```
+* pobiera lekcje nauczyciela
+```sql
+SELECT L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=:tid;
+```
+* pobiera listę obecności na lekcji
+```sql
+SELECT A.status, U.uname, U.surname, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON A.sid=U.uid INNER JOIN lessons AS L ON L.lid=A.lid WHERE L.lid=:lid;
+```
+* pobiera oceny ucznia wystawione przez wybranego nauczyciela
+```sql
+SELECT G.grade, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=:tid AND G.sid=:sid;
+```
+* pobieranie planu zajęć wybranego ucznia
+```sql
+SELECT TT.day, TT.startTime, TT.endTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN subjects AS SB ON TT.sbid=SB.sbid INNER JOIN classes ON TT.cid=C.cid INNER JOIN students AS S ON C.cid=S.cid INNER JOIN users as U ON U.uid=S.uid INNER JOIN users AS T ON TT.tid=T.uid WHERE U.uid=:uid;
+```
+* pobiera obecność wybranego użytkownika
+```sql
+SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=:uid;
+```
+* pobiera oceny użytkownika
+```sql
+SELECT G.grade, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=:uid;
+```
+
+### Aktualizacja danych w tabeli
+
+*  aktualizacja obecności ucznia na zajęciach
+```sql
+UPDATE attendance SET status=:status WHERE lid=:lid AND sid=:sid;
+```
+
+### Triggery
+* Automatyczne dodawanie obecności uczniów na lekcji
+```sql
+CREATE TRIGGER lesson_insert
+AFTER INSERT ON lessons
+BEGIN
+	INSERT INTO attendance (sid, lid, status) VALUES
+	SELECT S.uid AS sid, NEW.lid, 'undefined' AS status FROM time_table AS TT INNER JOIN students AS S ON S.cid=TT.cid WHERE TT.ttid=NEW.ttid;;
+END;
+```
