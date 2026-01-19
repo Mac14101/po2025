@@ -105,6 +105,9 @@ public class User extends DatabaseEntity {
      * @throws IllegalArgumentException niepoprawny adres e-mail
      */
     public void setEmail(String email) {
+        if (email == null) {
+            return;
+        }
         if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
             throw new IllegalArgumentException("Invalid email address!");
         } else if (email.length() > 100) {
@@ -129,6 +132,9 @@ public class User extends DatabaseEntity {
      * @throws IllegalArgumentException niepoprawne nazwisko
      */
     public void setSurname(String surname) {
+        if (surname == null) {
+            return;
+        }
         if (!surname.matches("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$")) {
             throw new IllegalArgumentException("Invalid surname format!");
         } else if (surname.length() > 50) {
@@ -154,6 +160,9 @@ public class User extends DatabaseEntity {
      * @throws IllegalArgumentException niepoprawne imię
      */
     public void setName(String name) {
+        if (name == null) {
+            return;
+        }
         if (!name.matches("^[A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż]+$")) {
             throw new IllegalArgumentException("Invalid name format!");
         } else if (name.length() > 50) {
