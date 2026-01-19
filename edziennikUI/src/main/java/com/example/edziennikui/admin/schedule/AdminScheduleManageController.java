@@ -44,8 +44,12 @@ public class AdminScheduleManageController {
 
     private void setupTableColumns() {
         colDay.setCellValueFactory(new PropertyValueFactory<>("day"));
-        colTime.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-        colRoom.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+        colTime.setCellValueFactory(cellData -> {
+            String start = cellData.getValue().getStartTime();
+            String end = cellData.getValue().getEndTime();
+            return new SimpleStringProperty(start + " - " + end);
+        });
+        colRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
 
         colSubject.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getSubject() != null ?
@@ -65,17 +69,28 @@ public class AdminScheduleManageController {
         try {
             ArrayList<SchoolGroup> classes = ApplicationClient.getInstance().getAllClass();
             comboFilterClass.setItems(FXCollections.observableArrayList(classes));
+
+            comboFilterClass.setConverter(new javafx.util.StringConverter<>() {
+                @Override public String toString(SchoolGroup sg) {
+                    return sg == null ? "" : sg.getNumber() + " " + sg.getLetter();
+                }
+                @Override public SchoolGroup fromString(String s) { return null; }
+            });
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się załadować klas: " + e.getMessage());
+            AlertHelper.showError("Błąd", "Nie udało się załadować klas.");
         }
     }
 
     private void loadScheduleForClass(int classId) {
         try {
-            System.out.println("Pobieram plan dla klasy ID: " + classId);
+            ArrayList<SchoolClass> schedule = ApplicationClient.getInstance().getClassSchedule(classId);
 
+            scheduleTable.setItems(FXCollections.observableArrayList(schedule));
+            scheduleTable.refresh();
+
+            System.out.println("Załadowano " + schedule.size() + " lekcji dla klasy ID: " + classId);
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się załadować planu.");
+            AlertHelper.showError("Błąd", "Nie udało się załadować planu zajęć.");
         }
     }
 

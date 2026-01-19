@@ -72,8 +72,71 @@ public class AdminLessonFormController {
 
     @FXML
     private void handleSave() {
-        // tu bedzie metoda zapisu
+        try {
+            SchoolGroup selectedGroup = comboClass.getSelectionModel().getSelectedItem();
+            Subject selectedSubject = comboSubject.getSelectionModel().getSelectedItem();
+            User selectedUser = comboTeacher.getSelectionModel().getSelectedItem();
+            String selectedDay = comboDay.getSelectionModel().getSelectedItem();
+            String startHour = txtLessonHour.getText().trim();
+
+            if (selectedGroup == null || selectedSubject == null || selectedUser == null ||
+                    selectedDay == null || startHour.isEmpty()) {
+                AlertHelper.showWarning("Brak danych", "Proszę uzupełnić wszystkie pola!");
+                return;
+            }
+
+            String formattedStartTime = formatToSqlTime(startHour);
+            String formattedEndTime = calculateEndTime(formattedStartTime);
+
+            SchoolClass scheduleEntry = new SchoolClass();
+            scheduleEntry.setDay(selectedDay);
+            scheduleEntry.setStartTime(formattedStartTime);
+            scheduleEntry.setEndTime(formattedEndTime);
+            scheduleEntry.setSchoolGroup(selectedGroup);
+            scheduleEntry.setSubject(selectedSubject);
+
+            Teacher teacher = new Teacher(
+                    selectedUser.getId(),
+                    selectedUser.getEmail(),
+                    selectedUser.getName(),
+                    selectedUser.getSurname(),
+                    null
+            );
+            scheduleEntry.setTeacher(teacher);
+
+            ApplicationClient.getInstance().addClassSchedule(scheduleEntry);
+
+            AlertHelper.showInfo("Sukces", "Dodano lekcję do planu zajęć.");
+            handleCancel();
+        } catch (Exception e) {
+            AlertHelper.showError("Błąd", "Nie udało się zapisać planu: " + e.getMessage());
+        }
     }
+
+    // Pomocnicza metoda do formatowania czasu
+    private String formatToSqlTime(String time) {
+        if (time.split(":").length == 2) return time + ":00"; // HH:MM -> HH:MM:00
+        return time;
+    }
+
+    // Pomocnicza metoda wyliczająca koniec lekcji (standardowe 45 min)
+    private String calculateEndTime(String startTime) {
+        try {
+            String[] parts = startTime.split(":");
+            int hour = Integer.parseInt(parts[0]);
+            int min = Integer.parseInt(parts[1]);
+
+            min += 45;
+            if (min >= 60) {
+                hour++;
+                min -= 60;
+            }
+            return String.format("%02d:%02d:00", hour, min);
+        } catch (Exception e) {
+            return startTime;
+        }
+    }
+
 
     @FXML
     private void handleCancel() {
