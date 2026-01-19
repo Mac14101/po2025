@@ -31,6 +31,13 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(attendanceTable).execute();
         String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
         this.getPreparedStatement(gradesTable).execute();
+        String attendanceTrigger = "CREATE TRIGGER attendance_lessons\n" +
+                "    AFTER INSERT ON lessons\n" +
+                "BEGIN\n" +
+                "    INSERT INTO attendance (sid, lid, status)\n" +
+                "    SELECT S.uid AS sid, NEW.lid, 'undefined' AS status FROM time_table AS TT INNER JOIN students AS S ON S.cid=TT.cid WHERE TT.ttid=NEW.ttid;\n" +
+                "END;";
+        this.getPreparedStatement(attendanceTrigger).execute();
         if (!this.getPreparedStatement("SELECT * FROM users;").executeQuery().next()) {
             String insertAdmin = "INSERT INTO users (email, uname, surname, password, role) VALUES (?, ?, ?, ?, ?);";
             PreparedStatement insertAdminStatement = this.getPreparedStatement(insertAdmin);
