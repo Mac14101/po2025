@@ -21,16 +21,6 @@
                         </Label>
                     </children>
                 </VBox>
-                <VBox alignment="CENTER">
-                    <children>
-                        <Label text="Średnia ogólna" textFill="#7f8c8d" />
-                        <Label fx:id="lblAverage" textFill="#2980b9">
-                            <font>
-                                <Font name="System Bold" size="18.0" />
-                            </font>
-                        </Label>
-                    </children>
-                </VBox>
             </children>
             <padding>
                 <Insets bottom="15.0" left="20.0" right="20.0" top="15.0" />
@@ -40,9 +30,8 @@
         <TableView fx:id="gradesTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colSubject" text="Przedmiot" />
-                <TableColumn fx:id="colGrades" text="Oceny (cząstkowe)" />
+                <TableColumn fx:id="colGrades" text="Oceny" />
                 <TableColumn fx:id="colAverage" text="Średnia" />
-                <TableColumn fx:id="colFinal"  text="Przewidywana" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
