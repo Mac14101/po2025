@@ -108,7 +108,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Subject> getAllSubjects() {
         try {
-            String selectSubjectsSQL = "SELECT sbname FROM subjects;";
+            String selectSubjectsSQL = "SELECT sbid, sbname FROM subjects;";
             ResultSet result = this.executeQueryStatement(this.getPreparedStatement(selectSubjectsSQL));
             return Subject.readSubjectsArray(result);
         } catch (SQLException e) {
