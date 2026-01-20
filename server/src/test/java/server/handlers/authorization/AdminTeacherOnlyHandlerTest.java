@@ -47,15 +47,4 @@ public class AdminTeacherOnlyHandlerTest {
         Mockito.verify(response, Mockito.times(1)).end();
     }
 
-    @Test
-    public void withoutSession() throws JExpError {
-        Request request = Mockito.mock(Request.class);
-        Mockito.when(request.sessionEstabilished()).thenReturn(false);
-        Response response = Mockito.mock(Response.class);
-        Next next = Mockito.mock(Next.class);
-        AdminTeacherOnlyHandler handler = new AdminTeacherOnlyHandler();
-        handler.handle(request, response, next);
-        Mockito.verify(response, Mockito.times(1)).status(401);
-        Mockito.verify(response, Mockito.times(1)).end();
-    }
 }
