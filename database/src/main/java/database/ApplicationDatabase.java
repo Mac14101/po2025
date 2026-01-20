@@ -155,7 +155,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Student> getClassStudents(int classId) {
         try {
-            String selectStudentsSQL = "SELECT U.uname, U.surname, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid WHERE S.cid=?;";
+            String selectStudentsSQL = "SELECT U.uid, U.uname, U.surname, U.email, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid WHERE S.cid=?;";
             PreparedStatement selectStudentsStatement = this.getPreparedStatement(selectStudentsSQL);
             selectStudentsStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectStudentsStatement);
