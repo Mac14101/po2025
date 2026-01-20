@@ -65,11 +65,12 @@ public class Main {
         server.get("/user/", new AllUsersHandler());
         server.post("/user/", new CreateUserHandler());
         //Trasy do manipulacji przedmiotami szkolnymi - tylko administratorzy
-        server.use("/subject/", adminOnlyHandler);
+        server.get("/subject/", adminTeacherOnlyHandler);
         server.get("/subject/", new AllSubjectsHandler());
+        server.post("/subject/", adminOnlyHandler);
         server.post("/subject/", new CreateSubjectHandler());
         //Trasy do manipulacji klasami - tylko administratorzy
-        //server.use("/class/", adminOnlyHandler);
+        server.use("/class/", adminOnlyHandler);
         server.get("/class/", new AllClassesHandler());
         server.post("/class/", new CreateClassHandler());
         //Trasy do manipulacji uczniami
