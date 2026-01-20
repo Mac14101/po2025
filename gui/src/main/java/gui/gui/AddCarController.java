@@ -70,8 +70,13 @@ public class AddCarController {
 
     public void onCarNumberGenerateButton(ActionEvent actionEvent) {
         StringBuilder registerNumber = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            registerNumber.append(rand.nextInt(10));
+        registerNumber.append("KR ");
+        for (int i = 0; i < 6; i++) {
+            if (rand.nextBoolean()) {
+                registerNumber.append((char) rand.nextInt(65, 90));
+            } else {
+                registerNumber.append((char) rand.nextInt(48, 57));
+            }
         }
         carNumberTextField.setText(registerNumber.toString());
     }

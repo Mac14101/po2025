@@ -94,7 +94,7 @@ public class Car extends Thread {
         } else if (!this.gearbox.getClutch().getStatus()) {
             return 0;
         }
-        return (double) (this.engine.getRPM() * this.gearbox.getGear()) / this.gearbox.getMaxGear() / 62;
+        return (double) (this.engine.getRPM() * this.gearbox.getGear()) / this.gearbox.getMaxGear() * 0.11d;
     }
 
     public double getWeight() {
