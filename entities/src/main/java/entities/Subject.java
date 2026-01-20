@@ -29,7 +29,7 @@ public class Subject extends DatabaseEntity {
      * @return wygenerowany obiekt przedmiotu
      */
     public static Subject readSubject(ResultSet resultSet) {
-        Integer id = getIntColumn(resultSet, "sid");
+        Integer id = getIntColumn(resultSet, "sbid");
         String name = getStringColumn(resultSet, "sbname");
         return new Subject(id, name);
     }
