@@ -57,9 +57,10 @@ public class Main {
         server.use("/self/", authenticatedUsersOnlyHandler);
         server.get("/self/timetable/", new StudentTimeTableHandler());
         server.get("/self/timetable/", new TeacherTimeTableHandler());
-        server.use("/self/", studentOnlyHandler);
         server.get("/self/attendance/", new StudentAttendanceHandler());
+        server.get("/self/attendance/", studentOnlyHandler);
         server.get("/self/grade/", new StudentGradesHandler());
+        server.get("/self/grade/", studentOnlyHandler);
         server.get("/self/", new UserDataHandler());
         //Trasy do manipulacji użytkownikami
         server.use("/user/", authenticatedUsersOnlyHandler);
