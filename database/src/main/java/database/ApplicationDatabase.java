@@ -14,12 +14,6 @@ public class ApplicationDatabase extends Database {
         return instance;
     }
 
-    public static void main(String[] args) throws SQLException {
-        ApplicationDatabase database = ApplicationDatabase.getInstance();
-        database.connect("database.db");
-        System.out.println(database.getUserGrades(2));
-    }
-
     public void initialize(User admin) throws SQLException {
         String usersTable = "CREATE TABLE IF NOT EXISTS users (uid INTEGER PRIMARY KEY, email VARCHAR(100) UNIQUE NOT NULL, uname VARCHAR(50) NOT NULL, surname VARCHAR(50) NOT NULL, password TEXT NOT NULL, role VARCHAR(20) DEFAULT NULL);";
         this.getPreparedStatement(usersTable).execute();
@@ -326,7 +320,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getTeacherSchedule(int teacherId) {
         try {
-            String getTeacherScheduleSQL = "SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=?;";
+            String getTeacherScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=3;";
             PreparedStatement getTeacherScheduleStatement = this.getPreparedStatement(getTeacherScheduleSQL);
             getTeacherScheduleStatement.setInt(1, teacherId);
             ResultSet result = this.executeQueryStatement(getTeacherScheduleStatement);
