@@ -288,7 +288,7 @@ public class ApplicationDatabase extends Database {
         }
     }
 
-    public ArrayList<SchoolClass> getUserSchedule(int studentId) {
+    public ArrayList<SchoolClass> getStudentSchedule(int studentId) {
         try {
             String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.startTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
             PreparedStatement getUserScheduleStatement = this.getPreparedStatement(getUserScheduleSQL);
@@ -324,4 +324,15 @@ public class ApplicationDatabase extends Database {
         }
     }
 
+    public ArrayList<SchoolClass> getTeacherSchedule(int teacherId) {
+        try {
+            String getTeacherScheduleSQL = "SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=?;";
+            PreparedStatement getTeacherScheduleStatement = this.getPreparedStatement(getTeacherScheduleSQL);
+            getTeacherScheduleStatement.setInt(1, teacherId);
+            ResultSet result = this.executeQueryStatement(getTeacherScheduleStatement);
+            return SchoolClass.readSchoolClassArray(result);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

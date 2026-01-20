@@ -315,4 +315,28 @@ public class ApplicationClient extends Client {
         request.POST(HttpRequest.BodyPublishers.ofString(JSON.stringify(grade)));
         this.fetch(request);
     }
+
+    public ArrayList<SchoolClass> getUserSchedule() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/self/timetable/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<SchoolClass>>() {
+        });
+    }
+
+    public ArrayList<Attendance> getUserAttendance() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/self/attendance/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Attendance>>() {
+        });
+    }
+
+    public ArrayList<Grade> getUserGrades() throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/self/grade/");
+        request.GET();
+        HttpResponse<String> response = this.fetch(request);
+        return JSON.parse(response.body(), new TypeReference<ArrayList<Grade>>() {
+        });
+    }
 }

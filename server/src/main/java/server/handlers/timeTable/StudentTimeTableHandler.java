@@ -1,6 +1,7 @@
 package server.handlers.timeTable;
 
 import entities.SchoolClass;
+import entities.User;
 import jexp.JExpError;
 import jexp.Next;
 import jexp.Request;
@@ -16,7 +17,11 @@ public class StudentTimeTableHandler extends DatabaseHandler {
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        ArrayList<SchoolClass> schoolClasses = this.database.getUserSchedule(Integer.parseInt(request.getSession("userId")));
+        if (User.Role.getRoleFromName(request.getSession("userRole")) != User.Role.STUDENT) {
+            next.next();
+            return;
+        }
+        ArrayList<SchoolClass> schoolClasses = this.database.getStudentSchedule(Integer.parseInt(request.getSession("userId")));
         response.json(schoolClasses);
     }
 }
