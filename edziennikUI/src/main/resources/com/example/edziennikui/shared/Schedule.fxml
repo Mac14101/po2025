@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="850.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.student.StudentScheduleController">
+<VBox prefHeight="600.0" prefWidth="850.0" spacing="20.0" xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.edziennikui.shared.ScheduleController">
     <children>
         <HBox alignment="CENTER_LEFT">
             <children>

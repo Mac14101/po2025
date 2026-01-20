@@ -1,10 +1,10 @@
-package com.example.edziennikui.student;
+package com.example.edziennikui.shared;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-public class StudentScheduleController {
+public class ScheduleController {
 
     @FXML private TableView<Object> scheduleTable;
     @FXML private TableColumn<Object, String> colTime;
