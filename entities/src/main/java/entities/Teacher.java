@@ -15,7 +15,7 @@ public class Teacher extends User {
     public static Teacher readTeacher(ResultSet resultSet) {
         Integer id = getIntColumn(resultSet, "tid");
         String email = getStringColumn(resultSet, "temail");
-        String name = getStringColumn(resultSet, "tuname");
+        String name = getStringColumn(resultSet, "tname");
         String surname = getStringColumn(resultSet, "tsurname");
         String password = getStringColumn(resultSet, "tpassword");
         String role = getStringColumn(resultSet, "role");
