@@ -12,6 +12,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -28,6 +30,8 @@ public class AdminUserListController {
     @FXML private TextField txtSearch;
     @FXML private ComboBox<String> comboFilterRole;
 
+    private FilteredList<User> filteredData;
+
     @FXML
     public void initialize() {
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
@@ -36,16 +40,53 @@ public class AdminUserListController {
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
         colRole.setCellValueFactory(new PropertyValueFactory<>("role"));
 
+        comboFilterRole.setItems(FXCollections.observableArrayList(
+                "Wszyscy", "Admin", "Teacher", "Student"
+        ));
+        comboFilterRole.getSelectionModel().selectFirst();
+
         loadUsers();
+        setupFiltering();
     }
 
     private void loadUsers() {
         try {
             ArrayList<User> users = ApplicationClient.getInstance().getAllUsers();
-            userTable.setItems(FXCollections.observableArrayList(users));
+            filteredData = new FilteredList<>(FXCollections.observableArrayList(users), p -> true);
+
+            SortedList<User> sortedData = new SortedList<>(filteredData);
+            sortedData.comparatorProperty().bind(userTable.comparatorProperty());
+            userTable.setItems(sortedData);
         } catch (Exception e) {
             AlertHelper.showError("Błąd bazy danych", "Nie udało się pobrać listy użytkowników.");
         }
+    }
+
+    private void setupFiltering() {
+        txtSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            applyFilters();
+        });
+
+        comboFilterRole.valueProperty().addListener((observable, oldValue, newValue) -> {
+            applyFilters();
+        });
+    }
+
+    private void applyFilters() {
+        String searchText = txtSearch.getText().toLowerCase();
+        String selectedRole = comboFilterRole.getValue();
+
+        filteredData.setPredicate(user -> {
+            boolean roleMatch = (selectedRole == null || selectedRole.equals("Wszyscy") ||
+                    user.getRole().toString().equalsIgnoreCase(selectedRole));
+
+            boolean searchMatch = searchText.isEmpty() ||
+                    user.getName().toLowerCase().contains(searchText) ||
+                    user.getSurname().toLowerCase().contains(searchText) ||
+                    user.getEmail().toLowerCase().contains(searchText);
+
+            return roleMatch && searchMatch;
+        });
     }
 
     @FXML
