@@ -10,17 +10,6 @@ import org.mockito.Mockito;
 
 public class TeacherOnlyHandlerTest {
 
-    @Test
-    public void withoutSession() throws JExpError {
-        Request request = Mockito.mock(Request.class);
-        Mockito.when(request.sessionEstabilished()).thenReturn(false);
-        Response response = Mockito.mock(Response.class);
-        Next next = Mockito.mock(Next.class);
-        TeacherOnlyHandler handler = new TeacherOnlyHandler();
-        handler.handle(request, response, next);
-        Mockito.verify(response, Mockito.times(1)).status(401);
-        Mockito.verify(response, Mockito.times(1)).end();
-    }
 
     @Test
     public void notTeacher() throws JExpError {

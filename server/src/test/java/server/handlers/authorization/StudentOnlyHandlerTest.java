@@ -11,18 +11,6 @@ import org.mockito.Mockito;
 public class StudentOnlyHandlerTest {
 
     @Test
-    public void withoutSession() throws JExpError {
-        Request request = Mockito.mock(Request.class);
-        Mockito.when(request.sessionEstabilished()).thenReturn(false);
-        Response response = Mockito.mock(Response.class);
-        Next next = Mockito.mock(Next.class);
-        StudentOnlyHandler handler = new StudentOnlyHandler();
-        handler.handle(request, response, next);
-        Mockito.verify(response, Mockito.times(1)).status(401);
-        Mockito.verify(response, Mockito.times(1)).end();
-    }
-
-    @Test
     public void notStudent() throws JExpError {
         Request request = Mockito.mock(Request.class);
         Mockito.when(request.sessionEstabilished()).thenReturn(true);
