@@ -19,13 +19,14 @@ public class AdminLessonFormController {
     @FXML private ComboBox<Subject> comboSubject;
     @FXML private ComboBox<User> comboTeacher;
     @FXML private ComboBox<String> comboDay;
-    @FXML private TextField txtLessonHour;
+    @FXML private ComboBox<String> comboLessonHour;
     @FXML private TextField txtRoom;
 
     @FXML
     public void initialize() {
         loadInitialData();
         setupDays();
+        setupLessonHours();
         setupConverters();
     }
 
@@ -77,21 +78,23 @@ public class AdminLessonFormController {
             Subject selectedSubject = comboSubject.getSelectionModel().getSelectedItem();
             User selectedUser = comboTeacher.getSelectionModel().getSelectedItem();
             String selectedDay = comboDay.getSelectionModel().getSelectedItem();
-            String startHour = txtLessonHour.getText().trim();
+            String selectedHourRange = comboLessonHour.getSelectionModel().getSelectedItem();
+            //String room = txtRoom.getText();
 
             if (selectedGroup == null || selectedSubject == null || selectedUser == null ||
-                    selectedDay == null || startHour.isEmpty()) {
+                    selectedDay == null || selectedHourRange == null /* || room.isEmpty()*/ ) {
                 AlertHelper.showWarning("Brak danych", "Proszę uzupełnić wszystkie pola!");
                 return;
             }
 
-            String formattedStartTime = formatToSqlTime(startHour);
-            String formattedEndTime = calculateEndTime(formattedStartTime);
+            String startTime = selectedHourRange.substring(3, 8);
+            String endTime = selectedHourRange.substring(11, 16);
 
             SchoolClass scheduleEntry = new SchoolClass();
             scheduleEntry.setDay(selectedDay);
-            scheduleEntry.setStartTime(formattedStartTime);
-            scheduleEntry.setEndTime(formattedEndTime);
+            scheduleEntry.setStartTime(startTime);
+            scheduleEntry.setEndTime(endTime);
+            //scheduleEntry.setRoom(room);
             scheduleEntry.setSchoolGroup(selectedGroup);
             scheduleEntry.setSubject(selectedSubject);
 
@@ -113,30 +116,19 @@ public class AdminLessonFormController {
         }
     }
 
-    // Pomocnicza metoda do formatowania czasu
-    private String formatToSqlTime(String time) {
-        if (time.split(":").length == 2) return time + ":00"; // HH:MM -> HH:MM:00
-        return time;
+    private void setupLessonHours() {
+        comboLessonHour.setItems(FXCollections.observableArrayList(
+                "1 (08:00 - 08:45)",
+                "2 (08:55 - 09:40)",
+                "3 (09:50 - 10:35)",
+                "4 (10:50 - 11:35)",
+                "5 (11:45 - 12:30)",
+                "6 (12:45 - 13:30)",
+                "7 (13:50 - 14:35)",
+                "8 (14:45 - 15:30)",
+                "9 (15:35 - 16:20)"
+        ));
     }
-
-    // Pomocnicza metoda wyliczająca koniec lekcji (standardowe 45 min)
-    private String calculateEndTime(String startTime) {
-        try {
-            String[] parts = startTime.split(":");
-            int hour = Integer.parseInt(parts[0]);
-            int min = Integer.parseInt(parts[1]);
-
-            min += 45;
-            if (min >= 60) {
-                hour++;
-                min -= 60;
-            }
-            return String.format("%02d:%02d:00", hour, min);
-        } catch (Exception e) {
-            return startTime;
-        }
-    }
-
 
     @FXML
     private void handleCancel() {

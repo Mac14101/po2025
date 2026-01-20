@@ -31,9 +31,9 @@
         <TableView fx:id="scheduleTable" VBox.vgrow="ALWAYS">
             <columns>
                 <TableColumn fx:id="colDay" prefWidth="120.0" text="Dzień" />
-                <TableColumn fx:id="colTime" prefWidth="100.0" text="Godzina" />
-                <TableColumn fx:id="colSubject" prefWidth="150.0" text="Przedmiot" />
-                <TableColumn fx:id="colTeacher" prefWidth="200.0" text="Nauczyciel" />
+                <TableColumn fx:id="colTime" prefWidth="220.0" text="Godzina" />
+                <TableColumn fx:id="colSubject" prefWidth="210.0" text="Przedmiot" />
+                <TableColumn fx:id="colTeacher" prefWidth="210.0" text="Nauczyciel" />
                 <TableColumn fx:id="colRoom" prefWidth="100.0" text="Sala" />
             </columns>
             <columnResizePolicy>
@@ -47,6 +47,7 @@
                 <Button mnemonicParsing="false" onAction="#handleEditLesson" text="Edytuj zaznaczoną" />
                 <Button mnemonicParsing="false" onAction="#handleDeleteLesson" style="-fx-background-color: #c0392b; -fx-text-fill: white;" text="Usuń z planu" />
             </children>
+
         </HBox>
     </children>
     <padding>

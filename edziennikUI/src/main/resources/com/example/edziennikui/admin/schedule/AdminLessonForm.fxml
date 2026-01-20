@@ -46,8 +46,8 @@
                 <Label text="Dzień tygodnia:" GridPane.rowIndex="3" />
                 <ComboBox fx:id="comboDay" maxWidth="1.7976931348623157E308" promptText="Wybierz dzień..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
 
-                <Label text="Godzina/Nr lekcji:" GridPane.rowIndex="4" />
-                <TextField fx:id="txtLessonHour" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label text="Nr lekcji:" GridPane.rowIndex="4" />
+                <ComboBox fx:id="comboLessonHour" maxWidth="1.7976931348623157E308" promptText="Wybierz godzinę..." GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
                 <Label text="Sala:" GridPane.rowIndex="5" />
                 <TextField fx:id="txtRoom" GridPane.columnIndex="1" GridPane.rowIndex="5" />
