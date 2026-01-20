@@ -1,28 +1,77 @@
 package com.example.edziennikui.teacher;
 
+import client.ApplicationClient;
+import com.example.edziennikui.shared.AlertHelper;
+import entities.SchoolGroup;
+import entities.Subject;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.util.StringConverter;
+
+import java.io.IOException;
 
 public class TeacherClassSelectController {
 
-    @FXML private ComboBox<String> comboClass;
-    @FXML private ComboBox<String> comboSubject;
-    @FXML private Button btnConfirm;
+    @FXML private ComboBox<SchoolGroup> comboClass;
+    @FXML private ComboBox<Subject> comboSubject;
 
     @FXML
     public void initialize() {
+        setupConverters();
+        loadData();
+    }
+
+    private void loadData() {
+        try {
+            comboClass.setItems(FXCollections.observableArrayList(ApplicationClient.getInstance().getAllClass()));
+            comboSubject.setItems(FXCollections.observableArrayList(ApplicationClient.getInstance().getAllSubjects()));
+        } catch (Exception e) {
+            AlertHelper.showError("Błąd połączenia", "Nie udało się załadować listy klas lub przedmiotów. \n" + "Szczegóły: " + e.getMessage());
+        }
+    }
+
+    private void setupConverters() {
+        comboClass.setConverter(new StringConverter<>() {
+            @Override public String toString(SchoolGroup g) { return g == null ? "" : g.getNumber() + " " + g.getLetter(); }
+            @Override public SchoolGroup fromString(String s) { return null; }
+        });
+        comboSubject.setConverter(new StringConverter<>() {
+            @Override public String toString(Subject s) { return s == null ? "" : s.getName(); }
+            @Override public Subject fromString(String s) { return null; }
+        });
     }
 
     @FXML
     private void handleConfirmSelection() {
-        String selectedClass = comboClass.getValue();
-        String selectedSubject = comboSubject.getValue();
+        SchoolGroup selectedGroup = comboClass.getValue();
+        Subject selectedSubject = comboSubject.getValue();
 
-        if (selectedClass != null && selectedSubject != null) {
-            System.out.println("Wybrano: " + selectedClass + " - " + selectedSubject);
-        } else {
-            System.err.println("Błąd: Nie wybrano klasy lub przedmiotu!");
+        if (selectedGroup == null || selectedSubject == null) {
+            AlertHelper.showWarning("Brak wyboru", "Proszę wybrać klasę i przedmiot.");
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/teacher/TeacherGrades.fxml"));
+            Parent root = loader.load();
+
+            TeacherGradesController controller = loader.getController();
+            controller.setContext(selectedGroup, selectedSubject);
+
+            Stage stage = new Stage();
+            stage.setTitle("Oceny - " + selectedGroup.getNumber() + selectedGroup.getLetter());
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.show();
+
+        } catch (IOException e) {
+            AlertHelper.showError("Błąd", "Nie udało się otworzyć okna ocen.");
         }
     }
 }
