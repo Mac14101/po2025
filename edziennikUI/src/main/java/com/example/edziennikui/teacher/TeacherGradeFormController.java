@@ -1,38 +1,61 @@
 package com.example.edziennikui.teacher;
 
+import client.ApplicationClient;
+import com.example.edziennikui.shared.AlertHelper;
+import entities.Grade;
+import entities.Student;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class TeacherGradeFormController {
 
     @FXML private Label lblStudentName;
-    @FXML private ComboBox<String> comboGradeValue;
-    @FXML private TextField txtWeight;
+    @FXML private ComboBox<Integer> comboGradeValue;
     @FXML private TextField txtCategory;
     @FXML private TextArea txtComment;
 
+    private Student currentStudent;
+    private entities.Subject currentSubject;
+
     @FXML
     public void initialize() {
-        comboGradeValue.getItems().addAll("1", "2", "3", "4", "5", "6");
+        comboGradeValue.getItems().addAll(1, 2, 3, 4, 5, 6);
     }
 
-    // Metoda z poprzedniego widoku, żeby ustawić dane ucznia
-    public void setStudentData(String studentName) {
-        lblStudentName.setText("Uczeń: " + studentName);
+    public void setGradeData(Student student, entities.Subject subject) {
+        this.currentStudent = student;
+        this.currentSubject = subject;
+        lblStudentName.setText("Uczeń: " + student.getName() + " " + student.getSurname() +
+                " (" + subject.getName() + ")");
     }
 
     @FXML
     private void handleSave() {
-        String grade = comboGradeValue.getValue();
-        String weight = txtWeight.getText();
-
-        if (grade == null) {
-            System.err.println("Musisz wybrać ocenę!");
+        if (comboGradeValue.getValue() == null || txtCategory.getText().isEmpty()) {
+            AlertHelper.showWarning("Błąd", "Wybierz ocenę i wpisz kategorię!");
             return;
+        }
+
+        try {
+            Grade newGrade = new Grade();
+            String selectedValue = comboGradeValue.getValue().toString();
+            newGrade.setGrade(Grade.GradeName.fromGrade(selectedValue));
+
+            newGrade.setStudent(currentStudent);
+            newGrade.setSubject(currentSubject);
+
+            ApplicationClient.getInstance().addGrade(currentStudent.getId(), newGrade);
+
+            AlertHelper.showInfo("Sukces", "Dodano ocenę: " + selectedValue);
+            handleCancel();
+        } catch (Exception e) {
+            AlertHelper.showError("Błąd", "Nie udało się zapisać: " + e.getMessage());
         }
     }
 
     @FXML
     private void handleCancel() {
+        ((Stage) lblStudentName.getScene().getWindow()).close();
     }
 }
