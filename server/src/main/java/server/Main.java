@@ -31,6 +31,7 @@ import server.handlers.subjects.CreateSubjectHandler;
 import server.handlers.timeTable.AddClassTimeTableHandler;
 import server.handlers.timeTable.ClassTimeTableHandler;
 import server.handlers.timeTable.StudentTimeTableHandler;
+import server.handlers.timeTable.TeacherTimeTableHandler;
 import server.handlers.users.AllUsersHandler;
 import server.handlers.users.CreateUserHandler;
 
@@ -57,9 +58,10 @@ public class Main {
         server.get("/self/", new UserDataHandler());
         //Trasy do pobierania danych - tylko uczniowie
         server.use("/self/", studentOnlyHandler);
-        server.use("/self/timetable/", new StudentTimeTableHandler());
-        server.use("/self/attendance/", new StudentAttendanceHandler());
-        server.use("/self/grade/", new StudentGradesHandler());
+        server.get("/self/timetable/", new StudentTimeTableHandler());
+        server.get("/self/timetable/", new TeacherTimeTableHandler());
+        server.get("/self/attendance/", new StudentAttendanceHandler());
+        server.get("/self/grade/", new StudentGradesHandler());
         //Trasy do manipulacji użytkownikami - tylko administratorzy
         server.use("/user/", adminOnlyHandler);
         server.get("/user/", new AllUsersHandler());
@@ -70,8 +72,9 @@ public class Main {
         server.post("/subject/", adminOnlyHandler);
         server.post("/subject/", new CreateSubjectHandler());
         //Trasy do manipulacji klasami - tylko administratorzy
-        server.use("/class/", adminOnlyHandler);
+        server.get("/class/", adminTeacherOnlyHandler);
         server.get("/class/", new AllClassesHandler());
+        server.post("/class/", adminOnlyHandler);
         server.post("/class/", new CreateClassHandler());
         //Trasy do manipulacji uczniami
         server.get("/student/:classId/", adminTeacherOnlyHandler);
