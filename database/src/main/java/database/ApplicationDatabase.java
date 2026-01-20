@@ -284,7 +284,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getStudentSchedule(int studentId) {
         try {
-            String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
+            String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, C.number, C.letter, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
             PreparedStatement getUserScheduleStatement = this.getPreparedStatement(getUserScheduleSQL);
             getUserScheduleStatement.setInt(1, studentId);
             ResultSet result = this.executeQueryStatement(getUserScheduleStatement);
