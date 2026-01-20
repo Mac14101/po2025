@@ -5,7 +5,6 @@ import entities.*;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import json.JSON;
 import client.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,7 +15,6 @@ import javafx.scene.control.Button;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import java.awt.*;
 import java.io.IOException;
 
 public class HelloController {
@@ -77,7 +75,7 @@ public class HelloController {
         if (loggedUser.getRole() == User.Role.ADMIN) {
             loadPage("/com/example/edziennikui/admin/schedule/AdminScheduleManage.fxml");
         } else {
-            loadPage("/com/example/edziennikui/student/StudentSchedule.fxml");
+            loadPage("/com/example/edziennikui/shared/Schedule.fxml");
         }
     }
 
@@ -135,7 +133,7 @@ public class HelloController {
             case TEACHER:
                 btnGrades.setText("Wystaw Oceny");
                 btnAttendance.setText("Obecność");
-                btnSchedule.setText("Plan");
+                btnSchedule.setText("Plan Lekcji");
                 break;
 
             case STUDENT:
