@@ -5,10 +5,8 @@ import com.example.edziennikui.shared.AlertHelper;
 import entities.Grade;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
+import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,16 +18,40 @@ public class StudentGradesController {
     @FXML private TableView<SubjectGradeRow> gradesTable;
     @FXML private TableColumn<SubjectGradeRow, String> colSubject;
     @FXML private TableColumn<SubjectGradeRow, String> colGrades;
+    @FXML private TableColumn<SubjectGradeRow, String> colDetails;
     @FXML private TableColumn<SubjectGradeRow, Double> colAverage;
 
 
     @FXML
     public void initialize() {
-        colSubject.setCellValueFactory(new PropertyValueFactory<>("subjectName"));
-        colGrades.setCellValueFactory(new PropertyValueFactory<>("partialGrades"));
-        colAverage.setCellValueFactory(new PropertyValueFactory<>("average"));
+        colSubject.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getSubjectName()));
+
+        colGrades.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getPartialGrades()));
+
+        colDetails.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleStringProperty(data.getValue().getDetails()));
+
+        colAverage.setCellValueFactory(data ->
+                new javafx.beans.property.SimpleDoubleProperty(data.getValue().getAverage()).asObject());
+
+        setupMultiLineColumn(colGrades);
+        setupMultiLineColumn(colDetails);
 
         loadGrades();
+    }
+
+    private void setupMultiLineColumn(TableColumn<SubjectGradeRow, String> column) {
+        column.setCellFactory(tc -> {
+            TableCell<SubjectGradeRow, String> cell = new TableCell<>();
+            Text text = new Text();
+            cell.setGraphic(text);
+            cell.setPrefHeight(Control.USE_COMPUTED_SIZE);
+            text.wrappingWidthProperty().bind(column.widthProperty());
+            text.textProperty().bind(cell.itemProperty());
+            return cell;
+        });
     }
 
     private void loadGrades() {
@@ -62,18 +84,35 @@ public class StudentGradesController {
 
             this.average = gradeList.stream()
                     .map(Grade::getGrade)
-                    .filter(gn -> !gn.toString().equals("np") && !gn.toString().equals("nb"))
-                    .mapToInt(gn -> Integer.parseInt(gn.toString()))
+                    .map(Object::toString)
+                    .filter(s -> s.matches("\\d+"))
+                    .mapToInt(Integer::parseInt)
                     .average().orElse(0.0);
         }
 
         public String getSubjectName() { return subjectName; }
+
         public String getPartialGrades() {
+            if (gradeList == null || gradeList.isEmpty()) return "-";
             return gradeList.stream()
                     .map(g -> g.getGrade().toString())
-                    .collect(java.util.stream.Collectors.joining(", "));
+                    .collect(Collectors.joining("\n"));
         }
-        public double getAverage() { return Math.round(average * 100.0) / 100.0; }
+
+        public double getAverage() {
+            return Math.round(average * 100.0) / 100.0;
+        }
+
+        public String getDetails() {
+            if (gradeList == null || gradeList.isEmpty()) return "-";
+            return gradeList.stream()
+                    .map(g -> {
+                        String t = (g.getTitle() != null && !g.getTitle().isEmpty()) ? g.getTitle() : "Brak tytułu";
+                        String c = (g.getComment() != null && !g.getComment().isEmpty()) ? ": " + g.getComment() : "";
+                        return t + c;
+                    })
+                    .collect(Collectors.joining("\n"));
+        }
     }
 }
 
