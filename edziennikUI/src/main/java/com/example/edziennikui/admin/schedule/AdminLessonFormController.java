@@ -63,13 +63,15 @@ public class AdminLessonFormController {
             User selectedUser = comboTeacher.getSelectionModel().getSelectedItem();
             String selectedDay = comboDay.getSelectionModel().getSelectedItem();
             String selectedHourRange = comboLessonHour.getSelectionModel().getSelectedItem();
-            //String room = txtRoom.getText();
+            String inputRoom = txtRoom.getText();
 
             if (selectedGroup == null || selectedSubject == null || selectedUser == null ||
-                    selectedDay == null || selectedHourRange == null /* || room.isEmpty()*/ ) {
+                    selectedDay == null || selectedHourRange == null  || inputRoom.isEmpty()) {
                 AlertHelper.showWarning("Brak danych", "Proszę uzupełnić wszystkie pola!");
                 return;
             }
+
+            Integer room = Integer.parseInt(inputRoom.trim());
 
             String startTime = selectedHourRange.substring(3, 8);
             String endTime = selectedHourRange.substring(11, 16);
@@ -78,7 +80,7 @@ public class AdminLessonFormController {
             scheduleEntry.setDay(selectedDay);
             scheduleEntry.setStartTime(startTime);
             scheduleEntry.setEndTime(endTime);
-            //scheduleEntry.setRoom(room);
+            scheduleEntry.setRoom(room);
             scheduleEntry.setSchoolGroup(selectedGroup);
             scheduleEntry.setSubject(selectedSubject);
 

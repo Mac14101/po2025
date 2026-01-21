@@ -66,6 +66,10 @@ public class AdminScheduleManageController {
             }
             return new SimpleStringProperty("Brak przypisanego nauczyciela");
         });
+        colRoom.setCellValueFactory(cellData -> {
+            Integer room = cellData.getValue().getRoom();
+            return new SimpleStringProperty(room != null ? String.valueOf(room) : "-");
+        });
     }
 
     private void loadInitialData() {
@@ -88,24 +92,42 @@ public class AdminScheduleManageController {
 
     @FXML
     private void handleAddLesson() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/schedule/AdminLessonForm.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Dodaj lekcję do planu");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            if (comboFilterClass.getValue() != null) {
-                loadScheduleForClass(comboFilterClass.getValue().getId());
-            }
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć formularza.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/schedule/AdminLessonForm.fxml",
+                "Dodaj lekcję do planu",
+                null
+        );
+        refreshTable();
     }
 
-    @FXML private void handleEditLesson() { }
-    @FXML private void handleDeleteLesson() { }
+    @FXML private void handleEditLesson() {
+        SchoolClass selected = scheduleTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            AlertHelper.showWarning("Brak wyboru", "Wybierz lekcję do edycji.");
+            return;
+        }
+
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/schedule/AdminLessonForm.fxml",
+                "Edytuj lekcję",
+                (AdminLessonFormController controller) -> {
+                    // Tutaj przekaże dane do formularza, gdy powstanie
+                }
+        );
+        refreshTable();
+    }
+    @FXML private void handleDeleteLesson() {
+        SchoolClass selected = scheduleTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            AlertHelper.showWarning("Brak wyboru", "Wybierz lekcję do usunięcia.");
+            return;
+        }
+        // Logika usuwania jak powstanie
+        refreshTable();
+    }
+    private void refreshTable() {
+        if (comboFilterClass.getValue() != null) {
+            loadScheduleForClass(comboFilterClass.getValue().getId());
+        }
+    }
 }
