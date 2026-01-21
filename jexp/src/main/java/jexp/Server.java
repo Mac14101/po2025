@@ -16,10 +16,15 @@ public class Server {
     private Router mainRouter;
     private HttpServer server;
     private ErrorHandler errorHandler;
+    private Logger logger;
 
     public Server() {
         this.mainRouter = new Router();
         this.errorHandler = null;
+    }
+
+    public void use(Logger logger) {
+        this.logger = logger;
     }
 
     /**
@@ -99,7 +104,7 @@ public class Server {
         this.mainRouter.updateDepth();
         //Uruchamia serwer
         this.server = HttpServer.create(new InetSocketAddress(host, port), 0);
-        this.server.createContext("/", new ServerHandler(this.mainRouter, this.errorHandler));
+        this.server.createContext("/", new ServerHandler(this.mainRouter, this.errorHandler, this.logger));
         this.server.start();
     }
 
@@ -120,14 +125,16 @@ public class Server {
     public static class ServerHandler implements HttpHandler {
         Router router;
         ErrorHandler serverErrorHandler;
+        Logger logger;
 
-        public ServerHandler(Router router, ErrorHandler errorHandler) {
+        public ServerHandler(Router router, ErrorHandler errorHandler, Logger logger) {
             this.router = router;
             if (errorHandler != null) {
                 this.serverErrorHandler = errorHandler;
             } else {
                 this.serverErrorHandler = new ServerErrorHandler();
             }
+            this.logger = logger;
         }
 
         @Override
@@ -138,15 +145,23 @@ public class Server {
                 Next next = new Next();
                 try {
                     this.router.handle(request, response, next);
+                    if (this.logger != null) {
+                        logger.logResponse(request, response);
+                    }
                     response.sendResponse(exchange);
                 } catch (Exception error) {
                     request = new Request(exchange);
                     response = new Response();
                     this.serverErrorHandler.handle(error, request, response);
+                    if (this.logger != null) {
+                        logger.logError(error, request, response);
+                    }
                     response.sendResponse(exchange);
                 }
             } catch (Exception error) {
-                System.err.println(error.getMessage());
+                if (this.logger != null) {
+                    logger.criticalError(error);
+                }
                 exchange.sendResponseHeaders(500, 0);
             }
         }

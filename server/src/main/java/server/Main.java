@@ -6,11 +6,13 @@ import jexp.Router;
 import jexp.Server;
 import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
+import server.handlers.MainLogger;
 import server.handlers.attendance.LessonAttendanceListHandler;
 import server.handlers.attendance.LessonAttendanceUpdateHandler;
 import server.handlers.attendance.StudentAttendanceHandler;
 import server.handlers.authentication.AuthenticationHandler;
 import server.handlers.authentication.SessionDestroyHandler;
+import server.handlers.authentication.UpdateUserPasswordHandler;
 import server.handlers.authentication.UserDataHandler;
 import server.handlers.authorization.*;
 import server.handlers.classes.AllClassesHandler;
@@ -41,6 +43,7 @@ public class Main {
         database.connect("database.db");
         database.initialize(new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString()));
         Server server = new Server();
+        server.use(new MainLogger("Server"));
 
         AuthenticatedUsersOnlyHandler authenticatedUsersOnlyHandler = new AuthenticatedUsersOnlyHandler();
         AdminOnlyHandler adminOnlyHandler = new AdminOnlyHandler();
@@ -55,6 +58,7 @@ public class Main {
         server.get("/logout/", new SessionDestroyHandler());
         //Trasy do pobierania danych
         server.use("/self/", authenticatedUsersOnlyHandler);
+        server.put("/self/password/", new UpdateUserPasswordHandler());
         server.get("/self/timetable/", new StudentTimeTableHandler());
         server.get("/self/timetable/", new TeacherTimeTableHandler());
         server.get("/self/attendance/", new StudentAttendanceHandler());
