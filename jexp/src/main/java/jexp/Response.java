@@ -31,6 +31,14 @@ public class Response {
         this.closed = false;
     }
 
+    public String getBody() {
+        return body;
+    }
+
+    public int getStatus() {
+        return statusCode;
+    }
+
     /**
      * Ustawia kod odpowiedzi HTTP.
      *
