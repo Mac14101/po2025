@@ -15,7 +15,7 @@ public class ApplicationClient extends Client {
     private ApplicationClient() {
         super();
     }
-
+    
     public static ApplicationClient getInstance() {
         if (instance == null) {
             instance = new ApplicationClient();
