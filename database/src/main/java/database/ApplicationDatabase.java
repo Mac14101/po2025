@@ -332,4 +332,16 @@ public class ApplicationDatabase extends Database {
             throw new RuntimeException(e);
         }
     }
+
+    public void updateUserPassword(int userId, String newPassword) {
+        try {
+            String updadetPasswordSQL = "UPDATE users SET password=? WHERE uid=?;";
+            PreparedStatement updadetPasswordStatement = this.getPreparedStatement(updadetPasswordSQL);
+            updadetPasswordStatement.setString(1, newPassword);
+            updadetPasswordStatement.setInt(2, userId);
+            this.executeUpdateStatement(updadetPasswordStatement);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
