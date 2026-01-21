@@ -2,18 +2,13 @@ package com.example.edziennikui.admin.subjects;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.Subject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AdminSubjectListController {
@@ -42,7 +37,12 @@ public class AdminSubjectListController {
 
     @FXML
     private void handleAddSubject() {
-        openSubjectForm(null);
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/subjects/AdminSubjectForm.fxml",
+                "Dodaj przedmiot",
+                null
+        );
+        loadSubjects();
     }
 
     @FXML
@@ -52,29 +52,12 @@ public class AdminSubjectListController {
             AlertHelper.showWarning("Brak wyboru", "Wybierz przedmiot do edycji.");
             return;
         }
-        openSubjectForm(selected);
-    }
-
-    private void openSubjectForm(Subject subject) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/subjects/AdminSubjectForm.fxml"));
-            Parent root = loader.load();
-
-            AdminSubjectFormController controller = loader.getController();
-            if (subject != null) {
-                controller.setSubjectData(subject);
-            }
-
-            Stage stage = new Stage();
-            stage.setTitle(subject == null ? "Dodaj przedmiot" : "Edytuj przedmiot");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            loadSubjects();
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć okna formularza.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/subjects/AdminSubjectForm.fxml",
+                "Edytuj przedmiot",
+                (AdminSubjectFormController controller) -> controller.setSubjectData(selected)
+        );
+        loadSubjects();
     }
 
     @FXML

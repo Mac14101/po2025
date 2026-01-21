@@ -7,15 +7,7 @@ import entities.SchoolGroup;
 import entities.Subject;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.util.StringConverter;
-
-import java.io.IOException;
 
 public class TeacherClassSelectController {
 
@@ -48,21 +40,12 @@ public class TeacherClassSelectController {
             return;
         }
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/teacher/TeacherGrades.fxml"));
-            Parent root = loader.load();
-
-            TeacherGradesController controller = loader.getController();
-            controller.setContext(selectedGroup, selectedSubject);
-
-            Stage stage = new Stage();
-            stage.setTitle("Oceny - " + selectedGroup.getNumber() + selectedGroup.getLetter());
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.show();
-
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć okna ocen.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/teacher/TeacherGrades.fxml",
+                "Oceny - " + selectedGroup.getNumber() + selectedGroup.getLetter(),
+                (TeacherGradesController controller) -> {
+                    controller.setContext(selectedGroup, selectedSubject);
+                }
+        );
     }
 }

@@ -25,7 +25,6 @@ public class StudentAttendanceController {
 
     @FXML
     public void initialize() {
-        // Mapujemy kolumny na pola z klasy Attendance
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colLesson.setCellValueFactory(new PropertyValueFactory<>("lid"));
         colSubject.setCellValueFactory(new PropertyValueFactory<>("subjectName"));

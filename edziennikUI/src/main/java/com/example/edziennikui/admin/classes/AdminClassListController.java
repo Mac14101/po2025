@@ -2,19 +2,13 @@ package com.example.edziennikui.admin.classes;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.SchoolGroup;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AdminClassListController {
@@ -54,40 +48,21 @@ public class AdminClassListController {
             return;
         }
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/classes/AdminClassDetails.fxml"));
-            Parent root = loader.load();
-
-            AdminClassDetailsController controller = loader.getController();
-            controller.setClassData(selectedClass);
-
-            Stage stage = new Stage();
-            stage.setTitle("Szczegóły klasy: " + selectedClass.getNumber() + " " + selectedClass.getLetter());
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.show();
-
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć okna szczegółów.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/classes/AdminClassDetails.fxml",
+                "Szczegóły klasy: " + selectedClass.getNumber() + " " + selectedClass.getLetter(),
+                (AdminClassDetailsController controller) -> controller.setClassData(selectedClass)
+        );
     }
 
     @FXML
     private void handleAddClass() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/classes/AdminClassForm.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Dodaj nową klasę");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-
-            stage.showAndWait();
-            loadClasses();
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć formularza dodawania.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/classes/AdminClassForm.fxml",
+                "Dodaj nową klasę",
+                null
+        );
+        loadClasses();
     }
 
     @FXML

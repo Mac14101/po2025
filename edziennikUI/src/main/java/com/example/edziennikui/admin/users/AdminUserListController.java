@@ -2,20 +2,14 @@ package com.example.edziennikui.admin.users;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.User;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AdminUserListController {
@@ -91,20 +85,12 @@ public class AdminUserListController {
 
     @FXML
     private void handleAddUser() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/users/AdminUserForm.fxml"));
-            Parent root = loader.load();
-
-            Stage stage = new Stage();
-            stage.setTitle("Dodaj nowego użytkownika");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            loadUsers();
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd ładowania", "Nie udało się otworzyć formularza dodawania.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/users/AdminUserForm.fxml",
+                "Dodaj nowego użytkownika",
+                null
+        );
+        loadUsers();
     }
 
     @FXML
@@ -116,23 +102,12 @@ public class AdminUserListController {
             return;
         }
 
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/users/AdminUserForm.fxml"));
-            Parent root = loader.load();
-
-            AdminUserFormController controller = loader.getController();
-            controller.setUserData(selectedUser);
-
-            Stage stage = new Stage();
-            stage.setTitle("Edytuj użytkownika");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            loadUsers();
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć okna edycji.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/users/AdminUserForm.fxml",
+                "Edytuj użytkownika",
+                (AdminUserFormController controller) -> controller.setUserData(selectedUser)
+        );
+        loadUsers();
     }
 
     @FXML

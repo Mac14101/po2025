@@ -2,22 +2,17 @@ package com.example.edziennikui.admin.classes;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.SchoolGroup;
 import entities.Student;
 import entities.User;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class AdminClassDetailsController {
@@ -65,26 +60,14 @@ public class AdminClassDetailsController {
 
     @FXML
     private void handleAddStudentToClass() {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/admin/classes/AdminAddStudentToClass.fxml"));
-            Parent root = loader.load();
-
-            AdminAddStudentToClassController controller = loader.getController();
-            controller.setClassId(currentClassId);
-
-            Stage stage = new Stage();
-            stage.setTitle("Dodaj ucznia do klasy");
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setScene(new Scene(root));
-            stage.showAndWait();
-
-            if (controller.isStudentAdded()) {
-                loadStudents(currentClassId);
-            }
-
-        } catch (IOException e) {
-            AlertHelper.showError("Błąd", "Nie udało się otworzyć okna wyboru uczniów.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/admin/classes/AdminAddStudentToClass.fxml",
+                "Dodaj ucznia do klasy",
+                (AdminAddStudentToClassController controller) -> {
+                    controller.setClassId(currentClassId);
+                }
+        );
+        loadStudents(currentClassId);
     }
 
     @FXML

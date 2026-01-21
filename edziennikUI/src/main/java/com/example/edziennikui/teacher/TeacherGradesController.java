@@ -2,16 +2,13 @@ package com.example.edziennikui.teacher;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.*;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
@@ -136,19 +133,14 @@ public class TeacherGradesController {
     }
 
     private void openGradeForm(Student student) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/teacher/TeacherGradeForm.fxml"));
-            Parent root = loader.load();
-            TeacherGradeFormController controller = loader.getController();
-            controller.setGradeData(student, this.currentSubject);
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.showAndWait();
-            handleRefresh();
-        } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie można otworzyć formularza.");
-        }
+        UIHelper.openModal(
+                "/com/example/edziennikui/teacher/TeacherGradeForm.fxml",
+                "Wystaw ocenę - " + student.getName() + " " + student.getSurname(),
+                (TeacherGradeFormController controller) -> {
+                    controller.setGradeData(student, this.currentSubject);
+                }
+        );
+        handleRefresh();
     }
 
     @FXML
