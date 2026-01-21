@@ -287,7 +287,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getStudentSchedule(int studentId) {
         try {
-            String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.startTime, TT.room, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
+            String getUserScheduleSQL = "SELECT TT.ttid, TT.day, TT.startTime, TT.startTime, TT.room, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
             PreparedStatement getUserScheduleStatement = this.getPreparedStatement(getUserScheduleSQL);
             getUserScheduleStatement.setInt(1, studentId);
             ResultSet result = this.executeQueryStatement(getUserScheduleStatement);
@@ -323,7 +323,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getTeacherSchedule(int teacherId) {
         try {
-            String getTeacherScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, TT.room, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=3;";
+            String getTeacherScheduleSQL = "SELECT TT.ttid, TT.day, TT.startTime, TT.endTime, TT.room, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=3;";
             PreparedStatement getTeacherScheduleStatement = this.getPreparedStatement(getTeacherScheduleSQL);
             getTeacherScheduleStatement.setInt(1, teacherId);
             ResultSet result = this.executeQueryStatement(getTeacherScheduleStatement);
