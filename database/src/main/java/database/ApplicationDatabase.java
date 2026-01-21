@@ -23,13 +23,13 @@ public class ApplicationDatabase extends Database {
         this.getPreparedStatement(studentsTable).execute();
         String subjectsTable = "CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQUE NOT NULL);";
         this.getPreparedStatement(subjectsTable).execute();
-        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sbid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid));";
+        String timeTabelTable = "CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sbid INTEGER, room INT, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid));";
         this.getPreparedStatement(timeTabelTable).execute();
         String lessonsTable = "CREATE TABLE IF NOT EXISTS lessons (lid INTEGER PRIMARY KEY, topic TEXT NOT NULL, date TEXT NOT NULL, ttid INTEGER, FOREIGN KEY(ttid) REFERENCES time_table(ttid));";
         this.getPreparedStatement(lessonsTable).execute();
         String attendanceTable = "CREATE TABLE IF NOT EXISTS attendance (sid INTEGER, lid INTEGER, status TEXT NOT NULL, FOREIGN KEY(sid) REFERENCES students(sid), FOREIGN KEY(lid) REFERENCES lessons(lid));";
         this.getPreparedStatement(attendanceTable).execute();
-        String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
+        String gradesTable = "CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, title TEXT NOT NULL, comment TEXT DEFAULT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));";
         this.getPreparedStatement(gradesTable).execute();
         String attendanceTrigger = "CREATE TRIGGER IF NOT EXISTS attendance_lessons\n" +
                 "    AFTER INSERT ON lessons\n" +
@@ -179,7 +179,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getClassSchedule(int classId) {
         try {
-            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=?;";
+            String selectSchoolClassesSQL = "SELECT TT.day, TT.startTime, TT.endTime, TT.room, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=?;";
             PreparedStatement selectSchoolClassesStatement = this.getPreparedStatement(selectSchoolClassesSQL);
             selectSchoolClassesStatement.setInt(1, classId);
             ResultSet result = this.executeQueryStatement(selectSchoolClassesStatement);
@@ -191,7 +191,7 @@ public class ApplicationDatabase extends Database {
 
     public void addClassSchedule(SchoolClass schoolClass) {
         try {
-            String addClassScheduleSQL = "INSERT INTO time_table (day, startTime, endTime, cid, tid, sbid) VALUES (?, ?, ?, ?, ?, ?);";
+            String addClassScheduleSQL = "INSERT INTO time_table (day, startTime, endTime, cid, tid, sbid, room) VALUES (?, ?, ?, ?, ?, ?, ?);";
             PreparedStatement addClassScheduleStatement = this.getPreparedStatement(addClassScheduleSQL);
             addClassScheduleStatement.setString(1, schoolClass.getDay());
             addClassScheduleStatement.setString(2, schoolClass.getStartTime());
@@ -199,6 +199,7 @@ public class ApplicationDatabase extends Database {
             addClassScheduleStatement.setInt(4, schoolClass.getSchoolGroup().getId());
             addClassScheduleStatement.setInt(5, schoolClass.getTeacher().getId());
             addClassScheduleStatement.setInt(6, schoolClass.getSubject().getId());
+            addClassScheduleStatement.setInt(7, schoolClass.getRoom());
             this.executeUpdateStatement(addClassScheduleStatement);
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -257,7 +258,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Grade> getStudentGrades(int studentId, int teacherId) {
         try {
-            String getStudentGrades = "SELECT G.grade, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=? AND G.sid=?;";
+            String getStudentGrades = "SELECT G.grade, G.title, G.comment, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=? AND G.sid=?;";
             PreparedStatement getStudentsGrades = this.getPreparedStatement(getStudentGrades);
             getStudentsGrades.setInt(1, teacherId);
             getStudentsGrades.setInt(2, studentId);
@@ -270,12 +271,14 @@ public class ApplicationDatabase extends Database {
 
     public void addStudentGrade(int studentId, int teacherId, Grade grade) {
         try {
-            String addStudentGradeSQL = "INSERT INTO grades (sid, sbid, tid, grade) VALUES (?, ?, ?, ?);";
+            String addStudentGradeSQL = "INSERT INTO grades (sid, sbid, tid, grade, title, comment) VALUES (?, ?, ?, ?, ?, ?);";
             PreparedStatement addStudentGradeStatement = this.getPreparedStatement(addStudentGradeSQL);
             addStudentGradeStatement.setInt(1, studentId);
             addStudentGradeStatement.setString(2, grade.getSubject().getName());
             addStudentGradeStatement.setInt(3, teacherId);
             addStudentGradeStatement.setString(4, grade.getGrade().toString());
+            addStudentGradeStatement.setString(5, grade.getTitle());
+            addStudentGradeStatement.setString(6, grade.getComment());
             this.executeUpdateStatement(addStudentGradeStatement);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -284,7 +287,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getStudentSchedule(int studentId) {
         try {
-            String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.startTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
+            String getUserScheduleSQL = "SELECT TT.day, TT.startTime, TT.startTime, TT.room, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=?;";
             PreparedStatement getUserScheduleStatement = this.getPreparedStatement(getUserScheduleSQL);
             getUserScheduleStatement.setInt(1, studentId);
             ResultSet result = this.executeQueryStatement(getUserScheduleStatement);
@@ -308,7 +311,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Grade> getUserGrades(int studentId) {
         try {
-            String getUserGradeSQL = "SELECT G.grade, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=?;";
+            String getUserGradeSQL = "SELECT G.grade, G.title, G.comment, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=?;";
             PreparedStatement getUserGradeStatement = this.getPreparedStatement(getUserGradeSQL);
             getUserGradeStatement.setInt(1, studentId);
             ResultSet result = this.executeQueryStatement(getUserGradeStatement);
@@ -320,7 +323,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getTeacherSchedule(int teacherId) {
         try {
-            String getTeacherScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=3;";
+            String getTeacherScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, TT.room, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=3;";
             PreparedStatement getTeacherScheduleStatement = this.getPreparedStatement(getTeacherScheduleSQL);
             getTeacherScheduleStatement.setInt(1, teacherId);
             ResultSet result = this.executeQueryStatement(getTeacherScheduleStatement);
