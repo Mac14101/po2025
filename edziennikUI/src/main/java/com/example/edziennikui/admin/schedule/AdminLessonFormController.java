@@ -2,6 +2,7 @@ package com.example.edziennikui.admin.schedule;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.*;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -27,13 +28,14 @@ public class AdminLessonFormController {
         loadInitialData();
         setupDays();
         setupLessonHours();
-        setupConverters();
+        UIHelper.setupClassComboBox(comboClass);
+        UIHelper.setupSubjectComboBox(comboSubject);
+        UIHelper.setupUserComboBox(comboTeacher);
     }
 
     private void loadInitialData() {
         try {
             comboClass.setItems(FXCollections.observableArrayList(ApplicationClient.getInstance().getAllClass()));
-
             comboSubject.setItems(FXCollections.observableArrayList(ApplicationClient.getInstance().getAllSubjects()));
 
             ArrayList<User> allUsers = ApplicationClient.getInstance().getAllUsers();
@@ -52,24 +54,6 @@ public class AdminLessonFormController {
                 "Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek"
         ));
     }
-
-    private void setupConverters() {
-        comboSubject.setConverter(new StringConverter<>() {
-            @Override public String toString(Subject s) { return s == null ? "" : s.getName(); }
-            @Override public Subject fromString(String s) { return null; }
-        });
-
-        comboTeacher.setConverter(new StringConverter<>() {
-            @Override public String toString(User u) { return u == null ? "" : u.getName() + " " + u.getSurname(); }
-            @Override public User fromString(String s) { return null; }
-        });
-
-        comboClass.setConverter(new StringConverter<>() {
-            @Override public String toString(SchoolGroup g) { return g == null ? "" : g.getNumber() + " " + g.getLetter(); }
-            @Override public SchoolGroup fromString(String s) { return null; }
-        });
-    }
-
 
     @FXML
     private void handleSave() {

@@ -2,13 +2,13 @@ package com.example.edziennikui.teacher;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.*;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.StringConverter;
 import java.util.ArrayList;
 
 public class TeacherAttendanceController {
@@ -39,17 +39,10 @@ public class TeacherAttendanceController {
     private void loadInitialData() {
         try {
             comboClass.setItems(FXCollections.observableArrayList(ApplicationClient.getInstance().getAllClass()));
+            UIHelper.setupClassComboBox(comboClass);
+
             comboSubject.setItems(FXCollections.observableArrayList(ApplicationClient.getInstance().getAllSubjects()));
-
-            comboClass.setConverter(new StringConverter<>() {
-                @Override public String toString(SchoolGroup sg) { return sg == null ? "" : sg.getNumber() + " " + sg.getLetter(); }
-                @Override public SchoolGroup fromString(String s) { return null; }
-            });
-
-            comboSubject.setConverter(new StringConverter<>() {
-                @Override public String toString(Subject s) { return s == null ? "" : s.getName(); }
-                @Override public Subject fromString(String s) { return null; }
-            });
+            UIHelper.setupSubjectComboBox(comboSubject);
         } catch (Exception e) {
             AlertHelper.showError("Błąd", "Nie udało się załadować list danych.");
         }

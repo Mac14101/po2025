@@ -2,6 +2,7 @@ package com.example.edziennikui.teacher;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.SchoolGroup;
 import entities.Subject;
 import javafx.collections.FXCollections;
@@ -23,7 +24,8 @@ public class TeacherClassSelectController {
 
     @FXML
     public void initialize() {
-        setupConverters();
+        UIHelper.setupClassComboBox(comboClass);
+        UIHelper.setupSubjectComboBox(comboSubject);
         loadData();
     }
 
@@ -34,17 +36,6 @@ public class TeacherClassSelectController {
         } catch (Exception e) {
             AlertHelper.showError("Błąd połączenia", "Nie udało się załadować listy klas lub przedmiotów. \n" + "Szczegóły: " + e.getMessage());
         }
-    }
-
-    private void setupConverters() {
-        comboClass.setConverter(new StringConverter<>() {
-            @Override public String toString(SchoolGroup g) { return g == null ? "" : g.getNumber() + " " + g.getLetter(); }
-            @Override public SchoolGroup fromString(String s) { return null; }
-        });
-        comboSubject.setConverter(new StringConverter<>() {
-            @Override public String toString(Subject s) { return s == null ? "" : s.getName(); }
-            @Override public Subject fromString(String s) { return null; }
-        });
     }
 
     @FXML

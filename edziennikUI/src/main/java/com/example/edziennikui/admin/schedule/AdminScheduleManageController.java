@@ -2,6 +2,7 @@ package com.example.edziennikui.admin.schedule;
 
 import client.ApplicationClient;
 import com.example.edziennikui.shared.AlertHelper;
+import com.example.edziennikui.shared.UIHelper;
 import entities.SchoolClass;
 import entities.SchoolGroup;
 import javafx.beans.property.SimpleStringProperty;
@@ -34,6 +35,7 @@ public class AdminScheduleManageController {
     public void initialize() {
         setupTableColumns();
         loadInitialData();
+        UIHelper.setupClassComboBox(comboFilterClass);
 
         comboFilterClass.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal != null) {
@@ -43,17 +45,18 @@ public class AdminScheduleManageController {
     }
 
     private void setupTableColumns() {
-        colDay.setCellValueFactory(new PropertyValueFactory<>("day"));
+        colDay.setCellValueFactory(cellData ->
+                new SimpleStringProperty(cellData.getValue().getDay()));
+
         colTime.setCellValueFactory(cellData -> {
             String start = cellData.getValue().getStartTime();
             String end = cellData.getValue().getEndTime();
-            return new SimpleStringProperty(start + " - " + end);
+            return new SimpleStringProperty((start != null ? start : "??:??") + " - " + (end != null ? end : "??:??"));
         });
-        colRoom.setCellValueFactory(new PropertyValueFactory<>("room"));
 
         colSubject.setCellValueFactory(cellData ->
                 new SimpleStringProperty(cellData.getValue().getSubject() != null ?
-                        cellData.getValue().getSubject().getName() : "Brak danych"));
+                        cellData.getValue().getSubject().getName() : "Brak przedmiotu"));
 
         colTeacher.setCellValueFactory(cellData -> {
             if (cellData.getValue().getTeacher() != null) {
@@ -61,7 +64,7 @@ public class AdminScheduleManageController {
                         cellData.getValue().getTeacher().getSurname();
                 return new SimpleStringProperty(fullName);
             }
-            return new SimpleStringProperty("Brak nauczyciela");
+            return new SimpleStringProperty("Brak przypisanego nauczyciela");
         });
     }
 
@@ -69,28 +72,17 @@ public class AdminScheduleManageController {
         try {
             ArrayList<SchoolGroup> classes = ApplicationClient.getInstance().getAllClass();
             comboFilterClass.setItems(FXCollections.observableArrayList(classes));
-
-            comboFilterClass.setConverter(new javafx.util.StringConverter<>() {
-                @Override public String toString(SchoolGroup sg) {
-                    return sg == null ? "" : sg.getNumber() + " " + sg.getLetter();
-                }
-                @Override public SchoolGroup fromString(String s) { return null; }
-            });
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się załadować klas.");
+            AlertHelper.showError("Błąd", "Nie udało się załadować listy klas.");
         }
     }
 
     private void loadScheduleForClass(int classId) {
         try {
             ArrayList<SchoolClass> schedule = ApplicationClient.getInstance().getClassSchedule(classId);
-
             scheduleTable.setItems(FXCollections.observableArrayList(schedule));
-            scheduleTable.refresh();
-
-            System.out.println("Załadowano " + schedule.size() + " lekcji dla klasy ID: " + classId);
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się załadować planu zajęć.");
+            AlertHelper.showError("Błąd", "Nie udało się pobrać planu zajęć dla wybranej klasy.");
         }
     }
 
@@ -110,7 +102,6 @@ public class AdminScheduleManageController {
                 loadScheduleForClass(comboFilterClass.getValue().getId());
             }
         } catch (IOException e) {
-            e.printStackTrace();
             AlertHelper.showError("Błąd", "Nie udało się otworzyć formularza.");
         }
     }
