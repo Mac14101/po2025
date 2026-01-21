@@ -29,9 +29,13 @@
 
         <TableView fx:id="gradesTable" VBox.vgrow="ALWAYS">
             <columns>
-                <TableColumn fx:id="colSubject" text="Przedmiot" />
-                <TableColumn fx:id="colGrades" text="Oceny" />
-                <TableColumn fx:id="colAverage" text="Średnia" />
+                <TableColumn fx:id="colSubject" text="Przedmiot" prefWidth="150.0" style="-fx-alignment: CENTER;" />
+
+                <TableColumn fx:id="colGrades" text="Oceny" minWidth="80.0" maxWidth="80.0"/>
+
+                <TableColumn fx:id="colDetails" text="Kategoria i Komentarz" prefWidth="400.0"/>
+
+                <TableColumn fx:id="colAverage" text="Średnia" minWidth="80.0" maxWidth="80.0" style="-fx-alignment: CENTER;" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

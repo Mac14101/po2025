@@ -27,7 +27,7 @@
 
         <TableView fx:id="scheduleTable" VBox.vgrow="ALWAYS" style="-fx-selection-bar: #ecf0f1; -fx-selection-bar-non-focused: #ecf0f1;">
             <columns>
-                <TableColumn fx:id="colTime" text="Godzina" />
+                <TableColumn fx:id="colTime" text="Godzina" style="-fx-alignment: CENTER;" />
                 <TableColumn fx:id="colMonday" text="Poniedziałek" />
                 <TableColumn fx:id="colTuesday" text="Wtorek" />
                 <TableColumn fx:id="colWednesday" text="Środa" />
