@@ -32,8 +32,8 @@ public class TeacherGradeFormController {
 
     @FXML
     private void handleSave() {
-        if (comboGradeValue.getValue() == null || txtCategory.getText().isEmpty()) {
-            AlertHelper.showWarning("Błąd", "Wybierz ocenę i wpisz kategorię!");
+        if (comboGradeValue.getValue() == null || txtCategory.getText().trim().isEmpty()) {
+            AlertHelper.showWarning("Błąd", "Wybierz ocenę i wpisz tytuł oceny!");
             return;
         }
 
@@ -41,6 +41,10 @@ public class TeacherGradeFormController {
             Grade newGrade = new Grade();
             String selectedValue = comboGradeValue.getValue().toString();
             newGrade.setGrade(Grade.GradeName.fromGrade(selectedValue));
+            newGrade.setTitle(txtCategory.getText().trim());
+            if (txtComment != null) {
+                newGrade.setComment(txtComment.getText());
+            }
 
             newGrade.setStudent(currentStudent);
             newGrade.setSubject(currentSubject);
