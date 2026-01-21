@@ -339,4 +339,10 @@ public class ApplicationClient extends Client {
         return JSON.parse(response.body(), new TypeReference<ArrayList<Grade>>() {
         });
     }
+
+    public void updateUserPassword(UserChangePassword userChangePassword) throws ClientError, JsonProcessingException {
+        HttpRequest.Builder request = this.request("/self/password/");
+        request.PUT(HttpRequest.BodyPublishers.ofString(JSON.stringify(userChangePassword)));
+        this.fetch(request);
+    }
 }
