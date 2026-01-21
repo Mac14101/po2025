@@ -273,7 +273,7 @@ public class ApplicationDatabase extends Database {
             String addStudentGradeSQL = "INSERT INTO grades (sid, sbid, tid, grade) VALUES (?, ?, ?, ?);";
             PreparedStatement addStudentGradeStatement = this.getPreparedStatement(addStudentGradeSQL);
             addStudentGradeStatement.setInt(1, studentId);
-            addStudentGradeStatement.setString(2, grade.getSubject().getName());
+            addStudentGradeStatement.setInt(2, grade.getSubject().getId());
             addStudentGradeStatement.setInt(3, teacherId);
             addStudentGradeStatement.setString(4, grade.getGrade().toString());
             this.executeUpdateStatement(addStudentGradeStatement);
