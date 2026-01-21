@@ -19,12 +19,12 @@ public class MainLogger implements Logger {
 
     @Override
     public void logResponse(Request request, Response response) {
-        System.out.println(this.messageInfo() + response.getStatus() + "\t" + request.getPath() + "\t" + (response.getBody() == null ? "0" : response.getBody().getBytes().length));
+        System.out.println(this.messageInfo() + response.getStatus() + "\t" + request.getPath() + " " + request.getMethod() + "\t" + (response.getBody() == null ? "0" : response.getBody().getBytes().length));
     }
 
     @Override
     public void logError(Exception error, Request request, Response response) {
-        System.err.println(this.messageInfo() + response.getStatus() + "\t" + request.getPath() + "\t" + (response.getBody() == null ? "0" : response.getBody().getBytes().length) + "\n" + error.getMessage());
+        System.err.println(this.messageInfo() + response.getStatus() + "\t" + request.getPath() + " " + request.getMethod() + "\t" + (response.getBody() == null ? "0" : response.getBody().getBytes().length) + "\n" + error.getMessage());
     }
 
     @Override
