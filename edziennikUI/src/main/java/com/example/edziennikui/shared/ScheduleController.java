@@ -60,7 +60,11 @@ public class ScheduleController {
                 };
 
                 if (dayIndex != -1) {
-                    timeRows.get(timeKey)[dayIndex] = sc.getSubject().getName();
+                    String subjectName = sc.getSubject().getName();
+                    Integer roomNum = sc.getRoom();
+                    String roomInfo = (roomNum != null) ? " (s. " + roomNum + ")" : "";
+
+                    timeRows.get(timeKey)[dayIndex] = subjectName + roomInfo;
                 }
             }
 
