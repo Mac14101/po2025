@@ -6,6 +6,7 @@ import jexp.Router;
 import jexp.Server;
 import jexp.defaultHandlers.SessionHandler;
 import jexp.defaultHandlers.SessionRefreshHandler;
+import server.handlers.MainLogger;
 import server.handlers.attendance.LessonAttendanceListHandler;
 import server.handlers.attendance.LessonAttendanceUpdateHandler;
 import server.handlers.attendance.StudentAttendanceHandler;
@@ -41,6 +42,7 @@ public class Main {
         database.connect("database.db");
         database.initialize(new User(null, "admin@gmail.com", "Admin", "Admin", "admin123", User.Role.ADMIN.toString()));
         Server server = new Server();
+        server.use(new MainLogger("Server"));
 
         AuthenticatedUsersOnlyHandler authenticatedUsersOnlyHandler = new AuthenticatedUsersOnlyHandler();
         AdminOnlyHandler adminOnlyHandler = new AdminOnlyHandler();
