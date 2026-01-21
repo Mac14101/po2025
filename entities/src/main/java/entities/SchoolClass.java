@@ -12,8 +12,9 @@ public class SchoolClass extends DatabaseEntity {
     private SchoolGroup schoolGroup;
     private Teacher teacher;
     private Subject subject;
+    private Integer room;
 
-    public SchoolClass(Integer id, String day, String startTime, String endTime, SchoolGroup schoolGroup, Teacher teacher, Subject subject) {
+    public SchoolClass(Integer id, String day, String startTime, String endTime, SchoolGroup schoolGroup, Teacher teacher, Subject subject, Integer room) {
         this.id = id;
         this.day = day;
         this.startTime = startTime;
@@ -21,6 +22,7 @@ public class SchoolClass extends DatabaseEntity {
         this.schoolGroup = schoolGroup;
         this.teacher = teacher;
         this.subject = subject;
+        this.room = room;
     }
 
     public SchoolClass() {
@@ -31,6 +33,7 @@ public class SchoolClass extends DatabaseEntity {
         this.schoolGroup = null;
         this.teacher = null;
         this.subject = null;
+        this.room = null;
     }
 
     public static SchoolClass readSchoolClass(ResultSet resultSet) {
@@ -39,9 +42,10 @@ public class SchoolClass extends DatabaseEntity {
         String startTime = getStringColumn(resultSet, "startTime");
         String endTime = getStringColumn(resultSet, "endTime");
         SchoolGroup schoolGroup = SchoolGroup.readSchoolGroup(resultSet);
+        Integer room = getIntColumn(resultSet, "room");
         Teacher teacher = Teacher.readTeacher(resultSet);
         Subject subject = Subject.readSubject(resultSet);
-        return new SchoolClass(id, day, startTime, endTime, schoolGroup, teacher, subject);
+        return new SchoolClass(id, day, startTime, endTime, schoolGroup, teacher, subject, room);
     }
 
     public static ArrayList<SchoolClass> readSchoolClassArray(ResultSet resultSet) {
@@ -54,6 +58,14 @@ public class SchoolClass extends DatabaseEntity {
         } catch (SQLException e) {
             return null;
         }
+    }
+
+    public Integer getRoom() {
+        return room;
+    }
+
+    public void setRoom(Integer room) {
+        this.room = room;
     }
 
     public SchoolGroup getSchoolGroup() {

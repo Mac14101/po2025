@@ -14,11 +14,6 @@ public class UserDataHandler extends DatabaseHandler {
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        if (!request.sessionEstabilished()) {
-            response.status(401);
-            response.end();
-            return;
-        }
         User userData = this.database.getUserData(Integer.parseInt(request.getSession("userId")));
         response.json(userData);
     }

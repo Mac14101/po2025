@@ -10,8 +10,10 @@ public class Grade extends DatabaseEntity {
     private Subject subject;
     private Teacher teacher;
     private GradeName grade;
+    private String title;
+    private String comment;
 
-    public Grade(Integer id, Student student, Subject subject, Teacher Teacher, String grade) {
+    public Grade(Integer id, Student student, Subject subject, Teacher Teacher, String grade, String title, String comment) {
         this.id = id;
         this.student = student;
         this.subject = subject;
@@ -19,14 +21,17 @@ public class Grade extends DatabaseEntity {
         if (grade != null) {
             this.grade = GradeName.fromGrade(grade);
         }
+        this.title = title;
+        this.comment = comment;
     }
-
     public Grade() {
         this.id = null;
         this.student = null;
         this.subject = null;
         this.teacher = null;
         this.grade = null;
+        this.title = null;
+        this.comment = null;
     }
 
     public static Grade readGrade(ResultSet resultSet) {
@@ -35,7 +40,9 @@ public class Grade extends DatabaseEntity {
         Subject subject = Subject.readSubject(resultSet);
         Teacher teacher = Teacher.readTeacher(resultSet);
         String grade = getStringColumn(resultSet, "grade");
-        return new Grade(id, student, subject, teacher, grade);
+        String title = getStringColumn(resultSet, "title");
+        String comment = getStringColumn(resultSet, "comment");
+        return new Grade(id, student, subject, teacher, grade, title, comment);
     }
 
     public static ArrayList<Grade> readGradesArray(ResultSet resultSet) {
@@ -49,6 +56,22 @@ public class Grade extends DatabaseEntity {
             return null;
         }
 
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public Integer getId() {

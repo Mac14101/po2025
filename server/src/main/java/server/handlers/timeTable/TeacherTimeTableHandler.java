@@ -10,18 +10,18 @@ import server.handlers.DatabaseHandler;
 
 import java.util.ArrayList;
 
-public class StudentTimeTableHandler extends DatabaseHandler {
-    public StudentTimeTableHandler() {
+public class TeacherTimeTableHandler extends DatabaseHandler {
+    public TeacherTimeTableHandler() {
         super();
     }
 
     @Override
     public void handle(Request request, Response response, Next next) throws JExpError {
-        if (User.Role.getRoleFromName(request.getSession("userRole")) != User.Role.STUDENT) {
+        if (User.Role.getRoleFromName(request.getSession("userRole")) != User.Role.TEACHER) {
             next.next();
             return;
         }
-        ArrayList<SchoolClass> schoolClasses = this.database.getStudentSchedule(Integer.parseInt(request.getSession("userId")));
+        ArrayList<SchoolClass> schoolClasses = this.database.getTeacherSchedule(Integer.parseInt(request.getSession("userId")));
         response.json(schoolClasses);
     }
 }
