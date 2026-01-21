@@ -323,7 +323,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<SchoolClass> getTeacherSchedule(int teacherId) {
         try {
-            String getTeacherScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, TT.room, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=3;";
+            String getTeacherScheduleSQL = "SELECT TT.day, TT.startTime, TT.endTime, TT.room, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=?;";
             PreparedStatement getTeacherScheduleStatement = this.getPreparedStatement(getTeacherScheduleSQL);
             getTeacherScheduleStatement.setInt(1, teacherId);
             ResultSet result = this.executeQueryStatement(getTeacherScheduleStatement);
