@@ -43,8 +43,6 @@
                                                 text="Utwórz i przejdź do listy" />
                                     </children>
                                 </HBox>
-
-                                <Label fx:id="lblLessonStatus" text="Status: Brak aktywnej lekcji" textFill="#7f8c8d" />
                             </children>
                         </VBox>
                     </content>

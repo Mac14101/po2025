@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.util.StringConverter;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,10 +19,9 @@ public class TeacherAttendanceController {
     @FXML private TabPane mainTabPane;
     @FXML private Tab tabAttendance;
 
-    @FXML private ComboBox<SchoolGroup> comboClass;
+    @FXML private ComboBox<SchoolClass> comboClass;
     @FXML private ComboBox<Subject> comboSubject;
     @FXML private TextField txtTopic;
-    @FXML private Label lblLessonStatus;
 
     @FXML private TableView<Attendance> attendanceTable;
     @FXML private TableColumn<Attendance, String> colStudentName;
@@ -33,11 +33,24 @@ public class TeacherAttendanceController {
 
     @FXML
     public void initialize() {
-        UIHelper.setupClassComboBox(comboClass);
+        comboClass.setConverter(new StringConverter<SchoolClass>() {
+            @Override
+            public String toString(SchoolClass sc) {
+                if (sc == null || sc.getSchoolGroup() == null) return "";
+                return sc.getSchoolGroup().getNumber() + " " + sc.getSchoolGroup().getLetter() +
+                        " (" + sc.getDay() + " " + sc.getStartTime() + ")";
+            }
+
+            @Override
+            public SchoolClass fromString(String string) {
+                return null;
+            }
+        });
         UIHelper.setupSubjectComboBox(comboSubject);
 
         try {
-            comboClass.setItems(FXCollections.observableArrayList(client.getAllClass()));
+            ArrayList<SchoolClass> schedule = client.getUserSchedule();
+            comboClass.setItems(FXCollections.observableArrayList(schedule));
             comboSubject.setItems(FXCollections.observableArrayList(client.getAllSubjects()));
         } catch (Exception e) {
             AlertHelper.showError("Błąd", "Nie udało się pobrać danych startowych: " + e.getMessage());
@@ -45,7 +58,7 @@ public class TeacherAttendanceController {
 
         mainTabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldTab, newTab) -> {
             if (newTab == tabAttendance) {
-                RefreshStudentList();
+                refreshStudentList();
             }
         });
 
@@ -54,8 +67,8 @@ public class TeacherAttendanceController {
 
     private void setupTableColumns() {
         colStudentName.setCellValueFactory(data -> {
-            User studentUser = data.getValue().getStudent();
-            return new SimpleStringProperty(studentUser.getName() + " " + studentUser.getSurname());
+            User s = data.getValue().getStudent();
+            return new SimpleStringProperty(s.getName() + " " + s.getSurname());
         });
 
         colStatus.setCellFactory(column -> new TableCell<>() {
@@ -85,7 +98,14 @@ public class TeacherAttendanceController {
                 if (empty || getTableRow().getItem() == null) {
                     setGraphic(null);
                 } else {
-                    statusCombo.setValue(getTableRow().getItem().getStatus().toString());
+                    Attendance.Status status = getTableRow().getItem().getStatus();
+                    String displayText = switch (status) {
+                        case PRESENT -> "Obecny";
+                        case ABSENT -> "Nieobecny";
+                        case LATE -> "Spóźniony";
+                        default -> "Nieokreślony";
+                    };
+                    statusCombo.setValue(displayText);
                     setGraphic(statusCombo);
                 }
             }
@@ -95,12 +115,12 @@ public class TeacherAttendanceController {
     @FXML
     private void handleCreateLesson() {
         try {
-            SchoolGroup selectedGroup = comboClass.getValue();
+            SchoolClass selectedClass = comboClass.getValue();
             Subject selectedSubject = comboSubject.getValue();
             String topic = txtTopic.getText();
 
-            if (selectedGroup == null || selectedSubject == null || topic.isEmpty()) {
-                AlertHelper.showError("Błąd", "Wypełnij wszystkie pola lekcji!");
+            if (selectedClass == null || selectedSubject == null || topic.isEmpty()) {
+                AlertHelper.showError("Błąd", "Wypełnij pola!");
                 return;
             }
 
@@ -108,21 +128,23 @@ public class TeacherAttendanceController {
             lesson.setTopic(topic);
             lesson.setDate(LocalDate.now().toString());
 
+            lesson.setSchoolClass(selectedClass);
+
             client.addLesson(lesson);
 
             ArrayList<Lesson> lessons = client.getLessons();
-            if (!lessons.isEmpty()) {
+            if (lessons != null && !lessons.isEmpty()) {
                 currentLessonId = lessons.getLast().getId();
+
+                String groupName = selectedClass.getSchoolGroup().getNumber() + " " + selectedClass.getSchoolGroup().getLetter();
+                lblActiveLessonInfo.setText("Klasa: " + groupName + " | Temat: " + topic);
+
+                tabAttendance.setDisable(false);
+                mainTabPane.getSelectionModel().select(tabAttendance);
+                loadAttendanceList();
             }
-
-            tabAttendance.setDisable(false);
-            mainTabPane.getSelectionModel().select(tabAttendance);
-            lblActiveLessonInfo.setText("Klasa: " + selectedGroup.getNumber() + selectedGroup.getLetter() + " | Temat: " + topic);
-
-            loadAttendanceList();
-
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się utworzyć lekcji: " + e.getMessage());
+            AlertHelper.showError("Błąd", "Nie udało się utworzyć lekcji.");
         }
     }
 
@@ -133,34 +155,50 @@ public class TeacherAttendanceController {
                 attendanceTable.setItems(FXCollections.observableArrayList(list));
             }
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie można załadować listy obecności.");
+            AlertHelper.showError("Błąd ładowania", "Nie udało się pobrać listy obecności z serwera: " + e.getMessage());
         }
     }
 
     @FXML
     private void handleSaveAttendance() {
         try {
+            if (currentLessonId == -1) return;
+
+            boolean confirm = AlertHelper.showConfirmation("Zapis obecności",
+                    "Czy na pewno chcesz zapisać listę obecności? Możesz ją później edytować.");
+            if (!confirm) return;
+
             for (Attendance att : attendanceTable.getItems()) {
                 client.updateAttendance(currentLessonId, att);
             }
-            AlertHelper.showInfo("Sukces", "Obecność została zapisana w systemie.");
 
-            tabAttendance.setDisable(true);
-            mainTabPane.getSelectionModel().select(0);
-            txtTopic.clear();
+            AlertHelper.showInfo("Sukces", "Obecność została zapisana w bazie.");
+
+            boolean closeLesson = AlertHelper.showConfirmation("Koniec lekcji",
+                    "Czy chcesz zakończyć edycję tej lekcji i wrócić do wyboru zajęć?");
+
+            if (closeLesson) {
+                tabAttendance.setDisable(true);
+                mainTabPane.getSelectionModel().select(0);
+                txtTopic.clear();
+                currentLessonId = -1;
+            }
+
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się zapisać zmian.");
+            AlertHelper.showError("Błąd", "Nie udało się zapisać zmian: " + e.getMessage());
         }
     }
 
-    private void RefreshStudentList() {
+    private void refreshStudentList() {
         try {
             if (currentLessonId != -1) {
                 loadAttendanceList();
             } else {
-                SchoolGroup selected = comboClass.getValue();
-                if (selected != null) {
-                    ArrayList<Student> students = client.getClassStudents(selected.getId());
+                SchoolClass selectedClass = comboClass.getValue();
+                if (selectedClass != null && selectedClass.getSchoolGroup() != null) {
+                    int groupId = selectedClass.getSchoolGroup().getId();
+                    ArrayList<Student> students = client.getClassStudents(groupId);
+
                     ObservableList<Attendance> preview = FXCollections.observableArrayList();
                     for (Student s : students) {
                         Attendance a = new Attendance();
@@ -172,7 +210,7 @@ public class TeacherAttendanceController {
                 }
             }
         } catch (Exception e) {
-            AlertHelper.showError("Błąd", "Nie udało się odświeżyć listy: " + e.getMessage());
+            System.err.println("Błąd odświeżania: " + e.getMessage());
         }
     }
 }
