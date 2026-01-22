@@ -23,12 +23,6 @@
                 </VBox>
                 <VBox alignment="CENTER">
                     <children>
-                        <Label text="Obecności" textFill="#27ae60" />
-                        <Label fx:id="lblPresentCount" />
-                    </children>
-                </VBox>
-                <VBox alignment="CENTER">
-                    <children>
                         <Label text="Nieobecności" textFill="#c0392b" />
                         <Label fx:id="lblAbsentCount" />
                     </children>

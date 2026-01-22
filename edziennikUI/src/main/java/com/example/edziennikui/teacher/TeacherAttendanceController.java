@@ -73,7 +73,7 @@ public class TeacherAttendanceController {
 
         colStatus.setCellFactory(column -> new TableCell<>() {
             private final ComboBox<String> statusCombo = new ComboBox<>(
-                    FXCollections.observableArrayList("Obecny", "Nieobecny", "Spóźniony", "Usprawiedliwiony")
+                    FXCollections.observableArrayList("Obecny", "Nieobecny", "Spóźniony")
             );
 
             {
