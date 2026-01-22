@@ -299,7 +299,7 @@ public class ApplicationDatabase extends Database {
 
     public ArrayList<Attendance> getUserAttendance(int studentId) {
         try {
-            String getUserAttendanceSQL = "SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=?;";
+            String getUserAttendanceSQL = "SELECT A.status,L.lid, L.topic, L.date, TT.startTime, TT.endTime, SB.sbname FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid INNER JOIN time_table AS TT ON L.ttid = TT.ttid INNER JOIN subjects AS SB ON TT.sbid = SB.sbid WHERE U.uid=?;";
             PreparedStatement getUserAttendanceStatement = this.getPreparedStatement(getUserAttendanceSQL);
             getUserAttendanceStatement.setInt(1, studentId);
             ResultSet result = this.executeQueryStatement(getUserAttendanceStatement);
