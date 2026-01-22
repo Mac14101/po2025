@@ -85,8 +85,4 @@ public class AdminAddStudentToClassController {
     private void handleCancel() {
         ((Stage) availableStudentsTable.getScene().getWindow()).close();
     }
-
-    public boolean isStudentAdded() {
-        return studentAdded;
-    }
 }
