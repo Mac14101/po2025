@@ -1,5 +1,6 @@
 package com.example.edziennikui;
 
+import com.example.edziennikui.shared.AccountSettingsController;
 import com.example.edziennikui.shared.DashboardController;
 import entities.*;
 import javafx.scene.Parent;
@@ -34,19 +35,19 @@ public class HelloController {
     private StackPane contentArea;
 
     @FXML
-    private void handleShowDashboard(ActionEvent event) {
+    private void handleShowDashboard() {
         showDashboard();
     }
 
     @FXML
-    private void handleShowUsers(ActionEvent event) {
+    private void handleShowUsers() {
         if (loggedUser.getRole() == User.Role.ADMIN) {
             loadPage("/com/example/edziennikui/admin/users/AdminUserList.fxml");
         }
     }
 
     @FXML
-    private void handleShowGrades(ActionEvent event) {
+    private void handleShowGrades() {
         User.Role role = loggedUser.getRole();
         if (role == User.Role.ADMIN) {
             loadPage("/com/example/edziennikui/admin/subjects/AdminSubjectList.fxml");
@@ -58,7 +59,7 @@ public class HelloController {
     }
 
     @FXML
-    private void handleShowAttendance(ActionEvent event) {
+    private void handleShowAttendance() {
         User.Role role = loggedUser.getRole();
 
         if (role == User.Role.ADMIN) {
@@ -71,7 +72,7 @@ public class HelloController {
     }
 
     @FXML
-    private void handleShowSchedule(ActionEvent event) {
+    private void handleShowSchedule() {
         if (loggedUser.getRole() == User.Role.ADMIN) {
             loadPage("/com/example/edziennikui/admin/schedule/AdminScheduleManage.fxml");
         } else {
@@ -100,7 +101,18 @@ public class HelloController {
     }
 
     @FXML
-    private void handleShowAccountSettings(ActionEvent event) {
+    private void handleShowAccountSettings() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/edziennikui/shared/AccountSettings.fxml"));
+            Node view = loader.load();
+
+            AccountSettingsController controller = loader.getController();
+            controller.setUserInfo(this.loggedUser);
+
+            contentArea.getChildren().setAll(view);
+        } catch (IOException e) {
+            LOGGER.log(Level.SEVERE, "Błąd ładowania ustawień", e);
+        }
     }
 
     private void loadPage(String fxmlPath) {

@@ -1,5 +1,8 @@
 package com.example.edziennikui.shared;
 
+import client.ApplicationClient;
+import entities.User;
+import entities.UserChangePassword;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -8,15 +11,12 @@ import javafx.scene.control.TextField;
 public class AccountSettingsController {
 
     @FXML private TextField txtUsername;
-    @FXML private PasswordField pwdCurrent;
     @FXML private PasswordField pwdNew;
     @FXML private PasswordField pwdConfirm;
     @FXML private Label lblStatus;
 
     @FXML
-    public void initialize() {
-        txtUsername.setText("Zalogowany_Uzytkownik");
-    }
+    public void initialize() {    }
 
     @FXML
     private void handleSaveSettings() {
@@ -24,16 +24,42 @@ public class AccountSettingsController {
         String confirmPass = pwdConfirm.getText();
 
         if (newPass.isEmpty() || confirmPass.isEmpty()) {
-            lblStatus.setText("Pola hasła nie mogą być puste!");
+            showError("Pola hasła nie mogą być puste!");
             return;
         }
 
         if (!newPass.equals(confirmPass)) {
-            lblStatus.setText("Hasła nie są identyczne!");
+            showError("Hasła nie są identyczne!");
             return;
         }
 
-        lblStatus.setText("Hasło zostało pomyślnie zmienione.");
-        lblStatus.setStyle("-fx-text-fill: green;");
+        try {
+            UserChangePassword changeReq = new UserChangePassword();
+            changeReq.newPassword = newPass;
+            changeReq.newPasswordConfirm = confirmPass;
+
+            ApplicationClient.getInstance().updateUserPassword(changeReq);
+
+            lblStatus.setText("Hasło zostało pomyślnie zmienione.");
+            lblStatus.setStyle("-fx-text-fill: green;");
+
+            pwdNew.clear();
+            pwdConfirm.clear();
+
+        } catch (Exception e) {
+            showError("Błąd serwera: " + e.getMessage());
+        }
+    }
+
+    private void showError(String message) {
+        lblStatus.setText(message);
+        lblStatus.setStyle("-fx-text-fill: red;");
+    }
+
+    public void setUserInfo(User user) {
+        if (user != null) {
+            txtUsername.setText(user.getEmail());
+            txtUsername.setEditable(false);
+        }
     }
 }

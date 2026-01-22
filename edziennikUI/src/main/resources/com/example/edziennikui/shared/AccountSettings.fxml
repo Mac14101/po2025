@@ -47,12 +47,6 @@
                 </Label>
                 <VBox spacing="5.0">
                     <children>
-                        <Label text="Aktualne hasło" />
-                        <PasswordField fx:id="pwdCurrent" />
-                    </children>
-                </VBox>
-                <VBox spacing="5.0">
-                    <children>
                         <Label text="Nowe hasło" />
                         <PasswordField fx:id="pwdNew" />
                     </children>
