@@ -26,10 +26,6 @@ public class AdminSubjectFormController {
     }
 
     @FXML
-    public void initialize() {
-    }
-
-    @FXML
     private void handleSave() {
         try {
             if (!isEditMode) {

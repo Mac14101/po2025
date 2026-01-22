@@ -8,10 +8,6 @@ public class DashboardController {
 
     @FXML private Label lblUserRole;
 
-    @FXML
-    public void initialize() {
-    }
-
     public void setInfo(User user) {
         lblUserRole.setText("Zalogowano jako: " + user.getName() + " " + user.getSurname());
     }

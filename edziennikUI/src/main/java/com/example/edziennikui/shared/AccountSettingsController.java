@@ -16,9 +16,6 @@ public class AccountSettingsController {
     @FXML private Label lblStatus;
 
     @FXML
-    public void initialize() {    }
-
-    @FXML
     private void handleSaveSettings() {
         String newPass = pwdNew.getText();
         String confirmPass = pwdConfirm.getText();

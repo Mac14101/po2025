@@ -13,10 +13,6 @@ public class AdminClassFormController {
     @FXML private TextField txtLetter;
 
     @FXML
-    public void initialize() {
-    }
-
-    @FXML
     private void handleSave() {
         try {
             if (txtNumber.getText().isEmpty() || txtLetter.getText().isEmpty()) {
