@@ -53,6 +53,26 @@ public class AdminUserFormController {
                 currentUser.setPassword(txtPassword.getText());
             }
 
+            /*
+            if (isEditMode) {
+                // Zmiana hasła
+                if (!txtPassword.getText().isEmpty()) {
+                    UserChangePassword changeReq = new UserChangePassword();
+                    changeReq.uid = currentUser.getId();
+                    changeReq.newPassword = txtPassword.getText();
+                    changeReq.newPasswordConfirm = txtPassword.getText();
+
+                    ApplicationClient.getInstance().updateUserPassword(changeReq);
+                }
+            } else {
+                // Nowy użytkownik
+                if (txtPassword.getText().isEmpty()) {
+                    throw new IllegalArgumentException("Hasło jest wymagane dla nowego użytkownika.");
+                }
+                currentUser.setPassword(txtPassword.getText());
+                ApplicationClient.getInstance().createUser(currentUser);
+            }
+             Nie zaimplementowane */
             if (isEditMode) {
                 System.out.println("Aktualizacja użytkownika: " + currentUser.getId());
             } else {
