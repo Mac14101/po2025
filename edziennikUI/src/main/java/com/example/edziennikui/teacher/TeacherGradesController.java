@@ -119,11 +119,6 @@ public class TeacherGradesController {
                                 Objects.equals(g.getSubject().getName(), currentSubject.getName()))
                         .collect(Collectors.toList());
 
-                /*List<Grade> filtered = allGrades.stream()
-                        .filter(g -> g.getSubject() != null &&
-                                Objects.equals(g.getSubject().getId(), currentSubject.getId()))
-                        .collect(Collectors.toList()); */
-
                 rows.add(new StudentGradesRow(s, filtered));
             }
             gradesTable.setItems(FXCollections.observableArrayList(rows));
