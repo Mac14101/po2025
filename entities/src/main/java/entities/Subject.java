@@ -89,7 +89,7 @@ public class Subject extends DatabaseEntity {
         if (name == null) {
             return;
         }
-        if (!name.matches("^[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż]+$")) {
+        if (!name.matches("^[A-ZĄĆĘŁŃÓŚŹŻa-ząćęłńóśźż ]+$")) {
             throw new IllegalArgumentException("Invalid subject name!");
         }
         this.name = name;
