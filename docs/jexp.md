@@ -225,13 +225,11 @@ Server--*Router
 Manager--*Session
 Request--|>Manager
 Request--*Session
-NotFoundHanlder--|>Handler
-SessionHandler--|>Handler
-SessionRefreshHandler--|>Handler
-SessionHandler--*Manager
-ServerErrorHandler--|>ErrorHandler
-Server--*ServerErrorHandler
-hide methods;
-hide members;
+defaultHandlers.NotFoundHanlder--|>Handler
+defaultHandlers.SessionHandler--|>Handler
+defaultHandlers.SessionRefreshHandler--|>Handler
+defaultHandlers.SessionHandler--*Manager
+defaultHandlers.ServerErrorHandler--|>ErrorHandler
+Server--*defaultHandlers.ServerErrorHandler
 @enduml
 ```
