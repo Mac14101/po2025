@@ -31,6 +31,7 @@ public class LoginViewController {
             ApplicationClient client = ApplicationClient.getInstance();
 
             client.setBaseUrl("http://localhost:8080");
+            client.setRefreshUrl("/session/");
 
             client.authenticate(credentials);
             User loggedUser = client.getUserData();
@@ -58,6 +59,7 @@ public class LoginViewController {
             mainController.initSession(user);
 
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setTitle("e-Dziennik - " + user.getRole().toString());
             stage.setScene(new Scene(root));
             stage.show();
 
