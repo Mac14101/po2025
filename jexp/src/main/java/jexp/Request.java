@@ -233,22 +233,51 @@ public class Request {
         return this.params.get(":" + name);
     }
 
+    /**
+     * Przypisuje obiekt sesji do żądania.
+     *
+     * @param session obiekt sesji odpowiedni dla tokenu żądania
+     */
     public void setSessionObject(Session session) {
         this.session = session;
     }
 
+    /**
+     * Zwraca informację czy do żądania przypisano sesję.
+     *
+     * @return true - przypisano sesję, false - brak przypisanej sesji
+     */
     public boolean sessionEstabilished() {
         return this.session != null;
     }
 
+    /**
+     * Zwraca ciąg znaków przypisany do podanej wartości w sesji.
+     *
+     * @param key klucz do wartości sesji
+     * @return ciąg znaków zapisany w sesji
+     */
     public String getSession(String key) {
         return this.session.getSession(key);
     }
 
+    /**
+     * Ustawaia wartość dla podanego klucza w sesji.
+     *
+     * @param key   klucz do wartości w sesji
+     * @param value wartość do zapisania
+     */
     public void setSession(String key, String value) {
         this.session.setSession(key, value);
     }
 
+    /**
+     * Tworzy nową sesję, zapisuje nazwę i id użytkownika.
+     *
+     * @param userId   identyfikator użytkownika
+     * @param username nazwa użytkownika
+     * @return token uwierzytelniania
+     */
     public String logIn(Integer userId, String username) {
         String token = this.sessionManager.addSession();
         this.session = this.sessionManager.getSession(token);
