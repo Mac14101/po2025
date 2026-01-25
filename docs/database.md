@@ -1,6 +1,6 @@
 # Baza danych e-dziennika
 
-Aplikacja korzysta z wbudowanej bazy danych SQLite.
+Aplikacja korzysta z wbudowanej bazy danych SQLite. Posiada moduł z dwiema klasami odpowiedzialnym za zapisywanie i pobieranie danych z bazy danych.
 
 ## Tabele w bazie danych
 
@@ -53,6 +53,7 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 | cid           | INTEGER | FOREIGN KEY             | Identyfikator klasy, której dotyczy lekcja               |
 | tid           | INTEGER | FOREIGN KEY             | Identyfikator nauczyciela, który prowadzi lekcję         |
 | sbid          | INTEGER | FOREIGN KEY             | Identyfikator przedmiotu                                 |
+| room          | INTEGER |                         | Numer sali liekcyjnej                                    |
 
 6. Lekcje(lessons)
    Tabela przechowująca lekcję, które się odbyły.
@@ -83,6 +84,8 @@ Aplikacja korzysta z wbudowanej bazy danych SQLite.
 | sbid          | INTEGER     | FOREIGN KEY             | Identyfikator przedmiotu                        |
 | tid           | INTEGER     | FOREIGN KEY             | Identyfikator nauczyciela, który wystawił ocenę |
 | grade         | VARCHAR(10) | NOT NULL                | Ocena                                           |
+| title         | TEXT        | NOT NULL                | Tytuł oceny                                     |
+| comment       | TEXT        | DEFAULT NULL            | Komentarz do oceny                              |
 
 ## Używane kwerendy
 
@@ -106,7 +109,7 @@ CREATE TABLE IF NOT EXISTS subjects (sbid INTEGER PRIMARY KEY, sbname TEXT UNIQU
 ```
 * tworzy tabelę `time_table`
 ```sql
-CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sid INTEGER, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sid) REFERENCES subjects(sbid));
+CREATE TABLE IF NOT EXISTS time_table (ttid INTEGER PRIMARY KEY, day TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, cid INTEGER, tid INTEGER, sbid INTEGER, room INT, FOREIGN KEY(cid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid));
 ```
 * tworzy tabelę `lessons`
 ```sql
@@ -118,7 +121,7 @@ CREATE TABLE IF NOT EXISTS attendance (sid INTEGER, lid INTEGER, status TEXT NOT
 ```
 * tworzy tabelę `grades`
 ```sql
-CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));
+CREATE TABLE IF NOT EXISTS grades (gid INTEGER PRIMARY KEY, sid INTEGER, sbid INTEGER, tid INTEGER, grade VARCHAR(10) NOT NULL, title TEXT NOT NULL, comment TEXT DEFAULT NULL, FOREIGN KEY(sid) REFERENCES users(uid), FOREIGN KEY(sbid) REFERENCES subjects(sbid), FOREIGN KEY(tid) REFERENCES users(uid));
 ```
 
 ### Wstawianie danych do tabeli
@@ -141,7 +144,7 @@ INSERT INTO subjects (sbname) VALUES (:sbname);
 ```
 * wstawia nowe zajęcia do tabeli `time_table`
 ```sql
-INSERT INTO time_table (day, startTime, endTime, cid, tid, sid) VALUES (:day, :startTime, :endTime, :cid, :tid, :sid);
+INSERT INTO time_table (day, startTime, endTime, cid, tid, sid, room) VALUES (:day, :startTime, :endTime, :cid, :tid, :sid, :room);
 ```
 * wstawia nową lekcję do tabeli `lessons`
 ```sql
@@ -153,7 +156,7 @@ INSERT INTO attendance (sid, lid, status) VALUES (:sid, :lid, :status);
 ```
 * dodaje nową ocenę ucznia do tabeli `grades`
 ```sql
-INSERT INTO grades (sid, sbid, tid, grade) VALUES (:sid, :sbid, :tid, :grade); 
+INSERT INTO grades (sbid, tid, grade, title, comment) VALUES (:sbid, :tid, :grade, :title, :comment);
 ```
 
 ### Pobieranie danych z tabel
@@ -172,7 +175,7 @@ SELECT cid, number, letter FROM classes;
 ```
 * pobiera wszystkie przedmioty
 ```sql
-SELECT sbname FROM subjects;
+SELECT sbid, sbname FROM subjects;
 ```
 * pobiera wszystkich uczniów razem z informację do której klasy należą
 ```sql
@@ -180,11 +183,11 @@ SELECT U.uname, U.surname, C.number, C.letter FROM users AS U INNER JOIN student
 ```
 * pobiera wszystkich uczniów przypisanych do wybranej klasy
 ```sql
-SELECT U.uname, U.surname FROM users AS U INNER JOIN students AS S ON S.uid=U.uid WHERE S.cid=:cid;
+SELECT U.uid, U.uname, U.surname, U.email, C.number, C.letter FROM users AS U INNER JOIN students AS S ON S.uid=U.uid INNER JOIN classes AS C ON C.cid=S.cid WHERE S.cid=:cid;
 ```
 * pobiera tygodniowy plan zajęć dla wybranej klasy
 ```sql
-SELECT TT.day, TT.startTime, TT.endTime, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid;
+SELECT TT.day, TT.startTime, TT.endTime, TT.room, T.uname AS tname, T.surname AS tsurname, SB.sbname FROM time_table AS TT INNER JOIN users AS T ON T.uid=TT.tid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.cid=:cid;
 ```
 * pobiera dane wybranego użytkownika
 ```sql
@@ -192,27 +195,31 @@ SELECT uid, email, uname, surname, role FROM users WHERE uid=:uid;
 ```
 * pobiera lekcje nauczyciela
 ```sql
-SELECT L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=:tid;
+SELECT L.lid, L.topic, L.date, SB.sbname FROM lessons AS L INNER JOIN time_table AS TT ON L.ttid=TT.ttid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=:tid;
 ```
 * pobiera listę obecności na lekcji
 ```sql
-SELECT A.status, U.uname, U.surname, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON A.sid=U.uid INNER JOIN lessons AS L ON L.lid=A.lid WHERE L.lid=:lid;
+SELECT A.status, U.uid, U.uname, U.surname, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON A.sid=U.uid INNER JOIN lessons AS L ON L.lid=A.lid WHERE L.lid=:lid;
 ```
 * pobiera oceny ucznia wystawione przez wybranego nauczyciela
-```sql
-SELECT G.grade, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=:tid AND G.sid=:sid;
+```
+sqlSELECT G.grade, G.title, G.comment, SB.sbname, U.uname, U.surname FROM grades AS G INNER JOIN subjects AS SB ON G.sbid=SB.sbid INNER JOIN users AS U ON G.sid=U.uid WHERE G.tid=:tid AND G.sid=:sid;
 ```
 * pobieranie planu zajęć wybranego ucznia
 ```sql
-SELECT TT.day, TT.startTime, TT.startTime, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=:uid;
+SELECT TT.ttid, TT.day, TT.startTime, TT.endTime, TT.room, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN students AS S ON S.cid=C.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid INNER JOIN users AS T ON T.uid=TT.tid WHERE S.uid=:uid;
 ```
 * pobiera obecność wybranego użytkownika
 ```sql
-SELECT A.status, L.topic, L.date FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid WHERE U.uid=:uid;
+SELECT A.status,L.lid, L.topic, L.date, TT.startTime, TT.endTime, SB.sbname FROM attendance AS A INNER JOIN users AS U ON U.uid=A.sid INNER JOIN lessons AS L ON L.lid=A.lid INNER JOIN time_table AS TT ON L.ttid = TT.ttid INNER JOIN subjects AS SB ON TT.sbid = SB.sbid WHERE U.uid=:uid;
 ```
 * pobiera oceny użytkownika
 ```sql
-SELECT G.grade, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=:uid;
+SELECT G.grade, G.title, G.comment, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades AS G INNER JOIN users AS U ON U.uid=G.sid INNER JOIN subjects AS SB ON SB.sbid=G.sbid INNER JOIN users AS T ON T.uid=G.tid WHERE U.uid=:uid;
+```
+* pobiera plan zajęć wybranego nauczyciela
+```sql
+SELECT TT.ttid, TT.day, TT.startTime, TT.endTime, TT.room, C.number, C.letter, SB.sbname FROM time_table AS TT INNER JOIN classes AS C ON C.cid=TT.cid INNER JOIN subjects AS SB ON SB.sbid=TT.sbid WHERE TT.tid=:tid;
 ```
 
 ### Aktualizacja danych w tabeli
@@ -220,6 +227,10 @@ SELECT G.grade, SB.sbname, T.uname AS tname, T.surname AS tsurname FROM grades A
 *  aktualizacja obecności ucznia na zajęciach
 ```sql
 UPDATE attendance SET status=:status WHERE lid=:lid AND sid=:sid;
+```
+* zmienia hasło wybranego użytkownika
+```sql
+UPDATE users SET password=? WHERE uid=?;
 ```
 
 ### Triggery
@@ -229,6 +240,54 @@ CREATE TRIGGER lesson_insert
 AFTER INSERT ON lessons
 BEGIN
 	INSERT INTO attendance (sid, lid, status) VALUES
-	SELECT S.uid AS sid, NEW.lid, 'undefined' AS status FROM time_table AS TT INNER JOIN students AS S ON S.cid=TT.cid WHERE TT.ttid=NEW.ttid;;
+	SELECT S.uid AS sid, NEW.lid, 'undefined' AS status FROM time_table AS TT INNER JOIN students AS S ON S.cid=TT.cid WHERE TT.ttid=NEW.ttid;
 END;
+```
+
+## Diagram UML klas
+
+```plantuml
+@startuml
+class Database{
+    - Connection connection;
+    - String url;
+    + void connect();
+    + void close();
+    + PreparedStatement getPreparedStatement();
+    + boolean executeCreateStatement();
+    + int executeUpdateStatement();
+    + ResultSet executeQueryStatement();
+    + void commit();
+    + void rollback();
+    - void ensureConnected();
+}
+class ApplicationDatabase{
+    + void initialize();
+    + ArrayList<User> getAllUsers();
+    + void createUser();
+    + User getUserCredentials();
+    + User getUserData();
+    + ArrayList<Subject> getAllSubjects();
+    + void createSubject();
+    + ArrayList<SchoolGroup> getAllClass();
+    + void createClass();
+    + ArrayList<Student> getAllStudents();
+    + ArrayList<Student> getClassStudents();
+    + void addStudent();
+    + ArrayList<SchoolClass> getClassSchedule();
+    + void addClassSchedule();
+    + ArrayList<Lesson> getLessons();
+    + void addLesson();
+    + ArrayList<Attendance> getAttendanceList();
+    + void updateAttendance();
+    + ArrayList<Grade> getStudentGrades();
+    + void addStudentGrade();
+    + ArrayList<SchoolClass> getStudentSchedule();
+    + ArrayList<Attendance> getUserAttendance();
+    + ArrayList<Grade> getUserGrades();
+    + ArrayList<SchoolClass> getTeacherSchedule();
+    + void updateUserPassword();
+}
+ApplicationDatabase--|>Database
+@enduml
 ```
