@@ -9,9 +9,7 @@
 
 ## Opis projektu
 
-Aplikacja e‑Dziennik to system wspierający pracę szkół poprzez umożliwienie elektronicznego zarządzania ocenami,
-obecnościami oraz planem lekcji. Aplikacja działa w architekturze klient-serwer używając protokołu HTTP (REST API) do
-przysyłania danych oraz bazy danych SQLite, aby zapewnić funkcjonalny i wydajny dostęp do danych.
+Aplikacja e‑Dziennik to system wspierający pracę szkół poprzez umożliwienie elektronicznego zarządzania ocenami, obecnościami oraz planem lekcji. Aplikacja działa w architekturze klient-serwer używając protokołu HTTP (REST API) do przysyłania danych oraz bazy danych SQLite, aby zapewnić funkcjonalny i wydajny dostęp do danych.
 
 ## Aktorzy systemu
 
@@ -44,12 +42,7 @@ Najważniejsze funkcje są zaznaczone pogrubioną czcionką.
 
 ## Działanie aplikacji
 
-Interfejs użytkownika zaimplementowany przy użyciu Java FX przy każdej operacji wysyła odpowiednie żądanie HTTP do
-odpowiedniego punktu końcowego. Serwer odbiera żądanie i wykonuje odpowiedni kod odpowiedzialny za obsługę wybranego
-punktu końcowego, oraz wysyła odpowiedź razem z odpowiednim kodem odpowiedzi HTTP. Aby używać aplikacji użytkownik musi
-być uwierzytelniony. Sesja logowania jest utrzymywana dzięki plikom cookie, zawierającym unikalny numer identyfikacyjny
-użytkownika generowany każdorazowo przy ustanawianiu sesji, zapisanym po stronie użytkownika. Serwer odczytuje numer,
-który umożliwia identyfikację użytkownika po stronie serwera.
+Interfejs użytkownika zaimplementowany przy użyciu Java FX przy każdej operacji wysyła odpowiednie żądanie HTTP do odpowiedniego punktu końcowego. Serwer odbiera żądanie i wykonuje odpowiedni kod odpowiedzialny za obsługę wybranego punktu końcowego, oraz wysyła odpowiedź razem z odpowiednim kodem odpowiedzi HTTP. Aby używać aplikacji użytkownik musi być uwierzytelniony. Sesja logowania jest utrzymywana dzięki tokenom uwierzytelniania, zawierającym unikalny numer identyfikacyjny użytkownika generowany każdorazowo przy ustanawianiu sesji, zapisanym po stronie użytkownika, token jest dodawany do żądania poprzez nagłówek `Authorization`. Serwer odczytuje numer,który umożliwia identyfikację użytkownika po stronie serwera.
 
 ### Ogólny schemat działania aplikacji
 
@@ -60,18 +53,39 @@ participant "DesktopAppController" AS UIController
 participant "HTTP Server" AS Server
 participant "SQLite Database" AS Database
 User --> UIController : Użytkownik wykonuje operację
-activate UIController
 UIController --> Server : Żądanie HTTP
-activate Server
 Server --> Server : Uwierzytelnianie i autoryzacja
 Server --> Database : Kwerenda SQL
-activate Database
 Database --> Server : Wynik kwerendy SQL
-deactivate Database
 Server --> UIController : Odpowiedź HTTP
-deactivate Server
 UIController --> User : Wyświetlenie informacji
-deactivate UIController
+@enduml
+```
+
+### Diagramy usecase
+
+#### Uwierzytelnianie
+```plantuml
+@startuml
+actor User
+participant ApplicationClient
+participant Server
+participant Router as "Router (Server.mainRouter)"
+participant AuthenticationHandler
+participant ApplicationDatabase
+participant Database as "baza danych SQLite"
+User -> ApplicationClient : authenticate(userCredentials)
+ApplicationClient -> Server : żądanie HTTP
+Server -> Router : handler(request, response, next)
+Router -> Router : dopasowanie trasy
+Router -> AuthenticationHandler : handle(request, response, next)
+AuthenticationHandler -> ApplicationDatabase : getUserCredentials(userCredentials.email)
+ApplicationDatabase -> Database : selectUserStatement.executeQuery()
+Database -> ApplicationDatabase : ResultSet
+ApplicationDatabase -> AuthenticationHandler : User.readUser(result)
+AuthenticationHandler -> Router
+Router -> Server
+Server -> ApplicationClient : response.sendResponse(exchange)
 @enduml
 ```
 
