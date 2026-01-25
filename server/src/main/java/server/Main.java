@@ -61,8 +61,8 @@ public class Main {
         server.put("/self/password/", new UpdateUserPasswordHandler());
         server.get("/self/timetable/", new StudentTimeTableHandler());
         server.get("/self/timetable/", new TeacherTimeTableHandler());
-        server.get("/self/attendance/", new StudentAttendanceHandler());
         server.get("/self/attendance/", studentOnlyHandler);
+        server.get("/self/attendance/", new StudentAttendanceHandler());
         server.get("/self/grade/", new StudentGradesHandler());
         server.get("/self/grade/", studentOnlyHandler);
         server.get("/self/", new UserDataHandler());
@@ -95,7 +95,6 @@ public class Main {
         server.use("/timetable/", adminOnlyHandler);
         server.get("/timetable/:classId/", new ClassTimeTableHandler());
         server.post("/timetable/", new AddClassTimeTableHandler());
-        server.post("/timetable//", new AddClassTimeTableHandler());
         //Trasy do manipulacji lekcjami
         server.use("/lesson/", authenticatedUsersOnlyHandler);
         server.use("/lesson/", teacherOnlyHandler);

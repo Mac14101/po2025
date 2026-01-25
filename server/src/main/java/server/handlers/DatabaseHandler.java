@@ -3,7 +3,7 @@ package server.handlers;
 import database.ApplicationDatabase;
 import jexp.*;
 
-public class DatabaseHandler implements Handler {
+public abstract class DatabaseHandler implements Handler {
     protected ApplicationDatabase database;
 
     public DatabaseHandler() {

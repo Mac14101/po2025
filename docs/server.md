@@ -12,6 +12,7 @@ Moduł server jest głównym modułem w działaniu serwera HTTP. Zawiera plik *M
 2. Konta użytkowników
     * `/user/` **GET** - lista wszystkich użytkowników, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
     * `/user/` **POST** - tworzy nowego użytkownika, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
+    * `/self/password/` **POST** - zmienia hasło do konta, ***obsługuje tylko uwierzytelnionych użytkowników!!!***
 3. Przedmioty szkolne
     * `/subject/` **GET** - lista wszystkich przedmiotów, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
     * `/subject/` **POST** - tworzy nowy przedmiot, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
@@ -25,7 +26,7 @@ Moduł server jest głównym modułem w działaniu serwera HTTP. Zawiera plik *M
 6. Plan zajęć
     * `/timetable/:classId/` **GET** - lista zajęć z planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
     * `/timetable/` **POST** - dodawania zajęć do planu zajęć klasy, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami administratora!!!***
-    * `/self/timetable/` **GET** - wyświetlanie planu zajęć, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!*** 
+    * `/self/timetable/` **GET** - wyświetlanie planu zajęć, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia lub nauczyciela!!!*** 
 7. Lekcje
     * `/lesson/` **GET** - wyświetlanie listy ostatnich lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
     * `/lesson/` **POST** - dodawanie lekcji, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
@@ -37,3 +38,155 @@ Moduł server jest głównym modułem w działaniu serwera HTTP. Zawiera plik *M
     * `/grade/:studentId/` **GET** - wyświetlanie ocen ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
     * `/grade/:studentId/` **POST** - dodawanie oceny ucznia, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami nauczyciela!!!***
     * `/self/grade/` **GET** - wyświetlanie ocen, ***obsługuje tylko uwierzytelnionych użytkowników z uprawnieniami ucznia!!!***
+
+## Diagram UML klas
+
+```plantuml
+@startuml
+class MainLogger{
+    - String name;
+    - String messageInfo();
+    + void logResponse();
+    + void logError();
+    + void criticalError();
+}
+class DatabaseHandler{
+    - ApplicationDatabase database;
+    + void handle();
+}
+package "attendance"{
+class LessonAttendanceListHandler{
+    + void handle();
+}
+class LessonAttendanceUpdateHandler{
+    + void handle();
+}
+class StudentAttendanceHandler{
+    + void handle();
+}
+}
+package "authentication"{
+class AuthenticationHandler{
+	+ void handle();
+}
+class SessionDestroyHandler{
+	+ void handle();
+}
+class UpdateUserPasswordHandler{
+	+ void handle();
+}
+class UserDataHandler{
+	+ void handle();
+}
+}
+package "authorization"{
+class AdminOnlyHandler{
+	+ void handle();
+}
+class AdminTeacherOnlyHandler{
+	+ void handle();
+}
+class AuthenticatedUsersOnlyHandler{
+	+ void handle();
+}
+class StudentOnlyHandler{
+	+ void handle();
+}
+class TeacherOnlyHandler{
+	+ void handle();
+}
+}
+package "classes"{
+class AllClassesHandler{
+	+ void handle();
+}
+class CreateClassHandler{
+	+ void handle();
+}
+}
+package "grades"{
+class AddGradeHandler{
+	+ void handle();
+}
+class StudentGradesHandler{
+	+ void handle();
+}
+class TeacherGradesListHandler{
+	+ void handle();
+}
+}
+package "lessons"{
+class AddLessonHandler{
+	+ void handle();
+}
+class TeacherLessonsHandler{
+	+ void handle();
+}
+}
+package "students"{
+class AddStudentHandler{
+	+ void handle();
+}
+class AllStudentsHandler{
+	+ void handle();
+}
+class StudentsClassHandler{
+	+ void handle();
+}
+}
+package "subjects"{
+class AllSubjectsHandler{
+	+ void handle();
+}
+class CreateSubjectHandler{
+	+ void handle();
+}
+}
+package "timeTable"{
+class AddClassTimeTableHandler{
+	+ void handle();
+}
+class ClassTimeTableHandler{
+	+ void handle();
+}
+class StudentTimeTableHandler{
+	+ void handle();
+}
+class TeacherTimeTableHandler{
+	+ void handle();
+}
+}
+package "users"{
+class AllUsersHandler{
+	+ void handle();
+}
+class CreateUserHandler{
+	+ void handle();
+}
+}
+attendance.LessonAttendanceListHandler--|>DatabaseHandler
+attendance.LessonAttendanceUpdateHandler--|>DatabaseHandler
+attendance.StudentAttendanceHandler--|>DatabaseHandler
+authentication.AuthenticationHandler--|>DatabaseHandler
+authentication.UpdateUserPasswordHandler--|>DatabaseHandler
+authentication.UserDataHandler--|>DatabaseHandler
+classes.AllClassesHandler--|>DatabaseHandler
+classes.CreateClassHandler--|>DatabaseHandler
+grades.AddGradeHandler--|>DatabaseHandler
+grades.StudentGradesHandler--|>DatabaseHandler
+grades.TeacherGradesListHandler--|>DatabaseHandler
+lessons.AddLessonHandler--|>DatabaseHandler
+lessons.TeacherLessonsHandler--|>DatabaseHandler
+students.AddStudentHandler--|>DatabaseHandler
+students.AllStudentsHandler--|>DatabaseHandler
+students.StudentsClassHandler--|>DatabaseHandler
+subjects.AllSubjectsHandler--|>DatabaseHandler
+subjects.CreateSubjectHandler--|>DatabaseHandler
+timeTable.AddClassTimeTableHandler--|>DatabaseHandler
+timeTable.ClassTimeTableHandler--|>DatabaseHandler
+timeTable.StudentTimeTableHandler--|>DatabaseHandler
+timeTable.TeacherTimeTableHandler--|>DatabaseHandler
+users.AllUsersHandler--|>DatabaseHandler
+users.CreateUserHandler--|>DatabaseHandler
+@enduml
+```

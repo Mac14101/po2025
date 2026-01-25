@@ -223,7 +223,7 @@ Server--*ErrorHandler
 Server--*Logger
 Server--*Router
 Manager--*Session
-Request--|>Manager
+Request--*Manager
 Request--*Session
 defaultHandlers.NotFoundHanlder--|>Handler
 defaultHandlers.SessionHandler--|>Handler
