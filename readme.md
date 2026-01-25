@@ -75,7 +75,7 @@ participant AuthenticationHandler
 participant ApplicationDatabase
 participant Database as "baza danych SQLite"
 User -> ApplicationClient : authenticate(userCredentials)
-ApplicationClient -> Server : żądanie HTTP
+ApplicationClient -> Server : żądanie HTTP POST
 Server -> Router : handler(request, response, next)
 Router -> Router : dopasowanie trasy
 Router -> AuthenticationHandler : handle(request, response, next)
@@ -83,7 +83,95 @@ AuthenticationHandler -> ApplicationDatabase : getUserCredentials(userCredential
 ApplicationDatabase -> Database : selectUserStatement.executeQuery()
 Database -> ApplicationDatabase : ResultSet
 ApplicationDatabase -> AuthenticationHandler : User.readUser(result)
+AuthenticationHandler -> AuthenticationHandler : request.logIn(user.getId(), user.getEmail());
+AuthenticationHandler -> AuthenticationHandler : response.send(token)
 AuthenticationHandler -> Router
+Router -> Server
+Server -> ApplicationClient : response.sendResponse(exchange)
+@enduml
+```
+
+#### Dodawanie konta użytkownika
+```plantuml
+@startuml
+actor User
+participant ApplicationClient
+participant Server
+participant Router as "Router (Server.mainRouter)"
+participant AdminsOnlyHandler
+participant CreateUserHandler
+participant ApplicationDatabase
+participant Database as "baza danych SQLite"
+User -> ApplicationClient : createUser(user)
+ApplicationClient -> Server : żądanie HTTP POST
+Server -> Router : handler(request, response, next)
+Router -> Router : dopasowanie trasy
+Router -> AdminsOnlyHandler : handler(request, response, next)
+AdminsOnlyHandler -> Router
+Router -> Router : dopasowanie trasy
+Router -> CreateUserHandler : handle(request, response, next)
+CreateUserHandler -> ApplicationDatabase : createUser(user)
+ApplicationDatabase -> Database : createUserStatement.executeUpdate()
+Database -> ApplicationDatabase
+CreateUserHandler -> CreateUserHandler : response.json(user)
+CreateUserHandler -> CreateUserHandler : response.status(201)
+CreateUserHandler -> Router
+Router -> Server
+Server -> ApplicationClient : response.sendResponse(exchange)
+@enduml
+```
+
+#### Pobieranie listy użytkowników
+```plantuml
+@startuml
+actor User
+participant ApplicationClient
+participant Server
+participant Router as "Router (Server.mainRouter)"
+participant AdminsOnlyHandler
+participant AllUsersHandler
+participant ApplicationDatabase
+participant Database as "baza danych SQLite"
+User -> ApplicationClient : getAllUsers()
+ApplicationClient -> Server : żądanie HTTP GET
+Server -> Router : handler(request, response, next)
+Router -> Router : dopasowanie trasy
+Router -> AdminsOnlyHandler : handler(request, response, next)
+AdminsOnlyHandler -> Router
+Router -> Router : dopasowanie trasy
+Router -> AllUsersHandler : handle(request, response, next)
+AllUsersHandler -> ApplicationDatabase : getAllUsers()
+ApplicationDatabase -> Database : selectUsersSQL.executeQuery()
+Database -> ApplicationDatabase : ResultSet
+AllUsersHandler -> AllUsersHandler : response.json(users)
+AllUsersHandler -> Router
+Router -> Server
+Server -> ApplicationClient : response.sendResponse(exchange)
+@enduml
+```
+
+#### Zmiana hasła do konta użytkownika
+```plantuml
+@startuml
+actor User
+participant ApplicationClient
+participant Server
+participant Router as "Router (Server.mainRouter)"
+participant AuthenticatedUsersOnlyHandler
+participant UpdateUserPasswordHandler
+participant ApplicationDatabase
+participant Database as "baza danych SQLite"
+User -> ApplicationClient : updateUserPassword(userChangePassword)
+ApplicationClient -> Server : żądanie HTTP PUT
+Server -> Router : handler(request, response, next)
+Router -> Router : dopasowanie trasy
+Router -> AuthenticatedUsersOnlyHandler : handler(request, response, next)
+AuthenticatedUsersOnlyHandler -> Router
+Router -> Router : dopasowanie trasy
+Router -> UpdateUserPasswordHandler : handle(request, response, next)
+UpdateUserPasswordHandler -> ApplicationDatabase : updateUserPassword(userId, newPassword)
+ApplicationDatabase -> Database : selectUsersSQL.executeUpdate()
+UpdateUserPasswordHandler -> Router
 Router -> Server
 Server -> ApplicationClient : response.sendResponse(exchange)
 @enduml
