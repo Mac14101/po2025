@@ -4,6 +4,10 @@ Moduł client odpowiada za wysyłanie żądań HTTP oraz zrządzanie sesją. W s
 ## Diagram UML klas
 ```plantuml
 @startuml
+class Exception{
+}
+class Thread{
+}
 class Client{
     - final HttpClient client;
     - String token;
@@ -49,6 +53,8 @@ class ApplicationClient{
     + ArrayList<Grade> getUserGrades();
     + void updateUserPassword();
 }
+ClientError--|>Exception
+Client--|>Thread
 ApplicationClient--*Client
 Client..>ClientError
 @enduml

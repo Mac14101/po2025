@@ -57,6 +57,12 @@ response.json(object) //Obiekt 'object' zostaje przekształcony do json.JSON, na
 
 ```plantuml
 @startuml
+class Thread{
+}
+class Exception{
+}
+class JExpError{
+}
 class Request{
     - Headers headers;
     - String[] route;
@@ -207,6 +213,7 @@ class SessionRefreshHandler{
     + void handle();
 }
 }
+JExpError--|>Exception
 Handler..>Request
 Handler..>Response
 Handler..>Next
@@ -222,6 +229,7 @@ Router--*ParamHandler
 Server--*ErrorHandler
 Server--*Logger
 Server--*Router
+Manager--|>Thread
 Manager--*Session
 Request--*Manager
 Request--*Session
