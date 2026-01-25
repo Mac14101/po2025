@@ -288,6 +288,164 @@ class ApplicationDatabase{
     + ArrayList<SchoolClass> getTeacherSchedule();
     + void updateUserPassword();
 }
+package "entities"{
+class User{
+    - Integer id;
+    - String email;
+    - String name;
+    - String surname;
+    - String password;
+    - Role role;
+    + Integer getId();
+    + void setId();
+    + String getEmail();
+    + void setEmail();
+    + String getSurname();
+    + void setSurname();
+    + String getName();
+    + void setName();
+    + String getPassword();
+    + void setPassword();
+    + Role getRole();
+    + void setRole();
+}
+enum Role as "User.Role"{
+    * admin;
+    * student;
+    * teacher;
+    + String toString();
+}
+class SchoolGroup{
+    - Integer id;
+    - Integer number;
+    - Character letter;
+    - ArrayList<Student> students;
+    + Integer getId();
+    + void setId();
+    + Integer getNumber();
+    + void setNumber();
+    + Character getLetter();
+    + void setLetter();
+    + ArrayList<Student> getStudents();
+    + void addStudent();
+}
+class Student{
+    - SchoolGroup schoolGroup;
+    + SchoolGroup getSchoolGroup();
+    + void setSchoolGroup();
+}
+class Subject{
+    - Integer id;
+    - String name;
+    + Integer getId();
+    + void setId();
+    + String getName();
+    + void setName();
+}
+class Teacher{}
+class Lesson{
+    - Integer id;
+    - String topic;
+    - String date;
+    - SchoolClass schoolClass;
+    + Integer getId();
+    + void setId();
+    + String getTopic();
+    + void setTopic();
+    + String getDate();
+    + void setDate();
+    + SchoolClass getSchoolClass();
+    + void setSchoolClass();
+}
+class SchoolClass{
+    - Integer id;
+    - String day;
+    - String startTime;
+    - String endTime;
+    - SchoolGroup schoolGroup;
+    - Teacher teacher;
+    - Subject subject;
+    - Integer room;
+    + Integer getRoom();
+    + void setRoom();
+    + SchoolGroup getSchoolGroup();
+    + void setSchoolGroup();
+    + Teacher getTeacher();
+    + void setTeacher();
+    + Subject getSubject();
+    + void setSubject();
+    + Integer getId();
+    + void setId();
+    + String getDay();
+    + void setDay();
+    + String getStartTime();
+    + void setStartTime();
+    + String getEndTime();
+    + void setEndTime();
+}
+class Attendance{
+    - Student student;
+    - Lesson lesson;
+    - Status status;
+    + Student getStudent();
+    + void setStudent();
+    + Lesson getLesson();
+    + void setLesson();
+    + Status getStatus();
+    + void setStatus();
+}
+enum Status as "Attendance.Status"{
+    * present;
+    * absent;
+    * late;
+    * undefined;
+    + String toString();
+}
+class Grade{
+    - Integer id;
+    - Student student;
+    - Subject subject;
+    - Teacher teacher;
+    - GradeName grade;
+    - String title;
+    - String comment;
+    + String getTitle();
+    + void setTitle();
+    + String getComment();
+    + void setComment();
+    + Integer getId();
+    + void setId();
+    + Student getStudent();
+    + void setStudent();
+    + Subject getSubject();
+    + void setSubject();
+    + GradeName getGrade();
+    + void setGrade();
+    + Teacher getTeacher();
+    + void setTeacher();
+}
+enum GradeName as "Grade.GradeName"{
+    * 1;
+    * 2;
+    * 3;
+    * 4;
+    * 5;
+    * 6;
+    * np;
+    * nb;
+    + String toString();
+}
+}
+
 ApplicationDatabase--|>Database
+ApplicationDatabase-->entities.User
+ApplicationDatabase-->entities.Subject
+ApplicationDatabase-->entities.SchoolGroup
+ApplicationDatabase-->entities.Student
+ApplicationDatabase-->entities.SchoolClass
+ApplicationDatabase-->entities.Attendance
+ApplicationDatabase-->entities.Lesson
+ApplicationDatabase-->entities.Teacher
+ApplicationDatabase-->entities.Grade
 @enduml
 ```

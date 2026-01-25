@@ -164,6 +164,36 @@ class CreateUserHandler{
 	+ void handle();
 }
 }
+package "database"{
+class ApplicationDatabase{
+    + void initialize();
+    + ArrayList<User> getAllUsers();
+    + void createUser();
+    + User getUserCredentials();
+    + User getUserData();
+    + ArrayList<Subject> getAllSubjects();
+    + void createSubject();
+    + ArrayList<SchoolGroup> getAllClass();
+    + void createClass();
+    + ArrayList<Student> getAllStudents();
+    + ArrayList<Student> getClassStudents();
+    + void addStudent();
+    + ArrayList<SchoolClass> getClassSchedule();
+    + void addClassSchedule();
+    + ArrayList<Lesson> getLessons();
+    + void addLesson();
+    + ArrayList<Attendance> getAttendanceList();
+    + void updateAttendance();
+    + ArrayList<Grade> getStudentGrades();
+    + void addStudentGrade();
+    + ArrayList<SchoolClass> getStudentSchedule();
+    + ArrayList<Attendance> getUserAttendance();
+    + ArrayList<Grade> getUserGrades();
+    + ArrayList<SchoolClass> getTeacherSchedule();
+    + void updateUserPassword();
+}
+}
+
 attendance.LessonAttendanceListHandler--|>DatabaseHandler
 attendance.LessonAttendanceUpdateHandler--|>DatabaseHandler
 attendance.StudentAttendanceHandler--|>DatabaseHandler
@@ -188,5 +218,7 @@ timeTable.StudentTimeTableHandler--|>DatabaseHandler
 timeTable.TeacherTimeTableHandler--|>DatabaseHandler
 users.AllUsersHandler--|>DatabaseHandler
 users.CreateUserHandler--|>DatabaseHandler
+
+DatabaseHandler--*ApplicationDatabase
 @enduml
 ```

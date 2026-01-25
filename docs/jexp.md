@@ -214,6 +214,9 @@ class SessionRefreshHandler{
 }
 }
 JExpError--|>Exception
+Request..>JExpError
+Response..>JExpError
+Next..>JExpError
 Handler..>Request
 Handler..>Response
 Handler..>Next
@@ -238,6 +241,6 @@ defaultHandlers.SessionHandler--|>Handler
 defaultHandlers.SessionRefreshHandler--|>Handler
 defaultHandlers.SessionHandler--*Manager
 defaultHandlers.ServerErrorHandler--|>ErrorHandler
-Server--*defaultHandlers.ServerErrorHandler
+Server--*defaultHandlers.NotFoundHanlder
 @enduml
 ```
