@@ -68,13 +68,17 @@ UIController --> User : Wyświetlenie informacji
 ```plantuml
 @startuml
 actor User
+participant "LoginViewController" as GUI
 participant ApplicationClient
 participant Server
 participant Router as "Router (Server.mainRouter)"
 participant AuthenticationHandler
 participant ApplicationDatabase
 participant Database as "baza danych SQLite"
-User -> ApplicationClient : authenticate(userCredentials)
+
+User -> GUI : Wpisanie danych i kliknięcie 'Login'
+GUI -> GUI : handleLogin(event)
+GUI -> ApplicationClient : authenticate(userCredentials)
 ApplicationClient -> Server : żądanie HTTP POST
 Server -> Router : handler(request, response, next)
 Router -> Router : dopasowanie trasy
@@ -88,6 +92,9 @@ AuthenticationHandler -> AuthenticationHandler : response.send(token)
 AuthenticationHandler -> Router
 Router -> Server
 Server -> ApplicationClient : response.sendResponse(exchange)
+ApplicationClient --> GUI : Success (User object)
+GUI -> GUI : proceedToMainApp(user)
+GUI --> User : Wyświetlenie panelu głównego
 @enduml
 ```
 
@@ -95,6 +102,7 @@ Server -> ApplicationClient : response.sendResponse(exchange)
 ```plantuml
 @startuml
 actor User
+participant "AdminUserFormController" as GUI
 participant ApplicationClient
 participant Server
 participant Router as "Router (Server.mainRouter)"
@@ -102,7 +110,10 @@ participant AdminsOnlyHandler
 participant CreateUserHandler
 participant ApplicationDatabase
 participant Database as "baza danych SQLite"
-User -> ApplicationClient : createUser(user)
+
+User -> GUI : Wpisanie danych i kliknięcie 'Save'
+GUI -> GUI : handleSave()
+GUI -> ApplicationClient : createUser(user)
 ApplicationClient -> Server : żądanie HTTP POST
 Server -> Router : handler(request, response, next)
 Router -> Router : dopasowanie trasy
@@ -118,6 +129,10 @@ CreateUserHandler -> CreateUserHandler : response.status(201)
 CreateUserHandler -> Router
 Router -> Server
 Server -> ApplicationClient : response.sendResponse(exchange)
+ApplicationClient --> GUI : Success (User object)
+GUI -> GUI : AlertHelper.showInfo("Sukces")
+GUI -> GUI : closeWindow()
+GUI --> User : Powrót do listy użytkowników
 @enduml
 ```
 
@@ -125,6 +140,7 @@ Server -> ApplicationClient : response.sendResponse(exchange)
 ```plantuml
 @startuml
 actor User
+participant "AdminUserListController" as GUI
 participant ApplicationClient
 participant Server
 participant Router as "Router (Server.mainRouter)"
@@ -132,7 +148,10 @@ participant AdminsOnlyHandler
 participant AllUsersHandler
 participant ApplicationDatabase
 participant Database as "baza danych SQLite"
-User -> ApplicationClient : getAllUsers()
+
+User -> GUI : Otwarcie widoku użytkowników / Refresh
+GUI -> GUI : loadUsers()
+GUI -> ApplicationClient : getAllUsers()
 ApplicationClient -> Server : żądanie HTTP GET
 Server -> Router : handler(request, response, next)
 Router -> Router : dopasowanie trasy
@@ -147,6 +166,9 @@ AllUsersHandler -> AllUsersHandler : response.json(users)
 AllUsersHandler -> Router
 Router -> Server
 Server -> ApplicationClient : response.sendResponse(exchange)
+ApplicationClient --> GUI : ArrayList<User>
+GUI -> GUI : userTable.setItems(observableList)
+GUI --> User : Wyświetlenie tabeli z użytkownikami
 @enduml
 ```
 
@@ -154,6 +176,7 @@ Server -> ApplicationClient : response.sendResponse(exchange)
 ```plantuml
 @startuml
 actor User
+participant "AccountSettingsController" as GUI
 participant ApplicationClient
 participant Server
 participant Router as "Router (Server.mainRouter)"
@@ -161,7 +184,10 @@ participant AuthenticatedUsersOnlyHandler
 participant UpdateUserPasswordHandler
 participant ApplicationDatabase
 participant Database as "baza danych SQLite"
-User -> ApplicationClient : updateUserPassword(userChangePassword)
+
+User -> GUI : Wpisanie nowego hasła i kliknięcie 'Zapisz'
+GUI -> GUI : handleSaveSettings()
+GUI -> ApplicationClient : updateUserPassword(userChangePassword)
 ApplicationClient -> Server : żądanie HTTP PUT
 Server -> Router : handler(request, response, next)
 Router -> Router : dopasowanie trasy
@@ -171,9 +197,13 @@ Router -> Router : dopasowanie trasy
 Router -> UpdateUserPasswordHandler : handle(request, response, next)
 UpdateUserPasswordHandler -> ApplicationDatabase : updateUserPassword(userId, newPassword)
 ApplicationDatabase -> Database : selectUsersSQL.executeUpdate()
+Database --> ApplicationDatabase
 UpdateUserPasswordHandler -> Router
 Router -> Server
 Server -> ApplicationClient : response.sendResponse(exchange)
+ApplicationClient --> GUI : Success
+GUI -> GUI : lblStatus.setText("Hasło zmienione")
+GUI --> User : Potwierdzenie zmiany w interfejsie
 @enduml
 ```
 
