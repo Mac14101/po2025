@@ -5,7 +5,7 @@
 1. [Opis projektu](#opis-projektu)
 2. [Aktorzy systemu](#aktorzy-systemu)
 3. [Działanie systemu](#działanie-systemu)
-4. [Serwer i endpointy API](#serwer-i-endpointy-api)
+4. [Moduły projektu](#więcej-dokumentacji)
 
 ## Opis projektu
 
@@ -207,14 +207,10 @@ GUI --> User : Potwierdzenie zmiany w interfejsie
 @enduml
 ```
 
-## Więcej dokumentacji
+## Moduły projektu
 
 * [serwer HTTP](./docs/server.md)
 * [baza danych](./docs/database.md)
 * [encje](./docs/entities.md)
 * [klient HTTP](./docs/client.md)
 * [moduł jexp](./docs/jexp.md)
-
-## TODO
-
-1. Zaimplementować managera sesji tak jak bazę danych - każdy obiekt obsługi trasy powinien b=posiadać referencję do managera sesji
